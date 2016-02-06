@@ -25,6 +25,8 @@
 		271D22721C33C9EE00E2798E /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 271D226E1C33C59500E2798E /* Colors.swift */; };
 		273B78B71C65C220007AC781 /* Visualization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 273B78B61C65C220007AC781 /* Visualization.swift */; };
 		273B78EE1C65C4FB007AC781 /* VisualizationClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 273B78ED1C65C4FB007AC781 /* VisualizationClient.swift */; };
+		273B78F61C6684F1007AC781 /* ColorsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 273B78F51C6684F1007AC781 /* ColorsTest.swift */; };
+		273B78F81C6684F1007AC781 /* OPC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 271036C51C337CA700AC3717 /* OPC.framework */; };
 		276DB3931C65BBB0002723B3 /* Control.swift in Sources */ = {isa = PBXBuildFile; fileRef = 276DB3921C65BBB0002723B3 /* Control.swift */; };
 /* End PBXBuildFile section */
 
@@ -183,6 +185,20 @@
 			remoteGlobalIDString = C85BA04B1C3878740075D68E;
 			remoteInfo = PerformanceTests;
 		};
+		273B78F91C6684F1007AC781 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 271036A31C337C8600AC3717 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 271036C41C337CA700AC3717;
+			remoteInfo = OPC;
+		};
+		273B78FE1C669E07007AC781 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 271036A31C337C8600AC3717 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 271036AA1C337C8600AC3717;
+			remoteInfo = SwiftledMobile;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -222,6 +238,9 @@
 		271D226E1C33C59500E2798E /* Colors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		273B78B61C65C220007AC781 /* Visualization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Visualization.swift; sourceTree = "<group>"; };
 		273B78ED1C65C4FB007AC781 /* VisualizationClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VisualizationClient.swift; sourceTree = "<group>"; };
+		273B78F31C6684F1007AC781 /* OPCTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OPCTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		273B78F51C6684F1007AC781 /* ColorsTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorsTest.swift; sourceTree = "<group>"; };
+		273B78F71C6684F1007AC781 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		276DB3921C65BBB0002723B3 /* Control.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Control.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -241,6 +260,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		273B78F01C6684F1007AC781 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				273B78F81C6684F1007AC781 /* OPC.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -250,6 +277,7 @@
 				2710370A1C338E1F00AC3717 /* SwiftledPlayground.playground */,
 				271036AD1C337C8600AC3717 /* SwiftledMobile */,
 				271036C61C337CA700AC3717 /* OPC */,
+				273B78F41C6684F1007AC781 /* OPCTests */,
 				271036AC1C337C8600AC3717 /* Products */,
 				271036D21C337CC000AC3717 /* Rx.xcodeproj */,
 			);
@@ -260,6 +288,7 @@
 			children = (
 				271036AB1C337C8600AC3717 /* SwiftledMobile.app */,
 				271036C51C337CA700AC3717 /* OPC.framework */,
+				273B78F31C6684F1007AC781 /* OPCTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -324,6 +353,15 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		273B78F41C6684F1007AC781 /* OPCTests */ = {
+			isa = PBXGroup;
+			children = (
+				273B78F51C6684F1007AC781 /* ColorsTest.swift */,
+				273B78F71C6684F1007AC781 /* Info.plist */,
+			);
+			path = OPCTests;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -376,6 +414,25 @@
 			productReference = 271036C51C337CA700AC3717 /* OPC.framework */;
 			productType = "com.apple.product-type.framework";
 		};
+		273B78F21C6684F1007AC781 /* OPCTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 273B78FB1C6684F1007AC781 /* Build configuration list for PBXNativeTarget "OPCTests" */;
+			buildPhases = (
+				273B78EF1C6684F1007AC781 /* Sources */,
+				273B78F01C6684F1007AC781 /* Frameworks */,
+				273B78F11C6684F1007AC781 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				273B78FA1C6684F1007AC781 /* PBXTargetDependency */,
+				273B78FF1C669E07007AC781 /* PBXTargetDependency */,
+			);
+			name = OPCTests;
+			productName = OPCTests;
+			productReference = 273B78F31C6684F1007AC781 /* OPCTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -392,6 +449,10 @@
 					};
 					271036C41C337CA700AC3717 = {
 						CreatedOnToolsVersion = 7.2;
+					};
+					273B78F21C6684F1007AC781 = {
+						CreatedOnToolsVersion = 7.2.1;
+						TestTargetID = 271036AA1C337C8600AC3717;
 					};
 				};
 			};
@@ -416,6 +477,7 @@
 			targets = (
 				271036AA1C337C8600AC3717 /* SwiftledMobile */,
 				271036C41C337CA700AC3717 /* OPC */,
+				273B78F21C6684F1007AC781 /* OPCTests */,
 			);
 		};
 /* End PBXProject section */
@@ -581,6 +643,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		273B78F11C6684F1007AC781 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -610,6 +679,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		273B78EF1C6684F1007AC781 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				273B78F61C6684F1007AC781 /* ColorsTest.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -622,6 +699,16 @@
 			isa = PBXTargetDependency;
 			name = "RxSwift-iOS";
 			targetProxy = 271036F91C337CDC00AC3717 /* PBXContainerItemProxy */;
+		};
+		273B78FA1C6684F1007AC781 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 271036C41C337CA700AC3717 /* OPC */;
+			targetProxy = 273B78F91C6684F1007AC781 /* PBXContainerItemProxy */;
+		};
+		273B78FF1C669E07007AC781 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 271036AA1C337C8600AC3717 /* SwiftledMobile */;
+			targetProxy = 273B78FE1C669E07007AC781 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -723,6 +810,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -807,6 +895,28 @@
 			};
 			name = Release;
 		};
+		273B78FC1C6684F1007AC781 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = OPCTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.swiftled.OPCTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SwiftledMobile.app/SwiftledMobile";
+			};
+			name = Debug;
+		};
+		273B78FD1C6684F1007AC781 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = OPCTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.swiftled.OPCTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SwiftledMobile.app/SwiftledMobile";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -836,6 +946,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		273B78FB1C6684F1007AC781 /* Build configuration list for PBXNativeTarget "OPCTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				273B78FC1C6684F1007AC781 /* Debug */,
+				273B78FD1C6684F1007AC781 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 	};
