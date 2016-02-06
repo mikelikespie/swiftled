@@ -52,8 +52,14 @@ private class VisualizationClient {
                     publishSubject.onNext(writeContext)
                 }
                 
-                for idx in self.buffer.startIndex..<self.buffer.endIndex {
-                    self.connection[idx] = self.buffer[idx].rgb8
+                // Divide the tasks up into 8
+                
+                let fullBounds = self.buffer.startIndex..<self.buffer.endIndex
+                
+                applyOverRange(fullBounds) { bounds in
+                    for idx in bounds {
+                        self.connection[idx] = self.buffer[idx]
+                    }
                 }
                 
                 self.connection.flush()
@@ -63,6 +69,19 @@ private class VisualizationClient {
         
         return compositeDisposable
         //        return TickContext.init(tickIndex: $0, timeOffset: startTime - now, timeDelta: <#T##NSTimeInterval#>)
+    }
+}
+
+
+public func applyOverRange(fullBounds: Range<Int>, iterations: Int = 16, fn: Range<Int> -> ()) {
+    let chunkSize = ((fullBounds.count - 1) / iterations) + 1
+    let splitBounds = (0..<iterations).map { idx in
+        (fullBounds.startIndex + chunkSize * idx)..<min((fullBounds.startIndex + chunkSize * (idx + 1)), fullBounds.endIndex)
+    }
+    
+    dispatch_apply(iterations, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0)) { idx in
+        let bounds = splitBounds[idx]
+        fn(bounds)
     }
 }
 
@@ -76,7 +95,7 @@ func startVisualization(visualization: Visualization, fps: Double) -> Disposable
         .take(1)
         .subscribe(
             onNext: { sock in
-                let connection = ClientConnection(fd: sock, ledCount: ledCount)
+                let connection = ClientConnection(fd: sock, ledCount: ledCount, mode: .RGBARaw)
                 
                 let client = VisualizationClient(connection: connection)
                 

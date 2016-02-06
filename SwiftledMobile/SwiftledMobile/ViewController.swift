@@ -43,10 +43,12 @@ class SimpleVisualization : Visualization {
             
             let now = context.tickContext.timeOffset
             
-            for i in writeBuffer.startIndex..<writeBuffer.endIndex {
-                let hue: Float = -((Float(now / -30) - Float(i) * 0.25 / Float(ledCount)) % 1.0)
-                let value = 0.5 + 0.5 * sin(Float(now * 2) + Float(M_PI * 2) * Float(i % segmentLength) / Float(segmentLength))
-                writeBuffer[i] = HSV(h: hue, s: 1, v: pow(value, 3)).rgbFloat
+            applyOverRange(writeBuffer.startIndex..<writeBuffer.endIndex) { bounds in
+                for i in bounds {
+                    let hue: Float = -((Float(now / -30) - Float(i) * 0.25 / Float(ledCount)) % 1.0)
+                    let value = 0.5 + 0.5 * sin(Float(now * 2) + Float(M_PI * 2) * Float(i % segmentLength) / Float(segmentLength))
+                    writeBuffer[i] = HSV(h: hue, s: 1, v: value).rgbFloat.gammaAdjusted()
+                }
             }
         }
     }

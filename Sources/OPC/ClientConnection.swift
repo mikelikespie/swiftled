@@ -12,8 +12,9 @@ import RxSwift
 private let headerSize = 4
 private let broadcastChannel: UInt8 = 0
 
-private enum OpcCommand : UInt8 {
+ enum OpcCommand : UInt8 {
     case SetPixels = 0
+    case CustomCommand = 255
 }
 
 /// A way to reuse by applying an element type over ourselves. This is how a "ClientConnection" is represented
@@ -24,8 +25,28 @@ public protocol ValueSink : class {
     /// The function we pass in is called inine which should return an element at each index
 }
 
+public enum ConnectionMode {
+    case RGB8 // use for standard OPC protocol
+    case RGBARaw // APA protocol for used in go-led-spi. Color conversion will probably be slower
+}
+
+extension ConnectionMode {
+    var bytesPerPixel: Int {
+        switch self {
+        case .RGB8: return 3
+        case .RGBARaw: return 4
+        }
+    }
+    var headerCommand: OpcCommand {
+        switch self {
+        case .RGB8: return .SetPixels
+        case .RGBARaw: return .CustomCommand
+        }
+    }
+}
+
 public final class ClientConnection : CollectionType {
-    public typealias Element = RGB8
+    public typealias Element = RGBFloat
     
     public typealias Index = Int
     
@@ -34,17 +55,23 @@ public final class ClientConnection : CollectionType {
     private var channel: dispatch_io_t
     private var ledCount: Int
     private var start: NSTimeInterval
+    private let mode: ConnectionMode
+    private let bytesPerPixel: Int
     
-    public init(fd: dispatch_fd_t, ledCount: Int) {
-        self.pixelBuffer =  [UInt8](count: headerSize + ledCount * 3, repeatedValue: 0)
+    public init(fd: dispatch_fd_t, ledCount: Int, mode: ConnectionMode) {
+        self.mode = mode
+        bytesPerPixel = mode.bytesPerPixel
+
+
+        self.pixelBuffer =  [UInt8](count: headerSize + ledCount * bytesPerPixel, repeatedValue: 0)
         // Only support 1 channel for now
+        
         let channel = broadcastChannel
         
         pixelBuffer[0] = channel
-        pixelBuffer[1] = OpcCommand.SetPixels.rawValue
-        pixelBuffer[2] = UInt8(truncatingBitPattern: UInt(ledCount * 3) >> 8)
-        pixelBuffer[3] = UInt8(truncatingBitPattern: UInt(ledCount * 3) >> 0)
-        
+        pixelBuffer[1] = mode.headerCommand.rawValue
+        pixelBuffer[2] = UInt8(truncatingBitPattern: UInt(self.pixelBuffer.count - headerSize) >> 8)
+        pixelBuffer[3] = UInt8(truncatingBitPattern: UInt(self.pixelBuffer.count - headerSize) >> 0)
         
         self.start = NSDate.timeIntervalSinceReferenceDate()
         self.ledCount = ledCount
@@ -57,7 +84,7 @@ public final class ClientConnection : CollectionType {
     public func apply<C: ColorConvertible>(@noescape fn: (index: Int, now: NSTimeInterval) -> C) {
         let timeOffset = NSDate.timeIntervalSinceReferenceDate() - start
         for idx in 0..<ledCount {
-            self[idx] = fn(index: idx, now: timeOffset).rgb8
+            self[idx] = fn(index: idx, now: timeOffset).rgbFloat
         }
     }
     
@@ -69,23 +96,47 @@ public final class ClientConnection : CollectionType {
         return self.ledCount
     }
     
-    public subscript(index: Int) -> RGB8 {
+    public subscript(index: Int) -> RGBFloat {
         get {
-            let baseOffset = headerSize + index * 3
+            let baseOffset = headerSize + index * bytesPerPixel
             
-            return RGB8(
-                r: pixelBuffer[baseOffset],
-                g: pixelBuffer[baseOffset + 1],
-                b: pixelBuffer[baseOffset + 2]
-            )
+            switch mode {
+            case .RGB8:
+                return RGB8(
+                    r: pixelBuffer[baseOffset],
+                    g: pixelBuffer[baseOffset + 1],
+                    b: pixelBuffer[baseOffset + 2]
+                    ).rgbFloat
+                
+            case .RGBARaw:
+                return RGBARaw(
+                    r: pixelBuffer[baseOffset],
+                    g: pixelBuffer[baseOffset + 1],
+                    b: pixelBuffer[baseOffset + 2],
+                    a: pixelBuffer[baseOffset + 3]
+                    ).rgbFloat
+                
+            }
         }
         
-        set(color) {
-            let baseOffset = headerSize + index * 3
+        set {
+            let baseOffset = headerSize + index * bytesPerPixel
             
-            pixelBuffer[baseOffset] = color.r
-            pixelBuffer[baseOffset + 1] = color.g
-            pixelBuffer[baseOffset + 2] = color.b
+            switch mode {
+            case .RGB8:
+                let color = newValue.rgb8
+                
+                pixelBuffer[baseOffset] = color.r
+                pixelBuffer[baseOffset + 1] = color.g
+                pixelBuffer[baseOffset + 2] = color.b
+                
+            case .RGBARaw:
+                let color = newValue.rawColor
+                pixelBuffer[baseOffset] = color.r
+                pixelBuffer[baseOffset + 1] = color.g
+                pixelBuffer[baseOffset + 2] = color.b
+                pixelBuffer[baseOffset + 3] = color.a
+            }
         }
     }
     

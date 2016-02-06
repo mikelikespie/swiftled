@@ -124,7 +124,6 @@ public struct RGBFloat : ColorConvertible, CustomStringConvertible {
             
             let c = self.closestRawColorWithAlpha(a)
             
-//            let cRgbFloat = c.rgbFloatStorage
             let deltaSquared = c.distanceToRgbFloatSquared(storage)
             
             let isMin = deltaSquared < closestDeltaSquared
