@@ -10,7 +10,7 @@ let segmentCount = 30
 let ledCount =  segmentLength * segmentCount
 
 func doStuff(conn: ClientConnection) {
-    interval(1.0/20, MainScheduler.sharedInstance)
+    interval(1.0/600, MainScheduler.sharedInstance)
         //.debug()
         .subscribeNext { t in
             conn.applyColor { i, now  -> HSV in

@@ -28,7 +28,7 @@ public struct AddrInfo {
 
 extension AddrInfo {
     public func connect(workQueue: dispatch_queue_t=dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) -> Observable<dispatch_fd_t> {
-        return create { observer in
+        return Observable.create { observer in
             do {
                 let socket = try self.socket()
                 precondition(socket >= 0)
@@ -134,7 +134,7 @@ extension AddrInfo {
 
 public func getaddrinfoSockAddrsAsync(hostname: String, servname: String, workQueue: dispatch_queue_t=dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) -> Observable<AddrInfo> {
     
-    return create { observer in
+    return Observable.create { observer in
         var ai: UnsafeMutablePointer<addrinfo> = nil
 
         dispatch_async(workQueue) {

@@ -16,7 +16,19 @@ private enum OpcCommand : UInt8 {
     case SetPixels = 0
 }
 
-public class ClientConnection {
+/// A way to reuse by applying an element type over ourselves. This is how a "ClientConnection" is represented
+public protocol ValueSink : class {
+    /// Usually a pixel format or something
+    typealias Element
+    
+    /// The function we pass in is called inine which should return an element at each index
+}
+
+public final class ClientConnection : CollectionType {
+    public typealias Element = RGB8
+    
+    public typealias Index = Int
+    
     private var pixelBuffer: [UInt8]
     private var workQueue = dispatch_queue_create("connection work queue", DISPATCH_QUEUE_SERIAL)
     private var channel: dispatch_io_t
@@ -42,13 +54,19 @@ public class ClientConnection {
         dispatch_io_set_interval(self.channel, 0, DISPATCH_IO_STRICT_INTERVAL)
     }
     
-    public func applyColor<C: ColorConvertible>(@noescape fn: (index: Int, now: NSTimeInterval) -> C) -> Observable<Void> {
+    public func apply<C: ColorConvertible>(@noescape fn: (index: Int, now: NSTimeInterval) -> C) {
         let timeOffset = NSDate.timeIntervalSinceReferenceDate() - start
         for idx in 0..<ledCount {
             self[idx] = fn(index: idx, now: timeOffset).rgb8
         }
-        
-        return self.flush()
+    }
+    
+    public var startIndex: Int {
+        return 0
+    }
+    
+    public var endIndex: Int {
+        return self.ledCount
     }
     
     public subscript(index: Int) -> RGB8 {
