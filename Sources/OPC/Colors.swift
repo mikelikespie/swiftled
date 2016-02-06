@@ -8,6 +8,8 @@
 
 import Foundation
 
+import simd
+
 private func clampUnit(x: Float) -> Float {
     if x < 0 {
         return 0
@@ -19,25 +21,55 @@ private func clampUnit(x: Float) -> Float {
     
     return x
 }
+//
+//public struct RGBFloatDistance {
+//    var storage: float3
+//    
+//    public var magnitude: Float {
+//        return sqrt(magnitudeSquared)
+//    }
+//    public var magnitudeSquared: Float {
+//        return r * r + g * g + b * b
+//    }
+//}
 
-public struct RGBFloatDistance {
-    public var r, g, b: Float
-    
-    public var magnitude: Float {
-        return sqrt(magnitudeSquared)
-    }
-    public var magnitudeSquared: Float {
-        return r * r + g * g + b * b
-    }
+@inline(__always) private func clampUnit(x: float3) -> float3 {
+    return clamp(x, min: 0, max: 1)
 }
-
 /// Represent colors on unit scale
 public struct RGBFloat : ColorConvertible, CustomStringConvertible {
     // Must be set between 0 and 1. Is not checked
-    public var r, g, b: Float
+    public var r: Float {
+        @inline(__always) get {
+            return storage.x
+        }
+        set {
+            storage.x = newValue
+        }
+    }
+    public var g: Float {
+        @inline(__always) get {
+            return storage.y
+        }
+        set {
+            storage.y = newValue
+        }
+    }
+    
+    public var b: Float {
+        @inline(__always) get {
+            return storage.z
+        }
+        set {
+            storage.z = newValue
+        }
+    }
+    
+    var storage: simd.float3
     
     public var rgb8: RGB8 {
-        return RGB8(r: UInt8(r * 255), g: UInt8(g * 255), b: UInt8(b * 255))
+        let multiplied = storage * 255
+        return RGB8(r: UInt8(multiplied.x), g: UInt8(multiplied.y), b: UInt8(multiplied.z))
     }
     
     public var rgbFloat: RGBFloat {
@@ -45,17 +77,19 @@ public struct RGBFloat : ColorConvertible, CustomStringConvertible {
     }
     
     public init(r: Float, g: Float, b: Float) {
-        self.r = r
-        self.g = g
-        self.b = b
+        self.storage = float3(r,g,b)
     }
     
+    init(storage: float3) {
+        self.storage = storage
+    }
     
     public func gammaAdjusted(gamma: Float = 2) -> RGBFloat {
         if gamma == 2 {
-            return RGBFloat(r: r * r, g: g * g, b: b * b)
+            return RGBFloat(storage: self.storage * self.storage)
         }
-        return RGBFloat(r: pow(r, gamma), g: pow(g, gamma), b: pow(b, gamma))
+        
+        return RGBFloat(r: pow(storage.x, gamma), g: pow(storage.y, gamma), b: pow(storage.z, gamma))
     }
     
     /// Should convert us to closest match of RGBARawColor
@@ -64,8 +98,8 @@ public struct RGBFloat : ColorConvertible, CustomStringConvertible {
         // Possible naive algorithm
         
         
-        let minComponent = min(r, min(g,b))
-        let maxComponent = max(r, max(g,b))
+//        let minComponent = min(r, min(g,b))
+        let maxComponent = max(storage.x, max(storage.y, storage.z))
         
         // This is the smallest our alpha can be
         let minA = UInt8(maxComponent * 31)
@@ -90,8 +124,8 @@ public struct RGBFloat : ColorConvertible, CustomStringConvertible {
             
             let c = self.closestRawColorWithAlpha(a)
             
-            let deltaSquared = self.distanceTo(c.rgbFloat).magnitudeSquared
-            
+//            let cRgbFloat = c.rgbFloatStorage
+            let deltaSquared = c.distanceToRgbFloatSquared(storage)
             
             let isMin = deltaSquared < closestDeltaSquared
             if isMin {
@@ -114,12 +148,12 @@ public struct RGBFloat : ColorConvertible, CustomStringConvertible {
         return closestRGBAColor
     }
     
-    private func closestRawColorWithAlpha(alpha: UInt8) -> RGBARaw {
+    @inline(__always) private func closestRawColorWithAlpha(alpha: UInt8) -> RGBARaw {
         if alpha == 0 {
             return RGBARaw(r: 0, g: 0, b: 0, a: 0)
         }
         
-        let alphaFloat = Float(alpha) / 31
+        let oneOverAlphaFloat = 31 / Float(alpha)
         
         // for each channel, solve c_256 in
         //   c_float = alpha_32 / 31 * c_256 / 256
@@ -127,17 +161,18 @@ public struct RGBFloat : ColorConvertible, CustomStringConvertible {
         //   c_float / alpha_float = (c_256 / 255)
         //   c_float / alpha_float * 255 = c_256
         
-        /// TODO: see if rounding works better?
+        let multiplied = clamp(storage * oneOverAlphaFloat * 255.0, min: 0, max: 255)
+        
         return RGBARaw(
-            r: UInt8(min(r / alphaFloat, 1) * 255),
-            g: UInt8(min(g / alphaFloat, 1) * 255),
-            b: UInt8(min(b / alphaFloat, 1) * 255),
+            r: UInt8(multiplied.x),
+            g: UInt8(multiplied.y),
+            b: UInt8(multiplied.z),
             a: alpha
         )
     }
     
-    public func distanceTo(other: RGBFloat) -> RGBFloatDistance {
-        return RGBFloatDistance(r: other.r - r, g: other.g - g, b: other.b - b)
+    public func distanceToSquared(other: RGBFloat) -> Float {
+        return distance_squared(self.storage, other.storage)
     }
     
     public var description: String {
@@ -178,6 +213,8 @@ public extension ColorConvertible {
 }
 
 
+private let floatStorageMultiplierConstant: Float = 1.0 / 255.0 / 31
+
 /// Represents the color format for an APA102
 /// a is 0-31
 public struct RGBARaw : ColorConvertible, CustomStringConvertible {
@@ -186,9 +223,22 @@ public struct RGBARaw : ColorConvertible, CustomStringConvertible {
     public var b: UInt8
     public var a: UInt8
     
+    private var rgbFloatStorage: float3 {
+        @inline(__always) get {
+            let mult = floatStorageMultiplierConstant * Float(a)
+            return float3(Float(r), Float(g), Float(b)) * mult
+        }
+    }
+
+    
+    @inline(__always) private func distanceToRgbFloatSquared(other: float3) -> Float {
+        let mult = floatStorageMultiplierConstant * Float(a)
+        let ourStorage = float3(Float(r), Float(g), Float(b)) * mult
+        return distance_squared(ourStorage, other)
+    }
+    
     public var rgbFloat: RGBFloat {
-        let aFloat = Float(a) / 31
-        return RGBFloat(r: Float(r) / 255.0 * aFloat, g: Float(g) / 255.0 * aFloat, b: Float(b) / 255.0 * aFloat)
+        return RGBFloat(storage: rgbFloatStorage)
     }
 
     public init(r: UInt8 = 0, g: UInt8 = 0, b: UInt8 = 0, a: UInt8 = 31) {

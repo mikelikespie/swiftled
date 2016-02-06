@@ -78,8 +78,8 @@ class OPCTests: XCTestCase {
         
         for c in colors {
             let mapping = mappingFunc(input: c)
-            let adjustedDelta = Double(mapping.rgbFloat.gammaAdjusted(0.5).distanceTo(c.gammaAdjusted(0.5)).magnitude)
-            let delta = Double(mapping.rgbFloat.distanceTo(c).magnitude)
+            let adjustedDelta = sqrt(Double(mapping.rgbFloat.gammaAdjusted(0.5).distanceToSquared(c.gammaAdjusted(0.5))))
+            let delta = sqrt(Double(mapping.rgbFloat.distanceToSquared(c)))
             
             deltaSum += adjustedDelta
             logSum += log(adjustedDelta + 0.0001)
