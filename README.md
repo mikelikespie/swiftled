@@ -6,8 +6,7 @@ experimental.
 Designed to interface with [go-led-spi](https://github.com/mikelikespie/go-led-spi), but
 also should work with arbitrary [OPC](http://openpixelcontrol.org/) servers.
 
-Mostly putting code here to share, but if somebody else wants to use it, I'll
-gladly license it under MIT or Apache 2.
+MIT license.
 
 ## Sources/OPC
 
