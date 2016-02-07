@@ -23,6 +23,7 @@
 		2710370C1C338F7800AC3717 /* Shims.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2710370B1C338F7800AC3717 /* Shims.swift */; };
 		2710370E1C33AA4200AC3717 /* ClientConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2710370D1C33AA4200AC3717 /* ClientConnection.swift */; };
 		271D22721C33C9EE00E2798E /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 271D226E1C33C59500E2798E /* Colors.swift */; };
+		273164F21C66DAD300EC23C1 /* RxCocoa.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 271036EA1C337CC000AC3717 /* RxCocoa.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		273B78B71C65C220007AC781 /* Visualization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 273B78B61C65C220007AC781 /* Visualization.swift */; };
 		273B78EE1C65C4FB007AC781 /* VisualizationClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 273B78ED1C65C4FB007AC781 /* VisualizationClient.swift */; };
 		273B78F61C6684F1007AC781 /* ColorsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 273B78F51C6684F1007AC781 /* ColorsTest.swift */; };
@@ -65,6 +66,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = C8A56AD61AD7424700B4673B;
 			remoteInfo = "RxSwift-iOS";
+		};
+		273164F01C66DA5100EC23C1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 271036D21C337CC000AC3717 /* Rx.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = C80938F51B8A71760088E94D;
+			remoteInfo = "RxCocoa-iOS";
 		};
 		273B78CB1C65C220007AC781 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -208,6 +216,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				273164F21C66DAD300EC23C1 /* RxCocoa.framework in Embed Frameworks */,
 				271036FB1C337D5300AC3717 /* RxSwift.framework in Embed Frameworks */,
 				271036CD1C337CA700AC3717 /* OPC.framework in Embed Frameworks */,
 			);
@@ -388,6 +397,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				273164F11C66DA5100EC23C1 /* PBXTargetDependency */,
 				271036CB1C337CA700AC3717 /* PBXTargetDependency */,
 			);
 			name = SwiftledMobile;
@@ -446,6 +456,11 @@
 					271036AA1C337C8600AC3717 = {
 						CreatedOnToolsVersion = 7.2;
 						DevelopmentTeam = 4NHJL99NX7;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
 					};
 					271036C41C337CA700AC3717 = {
 						CreatedOnToolsVersion = 7.2;
@@ -699,6 +714,11 @@
 			isa = PBXTargetDependency;
 			name = "RxSwift-iOS";
 			targetProxy = 271036F91C337CDC00AC3717 /* PBXContainerItemProxy */;
+		};
+		273164F11C66DA5100EC23C1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "RxCocoa-iOS";
+			targetProxy = 273164F01C66DA5100EC23C1 /* PBXContainerItemProxy */;
 		};
 		273B78FA1C6684F1007AC781 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;

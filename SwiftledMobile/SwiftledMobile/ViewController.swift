@@ -9,7 +9,7 @@
 import UIKit
 import RxSwift
 import OPC
-import RxSwift
+import RxCocoa
 import Darwin
 import Foundation
 
@@ -29,7 +29,7 @@ class ViewController: UITableViewController, UISplitViewControllerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.splitViewController?.delegate = self
-        
+        tableView.rowHeight = UITableViewAutomaticDimension
         
         let rootVisualization = SimpleVisualization()
         startVisualization(rootVisualization, fps: 400)
@@ -82,13 +82,48 @@ class ViewController: UITableViewController, UISplitViewControllerDelegate {
 
 class SliderCell : UITableViewCell {
     var slider: UISlider!
+    var label: UILabel!
+    var name: String
     
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
+    private var disposeBag = DisposeBag()
+    
+    init(bounds: ClosedInterval<Float>, defaultValue: Float, name: String) {
+        self.name = name
+        super.init(style: .Default, reuseIdentifier: nil)
         
-        slider = UISlider(frame: contentView.bounds)
+        label = UILabel()
+        label.font = UIFont.systemFontOfSize(12)
+        slider = UISlider()
+        
+        slider.minimumValue = bounds.start
+        slider.maximumValue = bounds.end
+
+        label.translatesAutoresizingMaskIntoConstraints = false
+        slider.translatesAutoresizingMaskIntoConstraints = false
         
         contentView.addSubview(slider)
+        contentView.addSubview(label)
+        
+        slider.value = defaultValue
+        slider
+            .rx_value
+            .subscribeNext { [unowned self] value in
+                self.label.text = "\(self.name): \(value)"
+            }
+            .addDisposableTo(disposeBag)
+        
+        let constraints = [
+            NSLayoutConstraint(item: slider, attribute: .Top, relatedBy: .Equal, toItem: contentView, attribute: .Top, multiplier: 1, constant: 0),
+            NSLayoutConstraint(item: slider, attribute: .Bottom, relatedBy: .Equal, toItem: label, attribute: .Top, multiplier: 1, constant: 0),
+            NSLayoutConstraint(item: label, attribute: .Bottom, relatedBy: .Equal, toItem: contentView, attribute: .Bottom, multiplier: 1, constant: 0),
+            ] + ([label, slider] as [UIView]).flatMap {
+                [
+                    NSLayoutConstraint(item: $0, attribute: .Leading, relatedBy: .Equal, toItem: self.contentView, attribute: .LeadingMargin, multiplier: 1, constant: 0),
+                    NSLayoutConstraint(item: $0, attribute: .Trailing, relatedBy: .Equal, toItem: self.contentView, attribute: .TrailingMargin, multiplier: 1, constant: 0),
+                ]
+        }
+        
+        NSLayoutConstraint.activateConstraints(constraints)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -99,8 +134,7 @@ class SliderCell : UITableViewCell {
 class SliderControl : Control {
     let name: String
     
-    let sliderCell = SliderCell(style: UITableViewCellStyle.Default, reuseIdentifier: nil)
-    
+    let sliderCell: SliderCell
     
     var value: Float {
         return sliderCell.slider.value
@@ -112,9 +146,8 @@ class SliderControl : Control {
     
     init(bounds: ClosedInterval<Float>, defaultValue: Float, name: String) {
         self.name = name
-        sliderCell.slider.minimumValue = bounds.start
-        sliderCell.slider.maximumValue = bounds.end
-        sliderCell.slider.value = defaultValue
+        self.sliderCell = SliderCell(bounds: bounds, defaultValue: defaultValue, name: name)
+        
     }
     
     func run(ticker: Observable<TickContext>) -> Disposable {
@@ -154,9 +187,10 @@ class SimpleVisualization : Visualization {
                         hueNumerator += -floor(hueNumerator)
                         precondition(hueNumerator >= 0)
                     }
+                    
                     let hue: Float = hueNumerator % 1.0
                     let value = 0.5 + 0.5 * sin(Float(now * 2) + Float(M_PI * 2) * Float(i % segmentLength) / Float(segmentLength))
-                    writeBuffer[i] = HSV(h: hue, s: 1, v: value * self.brightnessControl.value).rgbFloat.gammaAdjusted(self.gammaControl.value)
+                    writeBuffer[i] = HSV(h: hue, s: 1, v: value).rgbFloat.gammaAdjusted(self.gammaControl.value) * pow(self.brightnessControl.value, 2)
                 }
             }
         }

@@ -95,6 +95,7 @@ func startVisualization(visualization: Visualization, fps: Double) -> Disposable
         .subscribe(
             onNext: { sock in
                 let connection = ClientConnection(fd: sock, ledCount: ledCount, mode: .RGBARaw)
+//                let connection = ClientConnection(fd: sock, ledCount: ledCount, mode: .RGB8)
                 
                 let client = VisualizationClient(connection: connection)
                 

@@ -116,11 +116,11 @@ public struct RGBFloat : ColorConvertible, CustomStringConvertible {
         let maxComponent = max(storage.x, max(storage.y, storage.z))
         
         // This is the smallest our alpha can be
-        let minA = UInt8(maxComponent * 31)
+        let minA = UInt8(maxComponent * 31 + 1)
         let maxA: UInt8
         
         if maxComponent < 1.0 / 255.0 {
-            maxA = UInt8(maxComponent / 255 * 31)
+            maxA = UInt8((maxComponent / 255 * 31) + 1)
         } else {
             maxA = 31
         }
@@ -135,10 +135,10 @@ public struct RGBFloat : ColorConvertible, CustomStringConvertible {
         let secondThresholdSquared: Float = 0.00175 * 0.00175
         
         for a in alphaSearchRange {
-            
             let c = self.closestRawColorWithAlpha(a)
             
-            let deltaSquared = c.distanceToRgbFloatSquared(storage)
+            let cFloat = c.rgbFloat
+            let deltaSquared = distance_squared(cFloat.storage, storage)
             
             let isMin = deltaSquared < closestDeltaSquared
             if isMin {
@@ -174,7 +174,7 @@ public struct RGBFloat : ColorConvertible, CustomStringConvertible {
         //   c_float / alpha_float = (c_256 / 255)
         //   c_float / alpha_float * 255 = c_256
         
-        let multiplied = clamp(storage * oneOverAlphaFloat * 255.0, min: 0, max: 255)
+        let multiplied = clamp(storage * oneOverAlphaFloat * 255.0 + float3(0.5, 0.5, 0.5), min: 0, max: 255)
         
         return RGBARaw(
             r: UInt8(multiplied.x),
@@ -351,4 +351,8 @@ public struct HSV : ColorConvertible {
     }
 }
 
+
+public func *(lhs: RGBFloat, rhs: Float) -> RGBFloat {
+    return RGBFloat(storage: lhs.storage * rhs)
+}
 

@@ -23,7 +23,7 @@
             </objects>
             <point key="canvasLocation" x="1321" y="939"/>
         </scene>
-        <!--Root View Controller-->
+        <!--SwiftledMobile-->
         <scene sceneID="5Ax-Qx-EmV">
             <objects>
                 <tableViewController clearsSelectionOnViewWillAppear="NO" id="30j-MY-ChV" customClass="ViewController" customModule="SwiftledMobile" customModuleProvider="target" sceneMemberID="viewController">
@@ -46,7 +46,7 @@
                             <outlet property="delegate" destination="30j-MY-ChV" id="V07-aL-8cg"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Root View Controller" id="gVv-R4-Bu3"/>
+                    <navigationItem key="navigationItem" title="SwiftledMobile" id="gVv-R4-Bu3"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gTd-p6-HD6" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

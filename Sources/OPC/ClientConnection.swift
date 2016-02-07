@@ -160,8 +160,8 @@ public final class ClientConnection : CollectionType {
         }
 
         dispatch_io_barrier(self.channel) {
-            let fd = dispatch_io_get_descriptor(self.channel);
-            var flag: Int = 1
+//            _ = dispatch_io_get_descriptor(self.channel);
+//            var flag: Int = 1
         }
         
         return subject
