@@ -84,6 +84,20 @@ public struct RGBFloat : ColorConvertible, CustomStringConvertible {
         self.storage = storage
     }
     
+    /// from https://en.wikipedia.org/wiki/SRGB#The_reverse_transformation
+    private func componentToLinear(c: Float) -> Float {
+        if c < 0.04045 {
+            return c / 12.92
+        }
+        let a: Float = 0.055
+        return pow((c + a) / (1 + a), 2.4)
+    }
+    
+    // Converts from something like sRGB -> linear which is what a device would do maybe
+    public func toLinear() -> RGBFloat {
+        return RGBFloat(r: componentToLinear(storage.x), g: componentToLinear(storage.y), b: componentToLinear(storage.z))
+    }
+    
     public func gammaAdjusted(gamma: Float = 2) -> RGBFloat {
         if gamma == 2 {
             return RGBFloat(storage: self.storage * self.storage)

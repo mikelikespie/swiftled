@@ -2,7 +2,7 @@
 //  VisualizationClient.swift
 //  SwiftledMobile
 //
-//  Created by Michael Lewis on 2/5/16.
+    //  Created by Michael Lewis on 2/5/16.
 //  Copyright © 2016 Lolrus Industries. All rights reserved.
 //
 
@@ -68,7 +68,6 @@ private class VisualizationClient {
         compositeDisposable.addDisposable(tickerDisposable)
         
         return compositeDisposable
-        //        return TickContext.init(tickIndex: $0, timeOffset: startTime - now, timeDelta: <#T##NSTimeInterval#>)
     }
 }
 

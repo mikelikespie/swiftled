@@ -26,7 +26,7 @@
         <!--Root View Controller-->
         <scene sceneID="5Ax-Qx-EmV">
             <objects>
-                <tableViewController clearsSelectionOnViewWillAppear="NO" id="30j-MY-ChV" sceneMemberID="viewController">
+                <tableViewController clearsSelectionOnViewWillAppear="NO" id="30j-MY-ChV" customClass="ViewController" customModule="SwiftledMobile" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="Lct-Ny-JaN">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -68,10 +68,10 @@
             </objects>
             <point key="canvasLocation" x="1320" y="279"/>
         </scene>
-        <!--View Controller-->
+        <!--Split View Controller-->
         <scene sceneID="ipz-DO-dtE">
             <objects>
-                <splitViewController id="At7-S6-7cB" customClass="ViewController" customModule="SwiftledMobile" customModuleProvider="target" sceneMemberID="viewController">
+                <splitViewController id="At7-S6-7cB" sceneMemberID="viewController">
                     <connections>
                         <segue destination="Cj7-UD-1Et" kind="relationship" relationship="masterViewController" id="Qqw-uI-7w1"/>
                         <segue destination="4WU-Ta-0VY" kind="relationship" relationship="detailViewController" id="ldz-86-dbP"/>

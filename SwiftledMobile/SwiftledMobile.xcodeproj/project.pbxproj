@@ -954,6 +954,7 @@
 				273B78FD1C6684F1007AC781 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
