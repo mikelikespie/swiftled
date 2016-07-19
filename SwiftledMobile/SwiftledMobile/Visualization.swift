@@ -16,5 +16,5 @@ public protocol Visualization {
     
     /// - parameter ticker: ticks with time interval
     /// - returns: Disposable. It should stop listening for tick information
-    func bind(ticker: Observable<WriteContext>) -> Disposable
+    func bind(_ ticker: Observable<WriteContext>) -> Disposable
 }

@@ -27,15 +27,15 @@ public struct AddrInfo {
 }
 
 extension AddrInfo {
-    public func connect(workQueue: dispatch_queue_t=dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) -> Observable<dispatch_fd_t> {
+    public func connect(_ workQueue: DispatchQueue=DispatchQueue.global(attributes: DispatchQueue.GlobalAttributes.qosDefault)) -> Observable<Int32> {
         return Observable.create { observer in
             do {
                 let socket = try self.socket()
                 precondition(socket >= 0)
                 
-                let writeSource = dispatch_source_create(DISPATCH_SOURCE_TYPE_WRITE, UInt(socket), 0, workQueue);
+                let writeSource = DispatchSource.write(fileDescriptor: socket, queue: workQueue);
                 
-                dispatch_resume(writeSource);
+                writeSource.resume();
                 NSLog("STARTING")
                 
                 func completeConnection() {
@@ -43,15 +43,15 @@ extension AddrInfo {
                     // Clear out the close handler, thsi means somebody else will own the socket after this
                     
                     NSLog("COMPLETING CONNECTION")
-                    dispatch_suspend(writeSource)
-                    dispatch_source_set_cancel_handler(writeSource)  { }
-                    dispatch_resume(writeSource)
+                    writeSource.suspend()
+                    writeSource.setCancelHandler { }
+                    writeSource.resume()
                     
                     observer.onNext(socket)
                     observer.onCompleted()
                 }
                 
-                dispatch_source_set_event_handler(writeSource) {
+                writeSource.setEventHandler {
                     do {
                         NSLog("Event trying to connect")
                         try self.tryConnectContinue(socket)
@@ -64,7 +64,7 @@ extension AddrInfo {
                     }
                 }
                 
-                dispatch_source_set_cancel_handler(writeSource) {
+                writeSource.setCancelHandler {
                     Darwin.close(socket)
                 }
                 
@@ -79,7 +79,7 @@ extension AddrInfo {
                 
                 return AnonymousDisposable {
                     NSLog("Disposing!!!")
-                    dispatch_source_cancel(writeSource)
+                    writeSource.cancel()
                 }
                 
             } catch let e {
@@ -93,7 +93,7 @@ extension AddrInfo {
     
     
     /// If this doesn't throw, we've connected
-    private func tryConnect(socket: dispatch_fd_t) throws {
+    private func tryConnect(_ socket: Int32) throws {
         NSLog("trying to connect")
         
         let result = self.addr.withUnsafeSockaddrPtr { ptr in
@@ -104,7 +104,7 @@ extension AddrInfo {
             throw POSIXError(rawValue: errno)!
         }
     }  /// If this doesn't throw, we've connected
-    private func tryConnectContinue(socket: dispatch_fd_t) throws {
+    private func tryConnectContinue(_ socket: Int32) throws {
         NSLog("trying to connect")
         
         var result: Int = 0
@@ -118,9 +118,9 @@ extension AddrInfo {
     }
     
     /// Calls socket on this and returns a socket
-    public func socket() throws -> dispatch_fd_t {
+    public func socket() throws -> Int32 {
         let fd = Darwin.socket(self.family, self.socktype, self.proto)
-        let result = shim_fcntl(fd, F_SETFL, O_NONBLOCK);
+        let result = fcntl(fd, F_SETFL, O_NONBLOCK);
         if result < 0 {
             throw Error.errorFromStatusCode(fd)!
         }
@@ -132,12 +132,12 @@ extension AddrInfo {
     }
 }
 
-public func getaddrinfoSockAddrsAsync(hostname: String, servname: String, workQueue: dispatch_queue_t=dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) -> Observable<AddrInfo> {
+public func getaddrinfoSockAddrsAsync(_ hostname: String, servname: String, workQueue: DispatchQueue=DispatchQueue.global(attributes: DispatchQueue.GlobalAttributes.qosDefault)) -> Observable<AddrInfo> {
     
     return Observable.create { observer in
-        var ai: UnsafeMutablePointer<addrinfo> = nil
+        var ai: UnsafeMutablePointer<addrinfo>? = nil
 
-        dispatch_async(workQueue) {
+        workQueue.async {
             do {
                 defer {
                     if ai != nil {
@@ -149,26 +149,28 @@ public func getaddrinfoSockAddrsAsync(hostname: String, servname: String, workQu
                 NSLog("OMG")
                 var curAi = ai
                 while curAi != nil {
-                    if curAi.memory.ai_addr == nil {
-                        curAi = curAi.memory.ai_next
+                    if curAi?.pointee.ai_addr == nil {
+                        curAi = curAi?.pointee.ai_next
                         continue
                     }
                     
-                    let aiMem = curAi.memory
+                    guard let aiMem = curAi?.pointee else {
+                        continue
+                    }
                     
-                    switch aiMem.ai_addr.memory.sa_family {
+                    switch aiMem.ai_addr.pointee.sa_family {
                     case UInt8(AF_INET):
-                        let addr = unsafeBitCast(curAi.memory.ai_addr, UnsafePointer<sockaddr_in>.self).memory
+                        let addr = unsafeBitCast(curAi?.pointee.ai_addr, to: UnsafePointer<sockaddr_in>.self).pointee
                         observer.onNext(AddrInfo(family: aiMem.ai_family, socktype: aiMem.ai_socktype, proto: aiMem.ai_protocol, addr: addr))
                     case UInt8(AF_INET6):
-                        let addr = unsafeBitCast(curAi.memory.ai_addr, UnsafePointer<sockaddr_in6>.self).memory
+                        let addr = unsafeBitCast(curAi?.pointee.ai_addr, to: UnsafePointer<sockaddr_in6>.self).pointee
                         observer.onNext(AddrInfo(family: aiMem.ai_family, socktype: aiMem.ai_socktype, proto: aiMem.ai_protocol, addr: addr))
                     default:
                         NSLog("skiping")
                         continue
                     }
                     
-                    curAi = curAi.memory.ai_next
+                    curAi = curAi?.pointee.ai_next
                 }
                 
                 NSLog("completing")

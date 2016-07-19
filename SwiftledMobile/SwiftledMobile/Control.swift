@@ -15,10 +15,10 @@ public struct TickContext {
     var tickIndex: Int
     
     /// Offset we are from when the visualization started
-    var timeOffset: NSTimeInterval
+    var timeOffset: TimeInterval
     
     /// Time since last tick
-    var timeDelta: NSTimeInterval
+    var timeDelta: TimeInterval
     
 }
 
@@ -37,5 +37,5 @@ public protocol Control : class {
     
     /// - parameter ticker: ticks with time interval
     /// - returns: Disposable. It should stop listening for tick information
-    func run(ticker: Observable<TickContext>) -> Disposable
+    func run(_ ticker: Observable<TickContext>) -> Disposable
 }

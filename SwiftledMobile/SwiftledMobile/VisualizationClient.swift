@@ -16,11 +16,11 @@ private class VisualizationClient {
     var buffer: [RGBFloat]
     init(connection: ClientConnection) {
         self.connection = connection
-        self.buffer = [RGBFloat].init(count: connection.count, repeatedValue: RGBFloat(r: 0, g: 0, b: 0))
+        self.buffer = [RGBFloat](repeating: RGBFloat(r: 0, g: 0, b: 0), count: connection.count)
     }
     
-    func start(fps: Double, visualization: Visualization) -> Disposable {
-        let ticker: Observable<Int> =  Observable.interval(1.0 / NSTimeInterval(fps), scheduler: MainScheduler.instance)
+    func start(_ fps: Double, visualization: Visualization) -> Disposable {
+        let ticker: Observable<Int> =  Observable.interval(1.0 / TimeInterval(fps), scheduler: MainScheduler.instance)
         
         let compositeDisposable = CompositeDisposable()
         
@@ -30,11 +30,11 @@ private class VisualizationClient {
         compositeDisposable.addDisposable(visualizationDisposable)
         
         let tickerDisposable = ticker
-            .map { idx -> (Int, NSTimeInterval) in
-                let now = NSDate.timeIntervalSinceReferenceDate()
+            .map { idx -> (Int, TimeInterval) in
+                let now = Date.timeIntervalSinceReferenceDate
                 return (index: idx, now: now)
             }
-            .scan(nil as (startTime: NSTimeInterval, context: TickContext)?) { startOffsetLastContext, indexNow in
+            .scan(nil as (startTime: TimeInterval, context: TickContext)?) { startOffsetLastContext, indexNow in
                 let now = indexNow.1
                 let start = startOffsetLastContext?.startTime ?? now
                 let offset = now - start
@@ -72,19 +72,19 @@ private class VisualizationClient {
 }
 
 
-public func applyOverRange(fullBounds: Range<Int>, iterations: Int = 16, fn: Range<Int> -> ()) {
+public func applyOverRange(_ fullBounds: CountableRange<Int>, iterations: Int = 16, fn: (CountableRange<Int>) -> ()) {
     let chunkSize = ((fullBounds.count - 1) / iterations) + 1
     let splitBounds = (0..<iterations).map { idx in
-        (fullBounds.startIndex + chunkSize * idx)..<min((fullBounds.startIndex + chunkSize * (idx + 1)), fullBounds.endIndex)
+        (fullBounds.lowerBound + chunkSize * idx)..<min((fullBounds.lowerBound + chunkSize * (idx + 1)), fullBounds.upperBound)
     }
     
-    dispatch_apply(iterations, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0)) { idx in
+    DispatchQueue.concurrentPerform(iterations: iterations) { idx in
         let bounds = splitBounds[idx]
         fn(bounds)
     }
 }
 
-func startVisualization(visualization: Visualization, fps: Double) -> Disposable {
+func startVisualization(_ visualization: Visualization, fps: Double) -> Disposable {
     let compositeDisposable = CompositeDisposable()
     let addrInfoDisposable = getaddrinfoSockAddrsAsync("raspberrypi.local", servname: "7890")
         .debug()
@@ -94,7 +94,7 @@ func startVisualization(visualization: Visualization, fps: Double) -> Disposable
         .take(1)
         .subscribe(
             onNext: { sock in
-                let connection = ClientConnection(fd: sock, ledCount: ledCount, mode: .RGBARaw)
+                let connection = ClientConnection(fd: sock, ledCount: ledCount, mode: .rgbaRaw)
 //                let connection = ClientConnection(fd: sock, ledCount: ledCount, mode: .RGB8)
                 
                 let client = VisualizationClient(connection: connection)

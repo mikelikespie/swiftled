@@ -19,8 +19,6 @@
 		271036FD1C337F5C00AC3717 /* Net.swift in Sources */ = {isa = PBXBuildFile; fileRef = 271036FC1C337F5C00AC3717 /* Net.swift */; };
 		271036FF1C33806300AC3717 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 271036FE1C33806300AC3717 /* Error.swift */; };
 		271037011C33824D00AC3717 /* SockAddr.swift in Sources */ = {isa = PBXBuildFile; fileRef = 271037001C33824D00AC3717 /* SockAddr.swift */; };
-		271037051C33854900AC3717 /* Shims.m in Sources */ = {isa = PBXBuildFile; fileRef = 271037031C33854900AC3717 /* Shims.m */; };
-		2710370C1C338F7800AC3717 /* Shims.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2710370B1C338F7800AC3717 /* Shims.swift */; };
 		2710370E1C33AA4200AC3717 /* ClientConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2710370D1C33AA4200AC3717 /* ClientConnection.swift */; };
 		271D22721C33C9EE00E2798E /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 271D226E1C33C59500E2798E /* Colors.swift */; };
 		273164F21C66DAD300EC23C1 /* RxCocoa.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 271036EA1C337CC000AC3717 /* RxCocoa.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -240,9 +238,7 @@
 		271036FC1C337F5C00AC3717 /* Net.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Net.swift; sourceTree = "<group>"; };
 		271036FE1C33806300AC3717 /* Error.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
 		271037001C33824D00AC3717 /* SockAddr.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SockAddr.swift; sourceTree = "<group>"; };
-		271037031C33854900AC3717 /* Shims.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Shims.m; sourceTree = "<group>"; };
 		2710370A1C338E1F00AC3717 /* SwiftledPlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = SwiftledPlayground.playground; sourceTree = "<group>"; };
-		2710370B1C338F7800AC3717 /* Shims.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Shims.swift; path = ../../SwiftledMobile/Shims.swift; sourceTree = "<group>"; };
 		2710370D1C33AA4200AC3717 /* ClientConnection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClientConnection.swift; sourceTree = "<group>"; };
 		271D226E1C33C59500E2798E /* Colors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		273B78B61C65C220007AC781 /* Visualization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Visualization.swift; sourceTree = "<group>"; };
@@ -326,8 +322,6 @@
 				271036FE1C33806300AC3717 /* Error.swift */,
 				271036FC1C337F5C00AC3717 /* Net.swift */,
 				271037001C33824D00AC3717 /* SockAddr.swift */,
-				271037031C33854900AC3717 /* Shims.m */,
-				2710370B1C338F7800AC3717 /* Shims.swift */,
 				2710370D1C33AA4200AC3717 /* ClientConnection.swift */,
 				271D226E1C33C59500E2798E /* Colors.swift */,
 			);
@@ -450,12 +444,13 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0720;
-				LastUpgradeCheck = 0720;
+				LastUpgradeCheck = 0800;
 				ORGANIZATIONNAME = "Lolrus Industries";
 				TargetAttributes = {
 					271036AA1C337C8600AC3717 = {
 						CreatedOnToolsVersion = 7.2;
 						DevelopmentTeam = 4NHJL99NX7;
+						LastSwiftMigration = 0800;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
@@ -464,9 +459,11 @@
 					};
 					271036C41C337CA700AC3717 = {
 						CreatedOnToolsVersion = 7.2;
+						LastSwiftMigration = 0800;
 					};
 					273B78F21C6684F1007AC781 = {
 						CreatedOnToolsVersion = 7.2.1;
+						LastSwiftMigration = 0800;
 						TestTargetID = 271036AA1C337C8600AC3717;
 					};
 				};
@@ -688,8 +685,6 @@
 				271036FF1C33806300AC3717 /* Error.swift in Sources */,
 				271036FD1C337F5C00AC3717 /* Net.swift in Sources */,
 				271D22721C33C9EE00E2798E /* Colors.swift in Sources */,
-				271037051C33854900AC3717 /* Shims.m in Sources */,
-				2710370C1C338F7800AC3717 /* Shims.swift in Sources */,
 				271037011C33824D00AC3717 /* SockAddr.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -839,30 +834,32 @@
 		271036BE1C337C8600AC3717 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				INFOPLIST_FILE = SwiftledMobile/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.swiftled.SwiftledMobile;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
 		271036BF1C337C8600AC3717 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				INFOPLIST_FILE = SwiftledMobile/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.swiftled.SwiftledMobile;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
@@ -886,6 +883,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -910,6 +908,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.swiftled.OPC;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -922,6 +921,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.swiftled.OPCTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SwiftledMobile.app/SwiftledMobile";
 			};
 			name = Debug;
@@ -933,6 +933,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.swiftled.OPCTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SwiftledMobile.app/SwiftledMobile";
 			};
 			name = Release;

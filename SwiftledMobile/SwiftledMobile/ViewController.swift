@@ -45,36 +45,36 @@ class ViewController: UITableViewController, UISplitViewControllerDelegate {
             .addDisposableTo(disposeBag)
     }
     
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return cells.count
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        return cells[indexPath.row]
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        return cells[(indexPath as NSIndexPath).row]
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        super.prepareForSegue(segue, sender: sender)
+    override func prepare(for segue: UIStoryboardSegue, sender: AnyObject?) {
+        super.prepare(for: segue, sender: sender)
     }
     
     private var collapseDetailViewController = true
 
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         collapseDetailViewController = false
     }
     
     // MARK: - UISplitViewControllerDelegate
     
-    func splitViewController(splitViewController: UISplitViewController, collapseSecondaryViewController secondaryViewController: UIViewController, ontoPrimaryViewController primaryViewController: UIViewController) -> Bool {
+    func splitViewController(_ splitViewController: UISplitViewController, collapseSecondary secondaryViewController: UIViewController, onto primaryViewController: UIViewController) -> Bool {
         return collapseDetailViewController
     }
 }
@@ -87,16 +87,16 @@ class SliderCell : UITableViewCell {
     
     private var disposeBag = DisposeBag()
     
-    init(bounds: ClosedInterval<Float>, defaultValue: Float, name: String) {
+    init(bounds: ClosedRange<Float>, defaultValue: Float, name: String) {
         self.name = name
-        super.init(style: .Default, reuseIdentifier: nil)
+        super.init(style: .default, reuseIdentifier: nil)
         
         label = UILabel()
-        label.font = UIFont.systemFontOfSize(12)
+        label.font = UIFont.systemFont(ofSize: 12)
         slider = UISlider()
         
-        slider.minimumValue = bounds.start
-        slider.maximumValue = bounds.end
+        slider.minimumValue = bounds.lowerBound
+        slider.maximumValue = bounds.upperBound
 
         label.translatesAutoresizingMaskIntoConstraints = false
         slider.translatesAutoresizingMaskIntoConstraints = false
@@ -113,17 +113,17 @@ class SliderCell : UITableViewCell {
             .addDisposableTo(disposeBag)
         
         let constraints = [
-            NSLayoutConstraint(item: slider, attribute: .Top, relatedBy: .Equal, toItem: contentView, attribute: .Top, multiplier: 1, constant: 0),
-            NSLayoutConstraint(item: slider, attribute: .Bottom, relatedBy: .Equal, toItem: label, attribute: .Top, multiplier: 1, constant: 0),
-            NSLayoutConstraint(item: label, attribute: .Bottom, relatedBy: .Equal, toItem: contentView, attribute: .Bottom, multiplier: 1, constant: 0),
+            NSLayoutConstraint(item: slider, attribute: .top, relatedBy: .equal, toItem: contentView, attribute: .top, multiplier: 1, constant: 0),
+            NSLayoutConstraint(item: slider, attribute: .bottom, relatedBy: .equal, toItem: label, attribute: .top, multiplier: 1, constant: 0),
+            NSLayoutConstraint(item: label, attribute: .bottom, relatedBy: .equal, toItem: contentView, attribute: .bottom, multiplier: 1, constant: 0),
             ] + ([label, slider] as [UIView]).flatMap {
                 [
-                    NSLayoutConstraint(item: $0, attribute: .Leading, relatedBy: .Equal, toItem: self.contentView, attribute: .LeadingMargin, multiplier: 1, constant: 0),
-                    NSLayoutConstraint(item: $0, attribute: .Trailing, relatedBy: .Equal, toItem: self.contentView, attribute: .TrailingMargin, multiplier: 1, constant: 0),
+                    NSLayoutConstraint(item: $0, attribute: .leading, relatedBy: .equal, toItem: self.contentView, attribute: .leadingMargin, multiplier: 1, constant: 0),
+                    NSLayoutConstraint(item: $0, attribute: .trailing, relatedBy: .equal, toItem: self.contentView, attribute: .trailingMargin, multiplier: 1, constant: 0),
                 ]
         }
         
-        NSLayoutConstraint.activateConstraints(constraints)
+        NSLayoutConstraint.activate(constraints)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -144,13 +144,13 @@ class SliderControl : Control {
         return [sliderCell]
     }
     
-    init(bounds: ClosedInterval<Float>, defaultValue: Float, name: String) {
+    init(bounds: ClosedRange<Float>, defaultValue: Float, name: String) {
         self.name = name
         self.sliderCell = SliderCell(bounds: bounds, defaultValue: defaultValue, name: name)
         
     }
     
-    func run(ticker: Observable<TickContext>) -> Disposable {
+    func run(_ ticker: Observable<TickContext>) -> Disposable {
         return NopDisposable.instance
     }
 }
@@ -170,7 +170,7 @@ class SimpleVisualization : Visualization {
     
     let name = Observable<String>.just("Simple visualization")
     
-    func bind(ticker: Observable<WriteContext>) -> Disposable {
+    func bind(_ ticker: Observable<WriteContext>) -> Disposable {
         
         var offset = 0.0
         return ticker.subscribeNext { context in
@@ -188,8 +188,9 @@ class SimpleVisualization : Visualization {
                         precondition(hueNumerator >= 0)
                     }
                     
-                    let hue: Float = hueNumerator % 1.0
-                    let value = 0.5 + 0.5 * sin(Float(now * 2) + Float(M_PI * 2) * Float(i % segmentLength) / Float(segmentLength))
+                    let hue: Float = hueNumerator.truncatingRemainder(dividingBy:  1.0)
+                    let portion = Float(i % segmentLength) / Float(segmentLength)
+                    let value = 0.5 + 0.5 * sin(Float(now * 2) + Float(M_PI * 2) * portion)
                     writeBuffer[i] = HSV(h: hue, s: 1, v: value).rgbFloat.gammaAdjusted(self.gammaControl.value) * pow(self.brightnessControl.value, 2)
                 }
             }

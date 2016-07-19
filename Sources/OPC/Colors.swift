@@ -10,7 +10,7 @@ import Foundation
 
 import simd
 
-private func clampUnit(x: Float) -> Float {
+private func clampUnit(_ x: Float) -> Float {
     if x < 0 {
         return 0
     }
@@ -33,7 +33,7 @@ private func clampUnit(x: Float) -> Float {
 //    }
 //}
 
-@inline(__always) private func clampUnit(x: float3) -> float3 {
+@inline(__always) private func clampUnit(_ x: float3) -> float3 {
     return clamp(x, min: 0, max: 1)
 }
 /// Represent colors on unit scale
@@ -85,7 +85,7 @@ public struct RGBFloat : ColorConvertible, CustomStringConvertible {
     }
     
     /// from https://en.wikipedia.org/wiki/SRGB#The_reverse_transformation
-    private func componentToLinear(c: Float) -> Float {
+    private func componentToLinear(_ c: Float) -> Float {
         if c < 0.04045 {
             return c / 12.92
         }
@@ -98,7 +98,7 @@ public struct RGBFloat : ColorConvertible, CustomStringConvertible {
         return RGBFloat(r: componentToLinear(storage.x), g: componentToLinear(storage.y), b: componentToLinear(storage.z))
     }
     
-    public func gammaAdjusted(gamma: Float = 2) -> RGBFloat {
+    public func gammaAdjusted(_ gamma: Float = 2) -> RGBFloat {
         if gamma == 2 {
             return RGBFloat(storage: self.storage * self.storage)
         }
@@ -161,7 +161,7 @@ public struct RGBFloat : ColorConvertible, CustomStringConvertible {
         return closestRGBAColor
     }
     
-    @inline(__always) private func closestRawColorWithAlpha(alpha: UInt8) -> RGBARaw {
+    @inline(__always) private func closestRawColorWithAlpha(_ alpha: UInt8) -> RGBARaw {
         if alpha == 0 {
             return RGBARaw(r: 0, g: 0, b: 0, a: 0)
         }
@@ -184,7 +184,7 @@ public struct RGBFloat : ColorConvertible, CustomStringConvertible {
         )
     }
     
-    public func distanceToSquared(other: RGBFloat) -> Float {
+    public func distanceToSquared(_ other: RGBFloat) -> Float {
         return distance_squared(self.storage, other.storage)
     }
     
@@ -244,7 +244,7 @@ public struct RGBARaw : ColorConvertible, CustomStringConvertible {
     }
 
     
-    @inline(__always) private func distanceToRgbFloatSquared(other: float3) -> Float {
+    @inline(__always) private func distanceToRgbFloatSquared(_ other: float3) -> Float {
         let mult = floatStorageMultiplierConstant * Float(a)
         let ourStorage = float3(Float(r), Float(g), Float(b)) * mult
         return distance_squared(ourStorage, other)
@@ -289,7 +289,7 @@ public struct HSV : ColorConvertible {
         // Figure out which section of the hue wheel we're in,
         // and how far offset we are withing that section
         let section = Int(floor(h * 3.0))
-        let offset = (h * 3.0) % 1.0
+        let offset = (h * 3.0).truncatingRemainder(dividingBy: 1.0)
         
         let rampup = offset
         let rampdown = 1.0 - offset

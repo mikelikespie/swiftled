@@ -67,7 +67,7 @@ class OPCTests: XCTestCase {
     }
     
     
-    func testMapping<C: ColorConvertible>(name: String, colors: [RGBFloat], mappingFunc: (input: RGBFloat) -> C) {
+    func testMapping<C: ColorConvertible>(_ name: String, colors: [RGBFloat], mappingFunc: (input: RGBFloat) -> C) {
         // This is an example of a performance test case.
         var deltaSum: Double = 0
         var logSum: Double = 0
@@ -87,7 +87,7 @@ class OPCTests: XCTestCase {
                 maxAdjustedDelta = max(maxAdjustedDelta, adjustedDelta)
                 maxDelta = max(maxDelta, delta)
             }
-            count++
+            count += 1
         }
         
         
@@ -96,7 +96,7 @@ class OPCTests: XCTestCase {
         print("\(name): maxAdjustedDelta: \(maxAdjustedDelta)")
         print("\(name): maxDelta: \(maxDelta)")
         
-        self.measureBlock {
+        self.measure {
             for c in self.colorsToTest {
                 mappingFunc(input: c)
             }
