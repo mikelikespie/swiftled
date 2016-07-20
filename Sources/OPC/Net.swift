@@ -112,7 +112,7 @@ extension AddrInfo {
     private func tryConnect(_ socket: Int32) throws {
         NSLog("trying to connect")
         
-        let result = self.addr.withUnsafeSockaddrPtr { ptr in
+        let result = self.addr.withUnsafeSockaddrPtr { ptr -> Int32 in
             
             #if os(Linux)
                 return Glibc.connect(socket, ptr, socklen_t(self.addr.dynamicType.size))
