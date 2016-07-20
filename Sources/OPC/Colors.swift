@@ -8,7 +8,9 @@
 
 import Foundation
 
-import simd
+//import simd
+
+
 
 private func clampUnit(_ x: Float) -> Float {
     if x < 0 {
@@ -32,6 +34,10 @@ private func clampUnit(_ x: Float) -> Float {
 //        return r * r + g * g + b * b
 //    }
 //}
+
+#if !os(Linux)
+import simd
+#endif
 
 @inline(__always) private func clampUnit(_ x: float3) -> float3 {
     return clamp(x, min: 0, max: 1)
@@ -65,7 +71,7 @@ public struct RGBFloat : ColorConvertible, CustomStringConvertible {
         }
     }
     
-    var storage: simd.float3
+    var storage: float3
     
     public var rgb8: RGB8 {
         let multiplied = storage * 255
