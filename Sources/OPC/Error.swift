@@ -9,6 +9,12 @@
 
 #if os(Linux)
     import Glibc
+
+    typealias  ErrorProtocol = Swift.Error
+    
+    func NSLog(str: String, values: Any...) {
+        
+    }
 #endif
 
 
