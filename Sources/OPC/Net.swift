@@ -19,7 +19,7 @@ private var hints: addrinfo = {
     var hints = addrinfo()
     hints.ai_family = PF_UNSPEC
     #if os(Linux)
-        hints.ai_socktype = SOCK_STREAM.rawValue
+        hints.ai_socktype = Int32(SOCK_STREAM.rawValue)
     #else
         hints.ai_socktype = SOCK_STREAM
     #endif
@@ -114,9 +114,8 @@ extension AddrInfo {
         
         let result = self.addr.withUnsafeSockaddrPtr { ptr in
             
-            Darwin.connect(socket, ptr, socklen_t(self.addr.dynamicType.size))
             #if os(Linux)
-//                return Glibc.connect(socket, ptr, socklen_t(self.addr.dynamicType.size))
+                return Glibc.connect(socket, ptr, socklen_t(self.addr.dynamicType.size))
             #else
                 return Darwin.connect(socket, ptr, socklen_t(self.addr.dynamicType.size))
             #endif
