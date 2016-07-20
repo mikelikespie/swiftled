@@ -12,7 +12,7 @@
 
     typealias  ErrorProtocol = Swift.Error
     
-    func NSLog(str: String, values: Any...) {
+    func NSLog(_ str: String, _ values: Any...) {
         
     }
 #endif
