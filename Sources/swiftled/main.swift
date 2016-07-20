@@ -1,6 +1,5 @@
 import OPC
 import RxSwift
-import Darwin
 import Foundation
 
 let compositeDisposable = CompositeDisposable()
