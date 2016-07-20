@@ -18,7 +18,7 @@ import Foundation
 private var hints: addrinfo = {
     var hints = addrinfo()
     hints.ai_family = PF_UNSPEC
-    hints.ai_socktype = SOCK_STREAM
+    hints.ai_socktype = Int32(SOCK_STREAM)
     return hints
 }()
 
