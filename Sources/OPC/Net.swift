@@ -156,7 +156,7 @@ extension AddrInfo {
         }
         
         var flag: Int = 1
-        setsockopt(fd, IPPROTO_TCP, TCP_NODELAY, &flag, socklen_t(sizeofValue(flag)))
+        setsockopt(fd, Int32(IPPROTO_TCP), TCP_NODELAY, &flag, socklen_t(sizeofValue(flag)))
 
         return fd
     }
