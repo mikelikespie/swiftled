@@ -18,14 +18,22 @@ import Foundation
 private var hints: addrinfo = {
     var hints = addrinfo()
     hints.ai_family = PF_UNSPEC
-    hints.ai_socktype = Int32(SOCK_STREAM)
+    #if os(Linux)
+        hints.ai_socktype = SOCK_STREAM.rawValue
+    #else
+        hints.ai_socktype = SOCK_STREAM
+    #endif
     return hints
 }()
 
 // Wrapped addrinfo
 public struct AddrInfo {
     let family: Int32
+    #if os(Linux)
+    let socktype: __socket_type
+    #else
     let socktype: Int32
+    #endif
     let proto: Int32
     let addr: SockAddr
 }
@@ -69,7 +77,11 @@ extension AddrInfo {
                 }
                 
                 writeSource.setCancelHandler {
-                    Darwin.close(socket)
+                    #if os(Linux)
+                        Glibc.close(socket)
+                    #else
+                        Darwin.close(socket)
+                    #endif
                 }
                 
                 do {
@@ -101,7 +113,14 @@ extension AddrInfo {
         NSLog("trying to connect")
         
         let result = self.addr.withUnsafeSockaddrPtr { ptr in
+            
             Darwin.connect(socket, ptr, socklen_t(self.addr.dynamicType.size))
+            #if os(Linux)
+//                return Glibc.connect(socket, ptr, socklen_t(self.addr.dynamicType.size))
+            #else
+                return Darwin.connect(socket, ptr, socklen_t(self.addr.dynamicType.size))
+            #endif
+
         }
         
         if result != 0 {
@@ -113,7 +132,10 @@ extension AddrInfo {
         
         var result: Int = 0
         var len = socklen_t(sizeofValue(result))
+        
         let status = Darwin.getsockopt(socket, SOL_SOCKET, SO_ERROR, &result, &len)
+        
+        
         precondition(status == 0, "getsockopt should return zero")
         
         if result != 0 {

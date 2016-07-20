@@ -10,7 +10,6 @@ import UIKit
 import RxSwift
 import OPC
 import RxCocoa
-import Darwin
 import Foundation
 
 let compositeDisposable = CompositeDisposable()

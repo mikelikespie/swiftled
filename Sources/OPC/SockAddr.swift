@@ -100,7 +100,7 @@ extension sockaddr_in: SockAddr {
 
 
 public extension SockAddr {    
-    var addr: Darwin.sockaddr {
+    var addr: sockaddr {
         return self.withUnsafeSockaddrPtr { ptr in
             return ptr.pointee
         }
