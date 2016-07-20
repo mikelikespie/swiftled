@@ -6,7 +6,11 @@
 //  Copyright © 2015 Lolrus Industries. All rights reserved.
 //
 
-import Darwin
+
+#if os(linux)
+    import Glibc
+#endif
+
 import RxSwift
 
 

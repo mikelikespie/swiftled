@@ -6,7 +6,11 @@
 //
 //
 
-import Darwin
+
+#if os(linux)
+    import Glibc
+#endif
+
 
 /// Wraps errors. Has an uknown type if it cant resolve to an oserror
 enum Error: ErrorProtocol {
