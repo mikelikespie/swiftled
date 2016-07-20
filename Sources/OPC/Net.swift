@@ -146,7 +146,7 @@ extension AddrInfo {
     /// Calls socket on this and returns a socket
     public func socket() throws -> Int32 {
         #if os(Linux)
-            let fd = Glibc.socket(self.family, self.socktype, self.proto)
+            let fd = Glibc.socket(self.family, Int32(self.socktype.rawValue), self.proto)
         #else
             let fd = Darwin.socket(self.family, self.socktype, self.proto)
         #endif

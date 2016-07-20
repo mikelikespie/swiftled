@@ -147,8 +147,12 @@ public final class ClientConnection : Collection {
     }
     
     public func flush() -> Observable<Void> {
-        let dispatchData = self.pixelBuffer.withUnsafeBufferPointer { ptr in
-            return DispatchData(bytesNoCopy: ptr)
+        let dispatchData = self.pixelBuffer.withUnsafeBufferPointer { ptr -> DispatchData in
+            #if os(Linux)
+                return DispatchData(bytes: ptr)
+            #else
+                return DispatchData(bytesNoCopy: ptr)
+            #endif
         }
         
         let subject = PublishSubject<Void>()
