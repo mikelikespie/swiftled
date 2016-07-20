@@ -188,7 +188,7 @@ public func getaddrinfoSockAddrsAsync(_ hostname: String, servname: String, work
                         continue
                     }
                     
-                    let socktype = __socket_type(UInt32(aiMem.ai_socktype))!
+                    let socktype = __socket_type(UInt32(aiMem.ai_socktype))
                     
                     switch aiMem.ai_addr.pointee.sa_family {
                     case UInt16(AF_INET):
