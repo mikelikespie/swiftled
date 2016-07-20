@@ -7,6 +7,7 @@
 //
 
 
+
 #if os(Linux)
     import Glibc
 #endif
@@ -132,8 +133,8 @@ extension AddrInfo {
         var result: Int = 0
         var len = socklen_t(sizeofValue(result))
         
-        let status = Darwin.getsockopt(socket, SOL_SOCKET, SO_ERROR, &result, &len)
-        
+
+        let status = getsockopt(socket, SOL_SOCKET, SO_ERROR, &result, &len)
         
         precondition(status == 0, "getsockopt should return zero")
         
@@ -144,7 +145,11 @@ extension AddrInfo {
     
     /// Calls socket on this and returns a socket
     public func socket() throws -> Int32 {
-        let fd = Darwin.socket(self.family, self.socktype, self.proto)
+        #if os(Linux)
+            let fd = Glibc.socket(self.family, self.socktype, self.proto)
+        #else
+            let fd = Darwin.socket(self.family, self.socktype, self.proto)
+        #endif
         let result = fcntl(fd, F_SETFL, O_NONBLOCK);
         if result < 0 {
             throw Error.errorFromStatusCode(fd)!
