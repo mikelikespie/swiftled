@@ -7,7 +7,7 @@
 //
 
 
-#if os(linux)
+#if os(Linux)
     import Glibc
 #endif
 
