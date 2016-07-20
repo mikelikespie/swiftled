@@ -50,7 +50,9 @@ extension sockaddr_in6: SockAddr {
         
         self.sin6_port = listenPort.bigEndian
         self.sin6_family = sa_family_t(self.dynamicType.addressFamily)
+        #if !os(Linux)
         self.sin6_len = UInt8(self.dynamicType.size)
+        #endif
     }
     
     public func withUnsafeSockaddrPtr<Result>(@noescape _ body: @noescape (UnsafePointer<sockaddr>) throws -> Result) rethrows -> Result {
@@ -87,7 +89,10 @@ extension sockaddr_in: SockAddr {
         
         self.sin_port = listenPort.bigEndian
         self.sin_family = sa_family_t(self.dynamicType.addressFamily)
+        
+        #if !os(Linux)
         self.sin_len = UInt8(self.dynamicType.size)
+        #endif
     }
     
     public func withUnsafeSockaddrPtr<Result>( _ body: @noescape (UnsafePointer<sockaddr>) throws -> Result) rethrows -> Result {
