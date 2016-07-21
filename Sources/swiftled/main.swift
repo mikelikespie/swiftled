@@ -26,7 +26,7 @@ func doStuff(conn: ClientConnection) {
 }
 //
 //
-let disposable = getaddrinfoSockAddrsAsync("raspberrypi.local", servname: "7890")
+let disposable = getaddrinfoSockAddrsAsync("pi0.local", servname: "7890")
     .debug()
     .flatMap { sa in
         return sa.connect().catchError { _ in .empty() }
@@ -50,7 +50,11 @@ let disposable = getaddrinfoSockAddrsAsync("raspberrypi.local", servname: "7890"
 
 
 #if os(Linux)
-sleep(.max)
+    
+let g = DispatchGroup()
+g.enter()
+g.wait()
+    
 #else
 dispatchMain()
 #endif
