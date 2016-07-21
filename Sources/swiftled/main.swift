@@ -16,6 +16,7 @@ func doStuff(conn: ClientConnection) {
     Observable<Int>.interval(timeInterval, scheduler: MainScheduler.instance)
         //.debug()
         .subscribeNext { _ in
+            NSLog("pew")
             conn.apply { i, now  -> HSV in
                 let hue: Float = (Float(now / 5) + Float(i * 2) / Float(ledCount)).truncatingRemainder(dividingBy: 1.0)
 					let value = 0.5 + 0.5 * sin(Float(now * 2) + Float(M_PI * 2) * Float(i % segmentLength) / Float(segmentLength))
