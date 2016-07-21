@@ -48,5 +48,13 @@ let disposable = getaddrinfoSockAddrsAsync("raspberrypi.local", servname: "7890"
         }
 )
 
+#if os(Linux)
+    
+    
+let g = DispatchGroup()
+g.enter()
+g.wait()    
+#else
 dispatchMain()
+#endif
 
