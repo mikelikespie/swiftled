@@ -13,7 +13,7 @@ func doStuff(conn: ClientConnection) {
     
     let timeInterval: RxTimeInterval = 1.0/600.0
     
-    Observable<Int>.interval(timeInterval, scheduler: SerialDispatchQueueScheduler(internalSerialQueueName: "Queue").instance)
+    Observable<Int>.interval(timeInterval, scheduler: SerialDispatchQueueScheduler(internalSerialQueueName: "Queue"))
         .debug()
         .subscribeNext { _ in
             NSLog("pew")
