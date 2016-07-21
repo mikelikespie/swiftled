@@ -8,8 +8,11 @@
 
 
 
+
 #if os(Linux)
     import Glibc
+#else
+    import Darwin
 #endif
 
 import RxSwift
@@ -188,13 +191,17 @@ public func getaddrinfoSockAddrsAsync(_ hostname: String, servname: String, work
                         continue
                     }
                     
-                    let socktype = __socket_type(UInt32(aiMem.ai_socktype))
+                    #if os(Linux)
+                        let socktype = __socket_type(UInt32(aiMem.ai_socktype))
+                    #else
+                        let socktype = aiMem.ai_socktype
+                    #endif
                     
                     switch aiMem.ai_addr.pointee.sa_family {
-                    case UInt16(AF_INET):
+                    case sa_family_t(AF_INET):
                         let addr = unsafeBitCast(curAi?.pointee.ai_addr, to: UnsafePointer<sockaddr_in>.self).pointee
                         observer.onNext(AddrInfo(family: aiMem.ai_family, socktype: socktype, proto: aiMem.ai_protocol, addr: addr))
-                    case UInt16(AF_INET6):
+                    case sa_family_t(AF_INET6):
                         let addr = unsafeBitCast(curAi?.pointee.ai_addr, to: UnsafePointer<sockaddr_in6>.self).pointee
                         observer.onNext(AddrInfo(family: aiMem.ai_family, socktype: socktype, proto: aiMem.ai_protocol, addr: addr))
                     default:

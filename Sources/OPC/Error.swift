@@ -7,9 +7,15 @@
 //
 
 
+
 #if os(Linux)
     import Glibc
+#else
+    import Darwin
+#endif
 
+
+#if os(Linux)
     typealias  ErrorProtocol = Swift.Error
     
     func NSLog(_ str: String, _ values: Any...) {
