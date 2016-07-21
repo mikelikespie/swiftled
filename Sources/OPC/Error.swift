@@ -14,6 +14,8 @@
     import Darwin
 #endif
 
+import Dispatch
+
 
 #if os(Linux)
     typealias  ErrorProtocol = Swift.Error
