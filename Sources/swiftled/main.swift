@@ -16,6 +16,12 @@ func doStuff(conn: ClientConnection) {
     Observable<Int>.interval(timeInterval, scheduler: SerialDispatchQueueScheduler(internalSerialQueueName: "Queue"))
         .debug("OMGOMG")
         .subscribeNext { _ in
+            NSLog("hey hey hey")
+    }
+    
+    Observable<Int>.interval(timeInterval, scheduler: SerialDispatchQueueScheduler(internalSerialQueueName: "Queue"))
+        .debug("OMGOMG")
+        .subscribeNext { _ in
             NSLog("pew")
             conn.apply { i, now  -> HSV in
                 let hue: Float = (Float(now / 5) + Float(i * 2) / Float(ledCount)).truncatingRemainder(dividingBy: 1.0)
