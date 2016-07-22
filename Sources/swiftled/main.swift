@@ -17,9 +17,10 @@ func doStuff(conn: ClientConnection) {
     
     let timeInterval: RxTimeInterval = 1.0/600.0
     
-    
+    serialQueue.after(when: .now() + .seconds(3)) { NSLog("!!After 3 seconds!!!") }
+
     Observable<Int>.interval(timeInterval / 1000, scheduler: defaultScheduler)
-        .debug("OMGOMG")
+        .debug("OMGOMG333")
         .subscribeNext { _ in
             
             serialQueue.after(when: .now() + .seconds(3)) { NSLog("After 3 seconds!!!") }
@@ -27,16 +28,17 @@ func doStuff(conn: ClientConnection) {
             NSLog("hey hey hey")
     }
     
-    Observable<Int>.interval(timeInterval, scheduler: SerialDispatchQueueScheduler(internalSerialQueueName: "Queue"))
+    Observable<Int>.interval(timeInterval, scheduler: defaultScheduler)
         .debug("OMGOMG")
         .subscribeNext { _ in
-            NSLog("pew")
+            NSLog("pew1")
             conn.apply { i, now  -> HSV in
                 let hue: Float = (Float(now / 5) + Float(i * 2) / Float(ledCount)).truncatingRemainder(dividingBy: 1.0)
 					let value = 0.5 + 0.5 * sin(Float(now * 2) + Float(M_PI * 2) * Float(i % segmentLength) / Float(segmentLength))
                 return HSV(h: hue, s: 1, v: value * value)
             }
-            
+            NSLog("pew2")
+ 
     }
 }
 //
@@ -55,11 +57,11 @@ let disposable = getaddrinfoSockAddrsAsync("pi0.local", servname: "7890")
         },
         onError: { error in
             NSLog("failed \(error) \((error as? POSIXError)?.rawValue)")
-//            page.finishExecution()
-            
+            exit(1)
         },
         onCompleted: {
-//            page.finishExecution()
+            NSLog("All connections failed")
+            exit(2)
         }
 )
 

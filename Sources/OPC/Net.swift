@@ -179,7 +179,6 @@ public func getaddrinfoSockAddrsAsync(_ hostname: String, servname: String, work
                 }
                 
                 try Error.throwIfNotSuccess(getaddrinfo(hostname, servname, &hints, &ai))
-                NSLog("OMG")
                 var curAi = ai
                 while curAi != nil {
                     if curAi?.pointee.ai_addr == nil {
