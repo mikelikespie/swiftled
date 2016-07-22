@@ -58,13 +58,9 @@ let disposable = getaddrinfoSockAddrsAsync("pi0.local", servname: "7890")
 
 #if os(Linux)
     
-//NSLog("Waiting for dispatch group")
-//
-//let g = DispatchGroup()
-//g.enter()
-//g.wait()
-//    
-#else
-dispatchMain()
+    @_silgen_name("dispatch_main")
+    func dispatchMain()
+
 #endif
+dispatchMain()
 
