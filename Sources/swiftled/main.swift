@@ -13,7 +13,7 @@ func doStuff(conn: ClientConnection) {
     
     let timeInterval: RxTimeInterval = 1.0/600.0
     
-    Observable<Int>.interval(timeInterval, scheduler: SerialDispatchQueueScheduler(internalSerialQueueName: "Queue"))
+    Observable<Int>.interval(timeInterval / 1000, scheduler: SerialDispatchQueueScheduler(internalSerialQueueName: "Queue"))
         .debug("OMGOMG")
         .subscribeNext { _ in
             NSLog("hey hey hey")
@@ -34,7 +34,7 @@ func doStuff(conn: ClientConnection) {
 //
 //
 let disposable = getaddrinfoSockAddrsAsync("pi0.local", servname: "7890")
-    .debug()
+    .debug("getaddrinfoSockAddrsAsync")
     .flatMap { sa in
         return sa.connect().catchError { _ in .empty() }
     }
@@ -58,6 +58,8 @@ let disposable = getaddrinfoSockAddrsAsync("pi0.local", servname: "7890")
 
 #if os(Linux)
     
+NSLog("Waiting for dispatch group")
+
 let g = DispatchGroup()
 g.enter()
 g.wait()
