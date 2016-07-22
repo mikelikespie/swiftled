@@ -18,10 +18,9 @@
     typealias  ErrorProtocol = Swift.Error
     
     public func NSLog(_ str: String, _ values: Any...) {
-        
+        print(String(format: str, arguments: values))
     }
 #endif
-
 
 /// Wraps errors. Has an uknown type if it cant resolve to an oserror
 enum Error: ErrorProtocol {
