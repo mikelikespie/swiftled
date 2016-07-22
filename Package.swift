@@ -10,7 +10,6 @@ let package = Package(
             name: "swiftled",
             dependencies: [
 				.Target(name: "OPC"),
-				.Target(name: "LedLib"),
 			]),
     ]
 )
