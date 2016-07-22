@@ -8,14 +8,22 @@ let compositeDisposable = CompositeDisposable()
 let segmentLength = 18
 let segmentCount = 30
 let ledCount =  segmentLength * segmentCount
-//
+
+let serialQueue = DispatchQueue(label: "MyQueue", attributes: .serial, target: nil)
+
+let defaultScheduler = SerialDispatchQueueScheduler(queue: serialQueue, internalSerialQueueName: "MyQueue")
+
 func doStuff(conn: ClientConnection) {
     
     let timeInterval: RxTimeInterval = 1.0/600.0
     
-    Observable<Int>.interval(timeInterval / 1000, scheduler: SerialDispatchQueueScheduler(internalSerialQueueName: "Queue"))
+    
+    Observable<Int>.interval(timeInterval / 1000, scheduler: defaultScheduler)
         .debug("OMGOMG")
         .subscribeNext { _ in
+            
+            serialQueue.after(when: .now() + .seconds(3)) { NSLog("After 3 seconds!!!") }
+            
             NSLog("hey hey hey")
     }
     
