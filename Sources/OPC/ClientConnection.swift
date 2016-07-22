@@ -10,7 +10,6 @@ import Foundation
 import RxSwift
 import Dispatch
 import Swift
-import LedLib
 
 private let headerSize = 4
 private let broadcastChannel: UInt8 = 0
