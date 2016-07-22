@@ -10,6 +10,7 @@ import Foundation
 import RxSwift
 import Dispatch
 import Swift
+import LedLib
 
 private let headerSize = 4
 private let broadcastChannel: UInt8 = 0
@@ -83,10 +84,13 @@ public final class ClientConnection : Collection {
         self.channel.setInterval(interval: .seconds(0), flags: DispatchIO.IntervalFlags.strictInterval)
     }
     
-    public func apply<C: ColorConvertible>( _ fn: @noescape (index: Int, now: TimeInterval) -> C) {
+    public func apply<C: ColorConvertible>( _ fn: (index: Int, now: TimeInterval) -> C) {
         let timeOffset = Date.timeIntervalSinceReferenceDate - start
-        for idx in 0..<ledCount {
-            self[idx] = fn(index: idx, now: timeOffset).rgbFloat
+        
+        applyOverRange(0..<ledCount, iterations: 4) { rng in
+            for idx in rng {
+                self[idx] = fn(index: idx, now: timeOffset).rgbFloat
+            }
         }
     }
     
@@ -177,3 +181,18 @@ public final class ClientConnection : Collection {
         return subject
     }
 }
+
+
+public func applyOverRange(_ fullBounds: CountableRange<Int>, iterations: Int = 16, fn: (CountableRange<Int>) -> ()) {
+    let chunkSize = ((fullBounds.count - 1) / iterations) + 1
+    let splitBounds = (0..<iterations).map { idx in
+        (fullBounds.lowerBound + chunkSize * idx)..<min((fullBounds.lowerBound + chunkSize * (idx + 1)), fullBounds.upperBound)
+    }
+    
+    DispatchQueue.concurrentPerform(iterations: iterations) { idx in
+        let bounds = splitBounds[idx]
+        fn(bounds)
+    }
+}
+
+

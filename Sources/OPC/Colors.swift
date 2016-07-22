@@ -36,7 +36,7 @@ private func clampUnit(_ x: Float) -> Float {
 //}
 
 #if !os(Linux)
-import simd
+//import simd
 #endif
 
 @inline(__always) private func clampUnit(_ x: float3) -> float3 {

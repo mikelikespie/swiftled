@@ -7,7 +7,6 @@
 //
 
 
-#if os(Linux)
 
 public struct float3  {
     public var x: Float
@@ -56,6 +55,8 @@ func clamp(_ lhs: float3, min min_: Float, max max_: Float) -> float3 {
         max(min(lhs.z, max_), min_)
     )
 }
+
+#if os(Linux)
 
 public enum POSIXError : CInt, ErrorProtocol {
     case EDEADLK = 35
