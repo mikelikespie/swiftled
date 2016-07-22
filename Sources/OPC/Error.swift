@@ -17,7 +17,7 @@
 #if os(Linux)
     typealias  ErrorProtocol = Swift.Error
     
-    public func NSLog(_ str: String, _ values: Any...) {
+    public func NSLog(_ str: String, _ values: CVarArg...) {
         print(String(format: str, arguments: values))
     }
 #endif
