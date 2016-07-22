@@ -19,30 +19,29 @@ func doStuff(conn: ClientConnection) {
     
     serialQueue.after(when: .now() + .seconds(3)) { NSLog("!!After 3 seconds!!!") }
 
-    Observable<Int>.interval(timeInterval / 1000, scheduler: defaultScheduler)
-        .debug("OMGOMG333")
-        .subscribeNext { _ in
-            
-            serialQueue.after(when: .now() + .seconds(3)) { NSLog("After 3 seconds!!!") }
-            
-            NSLog("hey hey hey")
-    }
-    
+//    Observable<Int>.interval(timeInterval / 1000, scheduler: defaultScheduler)
+//        .debug("OMGOMG333")
+//        .subscribeNext { _ in
+//            
+//            serialQueue.after(when: .now() + .seconds(3)) { NSLog("After 3 seconds!!!") }
+//            
+//            NSLog("hey hey hey")
+//    }
+//    
     Observable<Int>.interval(timeInterval, scheduler: defaultScheduler)
-        .debug("OMGOMG")
         .subscribeNext { _ in
-            NSLog("pew1")
             conn.apply { i, now  -> HSV in
                 let hue: Float = (Float(now / 5) + Float(i * 2) / Float(ledCount)).truncatingRemainder(dividingBy: 1.0)
 					let value = 0.5 + 0.5 * sin(Float(now * 2) + Float(M_PI * 2) * Float(i % segmentLength) / Float(segmentLength))
                 return HSV(h: hue, s: 1, v: value * value)
             }
-            NSLog("pew2")
- 
-    }
+     }
 }
 //
 //
+
+var didConnect = false
+
 let disposable = getaddrinfoSockAddrsAsync("pi0.local", servname: "7890")
     .debug("getaddrinfoSockAddrsAsync")
     .flatMap { sa in
@@ -51,6 +50,8 @@ let disposable = getaddrinfoSockAddrsAsync("pi0.local", servname: "7890")
     .take(1)
     .subscribe(
         onNext: { sock in
+            didConnect = true
+            
             let connection = ClientConnection(fd: sock, ledCount: ledCount, mode: .rgbaRaw)
             
             doStuff(conn: connection)
@@ -60,8 +61,10 @@ let disposable = getaddrinfoSockAddrsAsync("pi0.local", servname: "7890")
             exit(1)
         },
         onCompleted: {
-            NSLog("All connections failed")
-            exit(2)
+            if !didConnect {
+                NSLog("All connections failed")
+                exit(2)
+            }
         }
 )
 
