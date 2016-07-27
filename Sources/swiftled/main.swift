@@ -36,6 +36,8 @@ func doStuff(conn: ClientConnection) {
                 return HSV(h: hue, s: 1, v: value * value)
             }
             
+            conn.flush()
+            
             if tick % 1000 == 0 {
                 NSLog("Still alive after \(tick) frames")
             }
@@ -48,10 +50,10 @@ var didConnect = false
 
 let disposable = getaddrinfoSockAddrsAsync("pi0.local", servname: "7890")
     .debug("getaddrinfoSockAddrsAsync")
+    .take(1)
     .flatMap { sa in
         return sa.connect().catchError { _ in .empty() }
     }
-    .take(1)
     .subscribe(
         onNext: { sock in
             didConnect = true

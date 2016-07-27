@@ -129,7 +129,9 @@ extension AddrInfo {
         if result != 0 {
             throw POSIXError(rawValue: errno)!
         }
-    }  /// If this doesn't throw, we've connected
+    }
+    
+    /// If this doesn't throw, we've connected
     private func tryConnectContinue(_ socket: Int32) throws {
         NSLog("trying to connect")
         

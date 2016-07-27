@@ -53,7 +53,7 @@ public final class ClientConnection : Collection {
     public typealias Index = Int
     
     private var pixelBuffer: [UInt8]
-    private var workQueue = DispatchQueue(label: "connection work queue", attributes: DispatchQueueAttributes.serial)
+    private let workQueue = DispatchQueue(label: "connection work queue", attributes: DispatchQueueAttributes.serial)
     private var channel: DispatchIO
     private var ledCount: Int
     private var start: TimeInterval
@@ -150,34 +150,41 @@ public final class ClientConnection : Collection {
     }
     
     public func flush() -> Observable<Void> {
-        let dispatchData = self.pixelBuffer.withUnsafeBufferPointer { ptr -> DispatchData in
-            #if os(Linux)
-                return DispatchData(bytes: ptr)
-            #else
-                return DispatchData(bytesNoCopy: ptr)
-            #endif
+        let dispatchData = self.pixelBuffer.withUnsafeBufferPointer {
+            return DispatchData(bytesNoCopy: $0, deallocator: DispatchData.Deallocator.custom(nil, {}))
         }
         
         let subject = PublishSubject<Void>()
         
-        self.channel.write(offset: 0, data: dispatchData, queue: self.workQueue) { done, data, error in
-            guard error == 0 else {
-                subject.onError(POSIXError(rawValue: error)!)
-                return
-            }
-            
-            if done {
-                subject.onNext()
-                subject.onCompleted()
-            }
+        self
+            .channel
+            .write(
+                offset: 0,
+                data: dispatchData,
+//                data: DispatchData.empty,
+                queue: self.workQueue
+            ) { done, data, error in
+                guard error == 0 else {
+                    subject.onError(POSIXError(rawValue: error)!)
+                    return
+                }
+                
+                if done {
+                    subject.onNext()
+                    subject.onCompleted()
+                }
         }
 
         self.channel.barrier {
-//            _ = dispatch_io_get_descriptor(self.channel);
-//            var flag: Int = 1
+            _ = self.channel.fileDescriptor;
+            var flag: Int = 1
         }
         
         return subject
+    }
+    
+    deinit {
+        NSLog("Deiniting")
     }
 }
 

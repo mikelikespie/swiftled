@@ -86,7 +86,7 @@ public func applyOverRange(_ fullBounds: CountableRange<Int>, iterations: Int = 
 
 func startVisualization(_ visualization: Visualization, fps: Double) -> Disposable {
     let compositeDisposable = CompositeDisposable()
-    let addrInfoDisposable = getaddrinfoSockAddrsAsync("raspberrypi.local", servname: "7890")
+    let addrInfoDisposable = getaddrinfoSockAddrsAsync("pi0.local", servname: "7890")
         .debug()
         .flatMap { sa in
             return sa.connect().catchError { _ in Observable.empty() }
