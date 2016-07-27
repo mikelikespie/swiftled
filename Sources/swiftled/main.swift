@@ -50,10 +50,10 @@ var didConnect = false
 
 let disposable = getaddrinfoSockAddrsAsync("pi0.local", servname: "7890")
     .debug("getaddrinfoSockAddrsAsync")
-    .take(1)
     .flatMap { sa in
         return sa.connect().catchError { _ in .empty() }
     }
+    .take(1)
     .subscribe(
         onNext: { sock in
             didConnect = true
