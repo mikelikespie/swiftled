@@ -152,7 +152,7 @@ public final class ClientConnection : Collection {
     public func flush() -> Observable<Void> {
         let dispatchData: DispatchData = self.pixelBuffer.withUnsafeBufferPointer {
             #if os(Linux)
-                return DispatchData(bytesNoCopy: $0)
+                return DispatchData(bytes: $0)
             #else
                 return DispatchData(bytesNoCopy: $0, deallocator: DispatchData.Deallocator.custom(nil, {}))
             #endif
