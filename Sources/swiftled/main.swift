@@ -28,7 +28,8 @@ func doStuff(conn: ClientConnection) {
 //            NSLog("hey hey hey")
 //    }
 //    
-    Observable.interval(timeInterval, scheduler: defaultScheduler)
+    Observable
+        .interval(timeInterval, scheduler: defaultScheduler)
         .subscribeNext { (tick: IntMax) in
             conn.apply { i, now  -> HSV in
                 let hue: Float = (Float(now / 5) + Float(i * 2) / Float(ledCount)).truncatingRemainder(dividingBy: 1.0)
@@ -36,7 +37,7 @@ func doStuff(conn: ClientConnection) {
                 return HSV(h: hue, s: 1, v: value * value)
             }
             
-            conn.flush()
+            _ = conn.flush()
             
             if tick % 1000 == 0 {
                 NSLog("Still alive after \(tick) frames")

@@ -181,7 +181,6 @@ public final class ClientConnection : Collection {
 
         self.channel.barrier {
             _ = self.channel.fileDescriptor;
-            var flag: Int = 1
         }
         
         return subject
