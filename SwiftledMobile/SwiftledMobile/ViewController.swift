@@ -130,30 +130,6 @@ class SliderCell : UITableViewCell {
     }
 }
 
-class SliderControl : Control {
-    let name: String
-    
-    let sliderCell: SliderCell
-    
-    var value: Float {
-        return sliderCell.slider.value
-    }
-    
-    var cells: [UITableViewCell] {
-        return [sliderCell]
-    }
-    
-    init(bounds: ClosedRange<Float>, defaultValue: Float, name: String) {
-        self.name = name
-        self.sliderCell = SliderCell(bounds: bounds, defaultValue: defaultValue, name: name)
-        
-    }
-    
-    func run(_ ticker: Observable<TickContext>) -> Disposable {
-        return NopDisposable.instance
-    }
-}
-
 class SimpleVisualization : Visualization {
     let brightnessControl = SliderControl(bounds: 0.0...1.0, defaultValue: 1.0, name: "Brightness")
     let gammaControl = SliderControl(bounds: 1.0...4.0, defaultValue: 2.4, name: "Gamma")

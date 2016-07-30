@@ -9,6 +9,7 @@
 import Foundation
 import OPC
 import RxSwift
+import Cleanse
 
 private class VisualizationClient {
     let connection: ClientConnection
@@ -84,38 +85,53 @@ public func applyOverRange(_ fullBounds: CountableRange<Int>, iterations: Int = 
     }
 }
 
-func startVisualization(_ visualization: Visualization, fps: Double) -> Disposable {
-    let compositeDisposable = CompositeDisposable()
-    let addrInfoDisposable = getaddrinfoSockAddrsAsync("pi0.local", servname: "7890")
-        .debug()
-        .flatMap { sa in
-            return sa.connect().catchError { _ in Observable.empty() }
-        }
-        .take(1)
-        .subscribe(
-            onNext: { sock in
-                let connection = ClientConnection(fd: sock, ledCount: ledCount, mode: .rgbaRaw)
-//                let connection = ClientConnection(fd: sock, ledCount: ledCount, mode: .RGB8)
-                
-                let client = VisualizationClient(connection: connection)
-                
-                let clientDisposable = client.start(fps, visualization: visualization)
-                
-                compositeDisposable.addDisposable(clientDisposable)
-                NSLog("Connected!")
-            },
-            onError: { error in
-                NSLog("failed \(error) \((error as? POSIXError)?.rawValue)")
-                //            page.finishExecution()
-                
-            },
-            onCompleted: {
-                NSLog("completed?")
-                //            page.finishExecution()
+
+public struct VisualizationRunner {
+    private let ledCount: Int
+    
+    public init(ledCount: TaggedProvider<LedCount>) {
+        self.ledCount = ledCount.get()
+    }
+    
+    func startVisualization(_ visualization: Visualization, fps: Double) -> Disposable {
+        let compositeDisposable = CompositeDisposable()
+        let addrInfoDisposable = getaddrinfoSockAddrsAsync("pi0.local", servname: "7890")
+            .debug()
+            .flatMap { sa in
+                return sa.connect().catchError { _ in Observable.empty() }
             }
-    )
-    
-    compositeDisposable.addDisposable(addrInfoDisposable)
-    
-    return compositeDisposable
+            .take(1)
+            .subscribe(
+                onNext: { sock in
+                    let connection = ClientConnection(
+                        fd: sock,
+                        ledCount: self.ledCount,
+                        mode: .rgbaRaw
+                    )
+                    //                let connection = ClientConnection(fd: sock, ledCount: ledCount, mode: .RGB8)
+                    
+                    let client = VisualizationClient(connection: connection)
+                    
+                    let clientDisposable = client.start(fps, visualization: visualization)
+                    
+                    _ = compositeDisposable.addDisposable(clientDisposable)
+                    
+                    NSLog("Connected!")
+                },
+                onError: { error in
+                    NSLog("failed \(error) \((error as? POSIXError)?.rawValue)")
+                    //            page.finishExecution()
+                    
+                },
+                onCompleted: {
+                    NSLog("completed?")
+                    //            page.finishExecution()
+                }
+        )
+        
+        _ = compositeDisposable.addDisposable(addrInfoDisposable)
+        
+        return compositeDisposable
+    }
 }
+

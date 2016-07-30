@@ -6,7 +6,9 @@
 //  Copyright © 2016 Lolrus Industries. All rights reserved.
 //
 
-import UIKit
+//import UIKit
+
+import Foundation
 import RxSwift
 import OPC
 
@@ -33,7 +35,7 @@ public protocol Control : class {
     var name: String { get }
     
     /// Cells to present in the split view. Should be pre-configured
-    var cells: [UITableViewCell] { get }
+//    var cells: [UITableViewCell] { get }
     
     /// - parameter ticker: ticks with time interval
     /// - returns: Disposable. It should stop listening for tick information
