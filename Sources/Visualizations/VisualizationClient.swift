@@ -10,6 +10,7 @@ import Foundation
 import OPC
 import RxSwift
 import Cleanse
+import Dispatch
 
 private class VisualizationClient {
     let connection: ClientConnection
