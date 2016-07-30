@@ -93,7 +93,7 @@ public struct VisualizationRunner {
         self.ledCount = ledCount.get()
     }
     
-    func startVisualization(_ visualization: Visualization, fps: Double) -> Disposable {
+    public func startVisualization(_ visualization: Visualization, fps: Double) -> Disposable {
         let compositeDisposable = CompositeDisposable()
         let addrInfoDisposable = getaddrinfoSockAddrsAsync("pi0.local", servname: "7890")
             .debug()

@@ -9,38 +9,17 @@
 import Foundation
 import OPC
 import RxSwift
+import Visualizations
+import Cleanse
 
 struct SwiftLedEntryPoint : EntryPoint {
-    private func doStuff(conn: ClientConnection) {
+    let ledRunner: VisualizationRunner
+    let visualizationFactory: ComponentFactory<VisualizationComponent>
+    
+    private func doStuff(conn: ClientConnection) {        
+        let visualization = visualizationFactory.build(seed: ())
         
-        let timeInterval: RxTimeInterval = 1.0/600.0
-        
-        serialQueue.after(when: .now() + .seconds(3)) { NSLog("!!After 3 seconds!!!") }
-        
-        //    Observable<Int>.interval(timeInterval / 1000, scheduler: defaultScheduler)
-        //        .debug("OMGOMG333")
-        //        .subscribeNext { _ in
-        //
-        //            serialQueue.after(when: .now() + .seconds(3)) { NSLog("After 3 seconds!!!") }
-        //
-        //            NSLog("hey hey hey")
-        //    }
-        //
-        Observable
-            .interval(timeInterval, scheduler: defaultScheduler)
-            .subscribeNext { (tick: IntMax) in
-                conn.apply { i, now  -> HSV in
-                    let hue: Float = (Float(now / 5) + Float(i * 2) / Float(ledCount)).truncatingRemainder(dividingBy: 1.0)
-                    let value = 0.5 + 0.5 * sin(Float(now * 2) + Float(M_PI * 2) * Float(i % segmentLength) / Float(segmentLength))
-                    return HSV(h: hue, s: 1, v: value * value)
-                }
-                
-                _ = conn.flush()
-                
-                if tick % 1000 == 0 {
-                    NSLog("Still alive after \(tick) frames")
-                }
-        }
+        let disposable = ledRunner.startVisualization(visualization, fps: 600)
     }
     
     
