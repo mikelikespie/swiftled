@@ -53,7 +53,7 @@ public final class ClientConnection : Collection {
     public typealias Index = Int
     
     private var pixelBuffer: [UInt8]
-    private let workQueue = DispatchQueue(label: "connection work queue", attributes: [])
+    private let workQueue = DispatchQueue(label: "connection work queue", attributes: [.initiallyInactive])
     private var channel: DispatchIO
     private var ledCount: Int
     private var start: TimeInterval

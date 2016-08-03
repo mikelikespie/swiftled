@@ -11,7 +11,7 @@ private let segmentLength = 18
 private let segmentCount = 30
 private let ledCount =  segmentLength * segmentCount
 
-let serialQueue = DispatchQueue(label: "MyQueue", attributes: .serial, target: nil)
+let serialQueue = DispatchQueue(label: "MyQueue", attributes: [.initiallyInactive], target: nil)
 
 let defaultScheduler = SerialDispatchQueueScheduler(queue: serialQueue, internalSerialQueueName: "MyQueue")
 

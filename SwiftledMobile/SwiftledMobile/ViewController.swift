@@ -42,8 +42,6 @@ class ViewController: UITableViewController, UISplitViewControllerDelegate {
             .start()
             .addDisposableTo(disposeBag)
         
-        
-        
         root.rootVisualization
             .controls
             .map { Array($0.map { $0.cells }.flatten()) }
