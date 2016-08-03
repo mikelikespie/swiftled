@@ -16,3 +16,7 @@ public struct LedCount : Tag {
 public struct SegmentLength : Tag {
     public typealias Element = Int
 }
+
+public struct SegmentCount : Tag {
+    public typealias Element = Int
+}

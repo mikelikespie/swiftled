@@ -12,22 +12,26 @@ import Foundation
 import RxSwift
 import OPC
 
+#if os(iOS)
+    import UIKit
+#endif
+
 /// Str
 public struct TickContext {
-    var tickIndex: Int
+    public private(set) var tickIndex: Int
     
     /// Offset we are from when the visualization started
-    var timeOffset: TimeInterval
+    public private(set) var timeOffset: TimeInterval
     
     /// Time since last tick
-    var timeDelta: TimeInterval
+    public private(set) var timeDelta: TimeInterval
     
 }
 
 public struct WriteContext {
-    var tickContext: TickContext
+    public private(set) var tickContext: TickContext
     /// The pixels to write to. Only while the tick observer is being called
-    var writeBuffer: UnsafeMutableBufferPointer<RGBFloat>
+    public private(set) var writeBuffer: UnsafeMutableBufferPointer<RGBFloat>
 }
 
 // Represents a control. They can have state. They are only mutated on one thread
@@ -35,7 +39,9 @@ public protocol Control : class {
     var name: String { get }
     
     /// Cells to present in the split view. Should be pre-configured
-//    var cells: [UITableViewCell] { get }
+    #if os(iOS)
+    var cells: [UITableViewCell] { get }
+    #endif
     
     /// - parameter ticker: ticks with time interval
     /// - returns: Disposable. It should stop listening for tick information

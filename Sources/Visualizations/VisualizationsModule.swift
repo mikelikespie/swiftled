@@ -10,11 +10,11 @@ import Foundation
 import Cleanse
 
 public struct VisualizationsModule : Module {
-    public static func configure<B : Binder>(binder: B) {
-        binder.install(dependency: VisualizationComponent.self)
+    public static func configure<B : Binder>(binder: B) {        
+        binder.install(module: LedConfigurationModule.self)
         
         binder
-            .bind(VisualizationRunner.self)
+            .bind()
             .to(factory: VisualizationRunner.init)
     }
 }

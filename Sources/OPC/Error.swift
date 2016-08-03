@@ -15,7 +15,6 @@
 #endif
 
 #if os(Linux)
-    typealias  ErrorProtocol = Swift.Error
     
     public func NSLog(_ str: String, _ values: CVarArg...) {
         print(String(format: str, arguments: values))
@@ -23,14 +22,14 @@
 #endif
 
 /// Wraps errors. Has an uknown type if it cant resolve to an oserror
-enum Error: ErrorProtocol {
+enum Error: Swift.Error {
     case unknown(status: Int32)
     case codecError
     case utf8DecodeError
     case canceled
     
     /// For functions that return negative value on error and expect errno to be set
-    static func checkReturnCode(_ returnCode: Int32) -> ErrorProtocol? {
+    static func checkReturnCode(_ returnCode: Int32) -> Swift.Error? {
         guard returnCode < 0 else {
             return nil
         }
@@ -38,12 +37,12 @@ enum Error: ErrorProtocol {
     }
     
     /// Returns an error type based on status code
-    static func errorFromStatusCode(_ status: Int32) -> ErrorProtocol? {
+    static func errorFromStatusCode(_ status: Int32) -> Swift.Error? {
         guard status != 0 else {
             return nil
         }
         
-        if let e = POSIXError(rawValue: status) {
+        if let e = POSIXErrorCode(rawValue: status) {
             return e
         }
         
@@ -62,4 +61,8 @@ enum Error: ErrorProtocol {
             throw e
         }
     }
+}
+
+
+extension POSIXErrorCode : Swift.Error {
 }

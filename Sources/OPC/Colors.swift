@@ -8,7 +8,9 @@
 
 import Foundation
 
-//import simd
+#if !os(Linux)
+    import simd
+#endif
 
 
 
@@ -36,7 +38,7 @@ private func clampUnit(_ x: Float) -> Float {
 //}
 
 #if !os(Linux)
-//import simd
+import simd
 #endif
 
 @inline(__always) private func clampUnit(_ x: float3) -> float3 {
@@ -122,7 +124,7 @@ public struct RGBFloat : ColorConvertible, CustomStringConvertible {
         let maxComponent = max(storage.x, max(storage.y, storage.z))
         
         // This is the smallest our alpha can be
-        let minA = UInt8(maxComponent * 31 + 1)
+        let minA = UInt8(maxComponent * 31)
         let maxA: UInt8
         
         if maxComponent < 1.0 / 255.0 {
@@ -199,6 +201,14 @@ public struct RGBFloat : ColorConvertible, CustomStringConvertible {
     }
 }
 
+
+extension RGBFloat {
+    public static let white = RGBFloat(r: 1, g: 1, b: 1)
+    public static let black = RGBFloat(r: 0, g: 0, b: 0)
+    public static let red   = RGBFloat(r: 1, g: 0, b: 0)
+    public static let green = RGBFloat(r: 0, g: 1, b: 0)
+    public static let blue  = RGBFloat(r: 0, g: 0, b: 1)
+}
 
 public struct RGB8 : ColorConvertible {
     public var r: UInt8

@@ -7,17 +7,18 @@ import Visualizations
 
 let compositeDisposable = CompositeDisposable()
 
-let segmentLength = 18
-let segmentCount = 30
-let ledCount =  segmentLength * segmentCount
+private let segmentLength = 18
+private let segmentCount = 30
+private let ledCount =  segmentLength * segmentCount
 
 let serialQueue = DispatchQueue(label: "MyQueue", attributes: .serial, target: nil)
 
 let defaultScheduler = SerialDispatchQueueScheduler(queue: serialQueue, internalSerialQueueName: "MyQueue")
 
-
-
 try! ComponentFactory
     .of(SwiftLedComponent.self)
-    .build(seed: LedConfiguration(segmentLength: 18, segmentCount: 30))
+    .build(seed: LedConfiguration(segmentLength: segmentLength, segmentCount: segmentCount))
     .run()
+
+
+dispatchMain()

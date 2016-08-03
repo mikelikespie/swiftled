@@ -5,3 +5,6 @@
 [submodule "Cleanse"]
 	path = Cleanse
 	url = pi@pi2.local:git/Cleanse.git
+[submodule "ola"]
+	path = ola
+	url = https://github.com/OpenLightingProject/ola.git

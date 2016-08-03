@@ -11,13 +11,12 @@ import RxSwift
 import OPC
 import RxCocoa
 import Foundation
+import Visualizations
+import Cleanse
 
-let compositeDisposable = CompositeDisposable()
-
-let segmentLength = 27
-let segmentCount = 20
-let ledCount =  segmentLength * segmentCount
-
+private let segmentLength = 18
+private let segmentCount = 30
+private let ledCount =  segmentLength * segmentCount
 
 class ViewController: UITableViewController, UISplitViewControllerDelegate {
     
@@ -30,11 +29,22 @@ class ViewController: UITableViewController, UISplitViewControllerDelegate {
         self.splitViewController?.delegate = self
         tableView.rowHeight = UITableViewAutomaticDimension
         
-        let rootVisualization = SimpleVisualization()
-        startVisualization(rootVisualization, fps: 400)
+        
+        let root = try! ComponentFactory
+            .of(SwiftLedComponent.self)
+            .build(seed: LedConfiguration(
+                segmentLength: segmentLength,
+                segmentCount: segmentCount
+            ))
+        
+        root
+            .entryPoint
+            .start()
             .addDisposableTo(disposeBag)
         
-        rootVisualization
+        
+        
+        root.rootVisualization
             .controls
             .map { Array($0.map { $0.cells }.flatten()) }
             .subscribeNext { [unowned self] cells in
@@ -79,58 +89,10 @@ class ViewController: UITableViewController, UISplitViewControllerDelegate {
 }
 
 
-class SliderCell : UITableViewCell {
-    var slider: UISlider!
-    var label: UILabel!
-    var name: String
-    
-    private var disposeBag = DisposeBag()
-    
-    init(bounds: ClosedRange<Float>, defaultValue: Float, name: String) {
-        self.name = name
-        super.init(style: .default, reuseIdentifier: nil)
-        
-        label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 12)
-        slider = UISlider()
-        
-        slider.minimumValue = bounds.lowerBound
-        slider.maximumValue = bounds.upperBound
-
-        label.translatesAutoresizingMaskIntoConstraints = false
-        slider.translatesAutoresizingMaskIntoConstraints = false
-        
-        contentView.addSubview(slider)
-        contentView.addSubview(label)
-        
-        slider.value = defaultValue
-        slider
-            .rx_value
-            .subscribeNext { [unowned self] value in
-                self.label.text = "\(self.name): \(value)"
-            }
-            .addDisposableTo(disposeBag)
-        
-        let constraints = [
-            NSLayoutConstraint(item: slider, attribute: .top, relatedBy: .equal, toItem: contentView, attribute: .top, multiplier: 1, constant: 0),
-            NSLayoutConstraint(item: slider, attribute: .bottom, relatedBy: .equal, toItem: label, attribute: .top, multiplier: 1, constant: 0),
-            NSLayoutConstraint(item: label, attribute: .bottom, relatedBy: .equal, toItem: contentView, attribute: .bottom, multiplier: 1, constant: 0),
-            ] + ([label, slider] as [UIView]).flatMap {
-                [
-                    NSLayoutConstraint(item: $0, attribute: .leading, relatedBy: .equal, toItem: self.contentView, attribute: .leadingMargin, multiplier: 1, constant: 0),
-                    NSLayoutConstraint(item: $0, attribute: .trailing, relatedBy: .equal, toItem: self.contentView, attribute: .trailingMargin, multiplier: 1, constant: 0),
-                ]
-        }
-        
-        NSLayoutConstraint.activate(constraints)
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-}
 
 class SimpleVisualization : Visualization {
+    
+    
     let brightnessControl = SliderControl(bounds: 0.0...1.0, defaultValue: 1.0, name: "Brightness")
     let gammaControl = SliderControl(bounds: 1.0...4.0, defaultValue: 2.4, name: "Gamma")
     let timeMultiplier = SliderControl(bounds: -10...10.0, defaultValue: 1, name: "Time Multiplier")

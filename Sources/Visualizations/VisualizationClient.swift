@@ -64,28 +64,29 @@ private class VisualizationClient {
                     }
                 }
                 
-                self.connection.flush()
+                _ = self.connection.flush()
         }
         
-        compositeDisposable.addDisposable(tickerDisposable)
+        _ = compositeDisposable.addDisposable(tickerDisposable)
         
         return compositeDisposable
     }
-}
-
-
-public func applyOverRange(_ fullBounds: CountableRange<Int>, iterations: Int = 16, fn: (CountableRange<Int>) -> ()) {
-    let chunkSize = ((fullBounds.count - 1) / iterations) + 1
-    let splitBounds = (0..<iterations).map { idx in
-        (fullBounds.lowerBound + chunkSize * idx)..<min((fullBounds.lowerBound + chunkSize * (idx + 1)), fullBounds.upperBound)
-    }
     
-    DispatchQueue.concurrentPerform(iterations: iterations) { idx in
-        let bounds = splitBounds[idx]
-        fn(bounds)
-    }
 }
 
+//
+//public func applyOverRange(_ fullBounds: CountableRange<Int>, iterations: Int = 16, fn: (CountableRange<Int>) -> ()) {
+//    let chunkSize = ((fullBounds.count - 1) / iterations) + 1
+//    let splitBounds = (0..<iterations).map { idx in
+//        (fullBounds.lowerBound + chunkSize * idx)..<min((fullBounds.lowerBound + chunkSize * (idx + 1)), fullBounds.upperBound)
+//    }
+//    
+//    DispatchQueue.concurrentPerform(iterations: iterations) { idx in
+//        let bounds = splitBounds[idx]
+//        fn(bounds)
+//    }
+//}
+//
 
 public struct VisualizationRunner {
     private let ledCount: Int
@@ -120,7 +121,7 @@ public struct VisualizationRunner {
                     NSLog("Connected!")
                 },
                 onError: { error in
-                    NSLog("failed \(error) \((error as? POSIXError)?.rawValue)")
+                    NSLog("failed \(error) \((error as? POSIXErrorCode)?.rawValue)")
                     //            page.finishExecution()
                     
                 },

@@ -6,6 +6,8 @@
 //
 //
 
-protocol EntryPoint {
-    func run()
+import RxSwift
+
+public protocol EntryPoint {
+    func start() -> Disposable
 }

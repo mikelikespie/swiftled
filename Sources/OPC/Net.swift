@@ -43,13 +43,13 @@ public struct AddrInfo {
 }
 
 extension AddrInfo {
-    public func connect(_ workQueue: DispatchQueue=DispatchQueue.global(attributes: DispatchQueue.GlobalAttributes.qosDefault)) -> Observable<Int32> {
+    public func connect(_ workQueue: DispatchQueue=DispatchQueue.global()) -> Observable<Int32> {
         return Observable.create { observer in
             do {
                 let socket = try self.socket()
                 precondition(socket >= 0)
                 
-                let writeSource = DispatchSource.write(fileDescriptor: socket, queue: workQueue);
+                let writeSource = DispatchSource.makeWriteSource(fileDescriptor: socket, queue: workQueue);
                 
                 writeSource.resume();
                 NSLog("STARTING")
@@ -72,7 +72,7 @@ extension AddrInfo {
                         NSLog("Event trying to connect")
                         try self.tryConnectContinue(socket)
                         completeConnection()
-                    } catch POSIXError.EINPROGRESS {
+                    } catch POSIXErrorCode.EINPROGRESS {
                         NSLog("EINPROGRESS")
                         // If we're in progress, we'll be trying again
                     } catch let e {
@@ -92,7 +92,7 @@ extension AddrInfo {
                     NSLog("First trying to connect")
                     try self.tryConnect(socket)
                     completeConnection()
-                } catch POSIXError.EINPROGRESS {
+                } catch POSIXErrorCode.EINPROGRESS {
                     NSLog("IN PROGRESS!!!")
                     // If we're in progress, we'll be trying again
                 }
@@ -127,7 +127,7 @@ extension AddrInfo {
         }
         
         if result != 0 {
-            throw POSIXError(rawValue: errno)!
+            throw POSIXErrorCode(rawValue: errno)!
         }
     }
     
@@ -144,7 +144,7 @@ extension AddrInfo {
         precondition(status == 0, "getsockopt should return zero")
         
         if result != 0 {
-            throw POSIXError(rawValue: errno)!
+            throw POSIXErrorCode(rawValue: errno)!
         }
     }
     
@@ -167,7 +167,7 @@ extension AddrInfo {
     }
 }
 
-public func getaddrinfoSockAddrsAsync(_ hostname: String, servname: String, workQueue: DispatchQueue=DispatchQueue.global(attributes: DispatchQueue.GlobalAttributes.qosDefault)) -> Observable<AddrInfo> {
+public func getaddrinfoSockAddrsAsync(_ hostname: String, servname: String, workQueue: DispatchQueue=DispatchQueue.global()) ->  Observable<AddrInfo> {
     
     return Observable.create { observer in
         var ai: UnsafeMutablePointer<addrinfo>? = nil

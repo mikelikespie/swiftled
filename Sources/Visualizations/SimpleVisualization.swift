@@ -14,7 +14,7 @@ import OPC
 public class SimpleVisualization : Visualization {
     let brightnessControl = SliderControl(bounds: 0.0...1.0, defaultValue: 1.0, name: "Brightness")
     let gammaControl = SliderControl(bounds: 1.0...4.0, defaultValue: 2.4, name: "Gamma")
-    let timeMultiplier = SliderControl(bounds: -10...10.0, defaultValue: 1, name: "Time Multiplier")
+    let timeMultiplier = SliderControl(bounds: -1.25...1.25, defaultValue: 1, name: "Time Multiplier")
     
     let ledCount: Int
     let segmentLength: Int
@@ -37,10 +37,10 @@ public class SimpleVisualization : Visualization {
     public let name = Observable<String>.just("Simple visualization")
     
     public func bind(_ ticker: Observable<WriteContext>) -> Disposable {
-        
         let ledCount = self.ledCount
         let segmentLength = self.segmentLength
         var offset = 0.0
+        
         return ticker.subscribeNext { context in
             let writeBuffer = context.writeBuffer
             

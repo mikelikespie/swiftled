@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "container:SwiftledMobile/SwiftledMobile.xcodeproj">
+      location = "group:swiftled-2.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:SwiftledMobile/SwiftledPlayground.playground">
    </FileRef>
 </Workspace>

@@ -9,30 +9,43 @@
 import Foundation
 import RxSwift
 
-class SliderControl : Control {
-    let name: String
+#if os(iOS)
+    import UIKit
+#endif
+
+public class SliderControl : Control {
+    public let name: String
     let bounds: ClosedRange<Float>
-    
-//    let sliderCell: SliderCell
-    
-    var value: Float {
+
+    public var value: Float {
         // return midpoint for now :/
-        return (bounds.lowerBound + bounds.upperBound) / 2
-//        return sliderCell.slider.value
+        #if os(iOS)
+            return sliderCell.slider.value
+        #else
+            return bounds.lowerBound + abs(bounds.lowerBound - bounds.upperBound) * 2 / 3
+        #endif
     }
-//    
-//    var cells: [UITableViewCell] {
-//        return [sliderCell]
-//    }
+
+    #if os(iOS)
     
-    init(bounds: ClosedRange<Float>, defaultValue: Float, name: String) {
+    public let sliderCell: SliderCell
+    
+    public var cells: [UITableViewCell] {
+        return [sliderCell]
+    }
+    
+    #endif
+    
+    
+    public init(bounds: ClosedRange<Float>, defaultValue: Float, name: String) {
         self.name = name
         self.bounds = bounds
-//        self.sliderCell = SliderCell(bounds: bounds, defaultValue: defaultValue, name: name)
-        
+        #if os(iOS)
+        self.sliderCell = SliderCell(bounds: bounds, defaultValue: defaultValue, name: name)
+        #endif
     }
     
-    func run(_ ticker: Observable<TickContext>) -> Disposable {
+    public func run(_ ticker: Observable<TickContext>) -> Disposable {
         return NopDisposable.instance
     }
 }

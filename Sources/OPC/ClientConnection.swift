@@ -53,7 +53,7 @@ public final class ClientConnection : Collection {
     public typealias Index = Int
     
     private var pixelBuffer: [UInt8]
-    private let workQueue = DispatchQueue(label: "connection work queue", attributes: DispatchQueueAttributes.serial)
+    private let workQueue = DispatchQueue(label: "connection work queue", attributes: [])
     private var channel: DispatchIO
     private var ledCount: Int
     private var start: TimeInterval
@@ -169,7 +169,7 @@ public final class ClientConnection : Collection {
                 queue: self.workQueue
             ) { done, data, error in
                 guard error == 0 else {
-                    subject.onError(POSIXError(rawValue: error)!)
+                    subject.onError(POSIXErrorCode(rawValue: error)!)
                     return
                 }
                 
