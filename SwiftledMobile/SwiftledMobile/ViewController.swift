@@ -22,7 +22,51 @@ class ViewController: UITableViewController, UISplitViewControllerDelegate {
     
     let disposeBag = DisposeBag()
     
-    private var cells = [UITableViewCell]()
+    var cellsByIndex = [UITableViewCell: Int]()
+    private var cells = [UITableViewCell]() {
+        willSet {
+            var oldIndexes = cellsByIndex
+            cellsByIndex.removeAll()
+            
+            for (i, cell) in newValue.enumerated() {
+                cellsByIndex[cell] = i
+            }
+            
+            var newIndexes = cellsByIndex
+            
+            var indexRemappings = [(Int, Int)]()
+            
+            for (oldIndex, cell) in cells.enumerated() {
+                if let newIndex = newIndexes[cell] {
+                    indexRemappings.append((oldIndex, newIndex))
+                    
+                    newIndexes[cell] = nil
+                    oldIndexes[cell] = nil
+                }
+            }
+
+            tableView.beginUpdates()
+            
+            let indexesToDelete = oldIndexes.values.sorted { $1 < $0 }
+            let indexesToInsert = newIndexes.values.sorted()
+            
+            indexRemappings.sort { $0.1 < $1.1 }
+            
+            
+            tableView.deleteRows(at: indexesToDelete.map { IndexPath(row: $0, section: 0) }, with: .automatic)
+            indexRemappings
+                .lazy
+                .map { (IndexPath(row: $0, section: 0), IndexPath(row: $1, section: 0)) }
+                .forEach(tableView.moveRow)
+            tableView.insertRows(at: indexesToInsert.map { IndexPath(row: $0, section: 0) }, with: .automatic)
+            
+        }
+        
+        didSet {
+            
+            tableView.endUpdates()
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,7 +91,7 @@ class ViewController: UITableViewController, UISplitViewControllerDelegate {
             .map { Array($0.map { $0.cells }.flatten()) }
             .subscribeNext { [unowned self] cells in
                 self.cells = cells
-                self.tableView.reloadData()
+//                self.tableView.reloadData()
             }
             .addDisposableTo(disposeBag)
     }
@@ -86,49 +130,3 @@ class ViewController: UITableViewController, UISplitViewControllerDelegate {
     }
 }
 
-
-
-class SimpleVisualization : Visualization {
-    
-    
-    let brightnessControl = SliderControl(bounds: 0.0...1.0, defaultValue: 1.0, name: "Brightness")
-    let gammaControl = SliderControl(bounds: 1.0...4.0, defaultValue: 2.4, name: "Gamma")
-    let timeMultiplier = SliderControl(bounds: -10...10.0, defaultValue: 1, name: "Time Multiplier")
-    
-    var controls: Observable<[Control]> {
-        return Observable.just([
-            brightnessControl,
-            gammaControl,
-            timeMultiplier,
-        ])
-    }
-    
-    let name = Observable<String>.just("Simple visualization")
-    
-    func bind(_ ticker: Observable<WriteContext>) -> Disposable {
-        
-        var offset = 0.0
-        return ticker.subscribeNext { context in
-            let writeBuffer = context.writeBuffer
-            
-            offset += context.tickContext.timeDelta * Double(self.timeMultiplier.value)
-            let now = offset
-            
-            applyOverRange(writeBuffer.startIndex..<writeBuffer.endIndex) { bounds in
-                for i in bounds {
-                    var hueNumerator =  -((Float(now / -30) - Float(i) * 0.25 / Float(ledCount)))
-                    
-                    if hueNumerator < 0 {
-                        hueNumerator += -floor(hueNumerator)
-                        precondition(hueNumerator >= 0)
-                    }
-                    
-                    let hue: Float = hueNumerator.truncatingRemainder(dividingBy:  1.0)
-                    let portion = Float(i % segmentLength) / Float(segmentLength)
-                    let value = 0.5 + 0.5 * sin(Float(now * 2) + Float(M_PI * 2) * portion)
-                    writeBuffer[i] = HSV(h: hue, s: 1, v: value).rgbFloat.gammaAdjusted(self.gammaControl.value) * pow(self.brightnessControl.value, 2)
-                }
-            }
-        }
-    }
-}

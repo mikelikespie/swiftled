@@ -11,11 +11,15 @@
 		2706BD811D50339A00C766C5 /* Geometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2706BD801D50339A00C766C5 /* Geometry.swift */; };
 		2706BD831D5036A200C766C5 /* CombinedHashable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2706BD821D5036A200C766C5 /* CombinedHashable.swift */; };
 		2706BD851D5036B300C766C5 /* DelegatedHashable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2706BD841D5036B300C766C5 /* DelegatedHashable.swift */; };
+		275C3F911D518CEE008B79E9 /* CompositeVisualization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 275C3F901D518CEE008B79E9 /* CompositeVisualization.swift */; };
+		275C3F931D518FB7008B79E9 /* DisposableHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 275C3F921D518FB7008B79E9 /* DisposableHelpers.swift */; };
 		275F96731D516D2F00B473B6 /* LedConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 275F96721D516D2F00B473B6 /* LedConfiguration.swift */; };
 		275F97631D5170D000B473B6 /* EntryPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 275F97601D5170D000B473B6 /* EntryPoint.swift */; };
 		275F97641D5170D000B473B6 /* SwiftLedComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 275F97611D5170D000B473B6 /* SwiftLedComponent.swift */; };
 		275F97651D5170D000B473B6 /* SwiftLedEntryPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 275F97621D5170D000B473B6 /* SwiftLedEntryPoint.swift */; };
 		275F97671D51728300B473B6 /* SliderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 275F97661D51728300B473B6 /* SliderCell.swift */; };
+		27713EEE1D51B05D00FC0F90 /* SharedControls.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27713EEC1D51B04400FC0F90 /* SharedControls.swift */; };
+		27713EF11D51B58000FC0F90 /* FloatValueConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27713EF01D51B58000FC0F90 /* FloatValueConvertible.swift */; };
 		_LinkFileRef_Cleanse_via_Visualizations /* Cleanse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "_____Product_Cleanse" /* Cleanse.framework */; };
 		_LinkFileRef_Cleanse_via_swiftled /* Cleanse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "_____Product_Cleanse" /* Cleanse.framework */; };
 		_LinkFileRef_OPC_via_Visualizations /* OPC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "_____Product_OPC" /* OPC.framework */; };
@@ -267,11 +271,15 @@
 		2706BD801D50339A00C766C5 /* Geometry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Geometry.swift; sourceTree = "<group>"; };
 		2706BD821D5036A200C766C5 /* CombinedHashable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CombinedHashable.swift; sourceTree = "<group>"; };
 		2706BD841D5036B300C766C5 /* DelegatedHashable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DelegatedHashable.swift; sourceTree = "<group>"; };
+		275C3F901D518CEE008B79E9 /* CompositeVisualization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompositeVisualization.swift; sourceTree = "<group>"; };
+		275C3F921D518FB7008B79E9 /* DisposableHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DisposableHelpers.swift; sourceTree = "<group>"; };
 		275F96721D516D2F00B473B6 /* LedConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LedConfiguration.swift; sourceTree = "<group>"; };
 		275F97601D5170D000B473B6 /* EntryPoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntryPoint.swift; sourceTree = "<group>"; };
 		275F97611D5170D000B473B6 /* SwiftLedComponent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftLedComponent.swift; sourceTree = "<group>"; };
 		275F97621D5170D000B473B6 /* SwiftLedEntryPoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftLedEntryPoint.swift; sourceTree = "<group>"; };
 		275F97661D51728300B473B6 /* SliderCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SliderCell.swift; sourceTree = "<group>"; };
+		27713EEC1D51B04400FC0F90 /* SharedControls.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharedControls.swift; sourceTree = "<group>"; };
+		27713EF01D51B58000FC0F90 /* FloatValueConvertible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FloatValueConvertible.swift; sourceTree = "<group>"; };
 		__PBXFileRef_Cleanse_Info.plist /* swiftled-2.xcodeproj/Cleanse_Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "swiftled-2.xcodeproj/Cleanse_Info.plist"; sourceTree = SOURCE_ROOT; };
 		__PBXFileRef_OPC_Info.plist /* swiftled-2.xcodeproj/OPC_Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "swiftled-2.xcodeproj/OPC_Info.plist"; sourceTree = SOURCE_ROOT; };
 		__PBXFileRef_Package.swift /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
@@ -538,6 +546,28 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		27713EEF1D51B25300FC0F90 /* Visualizations */ = {
+			isa = PBXGroup;
+			children = (
+				__PBXFileRef_Sources/Visualizations/Visualization.swift /* Visualization.swift */,
+				275C3F901D518CEE008B79E9 /* CompositeVisualization.swift */,
+				__PBXFileRef_Sources/Visualizations/SimpleVisualization.swift /* SimpleVisualization.swift */,
+				2706BD7E1D5028C100C766C5 /* IdentificationVisualization.swift */,
+			);
+			name = Visualizations;
+			sourceTree = "<group>";
+		};
+		27713EF21D51B59700FC0F90 /* Controls */ = {
+			isa = PBXGroup;
+			children = (
+				__PBXFileRef_Sources/Visualizations/Control.swift /* Control.swift */,
+				__PBXFileRef_Sources/Visualizations/SliderControl.swift /* SliderControl.swift */,
+				275F97661D51728300B473B6 /* SliderCell.swift */,
+				27713EEC1D51B04400FC0F90 /* SharedControls.swift */,
+			);
+			name = Controls;
+			sourceTree = "<group>";
+		};
 		"___RootGroup_" = {
 			isa = PBXGroup;
 			children = (
@@ -812,18 +842,16 @@
 				275F97621D5170D000B473B6 /* SwiftLedEntryPoint.swift */,
 				2706BD841D5036B300C766C5 /* DelegatedHashable.swift */,
 				2706BD821D5036A200C766C5 /* CombinedHashable.swift */,
-				__PBXFileRef_Sources/Visualizations/Control.swift /* Control.swift */,
-				__PBXFileRef_Sources/Visualizations/SimpleVisualization.swift /* SimpleVisualization.swift */,
-				__PBXFileRef_Sources/Visualizations/SliderControl.swift /* SliderControl.swift */,
+				27713EF21D51B59700FC0F90 /* Controls */,
+				27713EEF1D51B25300FC0F90 /* Visualizations */,
 				__PBXFileRef_Sources/Visualizations/Tags.swift /* Tags.swift */,
-				__PBXFileRef_Sources/Visualizations/Visualization.swift /* Visualization.swift */,
 				__PBXFileRef_Sources/Visualizations/VisualizationClient.swift /* VisualizationClient.swift */,
 				__PBXFileRef_Sources/Visualizations/VisualizationsModule.swift /* VisualizationsModule.swift */,
 				__PBXFileRef_Visualizations_Info.plist /* swiftled-2.xcodeproj/Visualizations_Info.plist */,
-				2706BD7E1D5028C100C766C5 /* IdentificationVisualization.swift */,
 				2706BD801D50339A00C766C5 /* Geometry.swift */,
 				275F96721D516D2F00B473B6 /* LedConfiguration.swift */,
-				275F97661D51728300B473B6 /* SliderCell.swift */,
+				275C3F921D518FB7008B79E9 /* DisposableHelpers.swift */,
+				27713EF01D51B58000FC0F90 /* FloatValueConvertible.swift */,
 			);
 			name = Visualizations;
 			path = Sources/Visualizations;
@@ -1185,6 +1213,8 @@
 				__src_cc_ref_Sources/Visualizations/SliderControl.swift /* SliderControl.swift in Sources */,
 				275F97671D51728300B473B6 /* SliderCell.swift in Sources */,
 				275F97641D5170D000B473B6 /* SwiftLedComponent.swift in Sources */,
+				27713EF11D51B58000FC0F90 /* FloatValueConvertible.swift in Sources */,
+				27713EEE1D51B05D00FC0F90 /* SharedControls.swift in Sources */,
 				2706BD7F1D5028C100C766C5 /* IdentificationVisualization.swift in Sources */,
 				__src_cc_ref_Sources/Visualizations/Tags.swift /* Tags.swift in Sources */,
 				275F97631D5170D000B473B6 /* EntryPoint.swift in Sources */,
@@ -1194,7 +1224,9 @@
 				2706BD831D5036A200C766C5 /* CombinedHashable.swift in Sources */,
 				275F96731D516D2F00B473B6 /* LedConfiguration.swift in Sources */,
 				__src_cc_ref_Sources/Visualizations/VisualizationsModule.swift /* VisualizationsModule.swift in Sources */,
+				275C3F911D518CEE008B79E9 /* CompositeVisualization.swift in Sources */,
 				2706BD811D50339A00C766C5 /* Geometry.swift in Sources */,
+				275C3F931D518FB7008B79E9 /* DisposableHelpers.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

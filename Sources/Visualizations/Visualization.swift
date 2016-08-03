@@ -11,7 +11,7 @@ import RxSwift
 
 public protocol Visualization {
     /// Name of visualization. Can change
-    var name: Observable<String> { get }
+    var name: String { get }
     var controls: Observable<[Control]> { get }
     
     /// - parameter ticker: ticks with time interval

@@ -11,10 +11,11 @@ import RxSwift
 import Cleanse
 import OPC
 
-public class SimpleVisualization : Visualization {
-    let brightnessControl = SliderControl(bounds: 0.0...1.0, defaultValue: 1.0, name: "Brightness")
-    let gammaControl = SliderControl(bounds: 1.0...4.0, defaultValue: 2.4, name: "Gamma")
-    let timeMultiplier = SliderControl(bounds: -1.25...1.25, defaultValue: 1, name: "Time Multiplier")
+class SimpleVisualization : Visualization {
+    let brightnessControl: BrightnessControl.Element
+    
+    let gammaControl = SliderControl<Float>(bounds: 1.0..<4.0, defaultValue: 2.4, name: "Gamma")
+    let timeMultiplier = SliderControl<Float>(bounds: -10.0..<10.0, defaultValue: 1, name: "Time Multiplier")
     
     let ledCount: Int
     let segmentLength: Int
@@ -27,21 +28,32 @@ public class SimpleVisualization : Visualization {
             ])
     }
     
-    public init(
+    init(
         ledCount: TaggedProvider<LedCount>,
-        segmentLength: TaggedProvider<SegmentLength>) {
+        segmentLength: TaggedProvider<SegmentLength>,
+        brightnessControl: TaggedProvider<BrightnessControl>) {
         self.ledCount = ledCount.get()
         self.segmentLength = segmentLength.get()
+        self.brightnessControl = brightnessControl.get()
     }
     
-    public let name = Observable<String>.just("Simple visualization")
+    public let name = "Simple"
     
     public func bind(_ ticker: Observable<WriteContext>) -> Disposable {
         let ledCount = self.ledCount
         let segmentLength = self.segmentLength
         var offset = 0.0
         
-        return ticker.subscribeNext { context in
+        
+        return ticker.subscribeNext { [weak self] context in
+            guard let `self` = self else {
+                return
+            }
+            
+            
+            let gammaControlValue = self.gammaControl.value
+            let brightnessControlValue = self.brightnessControl.value
+            
             let writeBuffer = context.writeBuffer
             
             offset += context.tickContext.timeDelta * Double(self.timeMultiplier.value)
@@ -59,7 +71,13 @@ public class SimpleVisualization : Visualization {
                     let hue: Float = hueNumerator.truncatingRemainder(dividingBy:  1.0)
                     let portion = Float(i % segmentLength) / Float(segmentLength)
                     let value = 0.5 + 0.5 * sin(Float(now * 2) + Float(M_PI * 2) * portion)
-                    writeBuffer[i] = HSV(h: hue, s: 1, v: value).rgbFloat.gammaAdjusted(self.gammaControl.value) * pow(self.brightnessControl.value, 2)
+                    writeBuffer[i] = HSV(
+                        h: hue,
+                        s: 1,
+                        v: value
+                        )
+                        .rgbFloat
+                        .gammaAdjusted(gammaControlValue) * pow(brightnessControlValue, 2)
                 }
             }
         }

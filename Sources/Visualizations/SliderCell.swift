@@ -14,14 +14,32 @@ import Foundation
 import UIKit
 import RxSwift
     
-    public class SliderCell : UITableViewCell {
+    class SliderCell<Value: FloatValueConvertible> : UITableViewCell {
         var slider: UISlider!
         var label: UILabel!
         var name: String
         
+        let valueBounds: Range<Value>
+        
+        var rx_value: Observable<Value> {
+            return valueSubject
+        }
+        
         private var disposeBag = DisposeBag()
         
-        init(bounds: ClosedRange<Float>, defaultValue: Float, name: String) {
+        private let valueSubject: BehaviorSubject<Value>
+        init(
+            bounds: Range<Value>,
+            defaultValue: Value,
+            name: String,
+            labelFunction: Optional<(Value) -> String>
+        ) {
+            
+            self.valueSubject = BehaviorSubject(value: defaultValue)
+            
+            let labelFunction = labelFunction ?? { "\($0)" }
+            
+            self.valueBounds = bounds
             self.name = name
             super.init(style: .default, reuseIdentifier: nil)
             
@@ -29,8 +47,8 @@ import RxSwift
             label.font = UIFont.systemFont(ofSize: 12)
             slider = UISlider()
             
-            slider.minimumValue = bounds.lowerBound
-            slider.maximumValue = bounds.upperBound
+            slider.minimumValue = bounds.lowerBound.floatValue
+            slider.maximumValue = bounds.upperBound.floatValue
             
             label.translatesAutoresizingMaskIntoConstraints = false
             slider.translatesAutoresizingMaskIntoConstraints = false
@@ -38,14 +56,23 @@ import RxSwift
             contentView.addSubview(slider)
             contentView.addSubview(label)
             
-            slider.value = defaultValue
-//            slider
-//                .rx_value
-//                .subscribeNext { [unowned self] value in
-//                    self.label.text = "\(self.name): \(value)"
-//                }
-//                .addDisposableTo(disposeBag)
-//            
+            slider.value = defaultValue.floatValue
+            
+            slider.addTarget(self, action: #selector(SliderCell.valueChanged), for: .valueChanged)
+        
+            rx_value
+                .map(labelFunction)
+                .subscribeNext { [weak self] label in
+                    guard let `self` = self else {
+                        return
+                    }
+                    
+                    
+                    
+                    self.label.text = "\(name): \(label)"
+                }
+                .addDisposableTo(disposeBag)
+
             let constraints = [
                 NSLayoutConstraint(item: slider, attribute: .top, relatedBy: .equal, toItem: contentView, attribute: .top, multiplier: 1, constant: 0),
                 NSLayoutConstraint(item: slider, attribute: .bottom, relatedBy: .equal, toItem: label, attribute: .top, multiplier: 1, constant: 0),
@@ -58,6 +85,16 @@ import RxSwift
             }
             
             NSLayoutConstraint.activate(constraints)
+        }
+        
+        func valueChanged() {
+            let nextValue = Value(floatValue: self.slider.value)
+            
+            guard valueBounds.contains(nextValue) else {
+                return
+            }
+            
+            self.valueSubject.onNext(nextValue)
         }
         
         required public init?(coder aDecoder: NSCoder) {

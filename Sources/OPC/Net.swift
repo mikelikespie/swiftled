@@ -50,9 +50,17 @@ extension AddrInfo {
                 precondition(socket >= 0)
                 
                 let writeSource = DispatchSource.makeWriteSource(fileDescriptor: socket, queue: workQueue);
+  
+       
+                let closeItem = DispatchWorkItem {
+                    #if os(Linux)
+                        Glibc.close(socket)
+                    #else
+                        NSLog("CLOSING")
+                        Darwin.close(socket)
+                    #endif
+                }
                 
-                writeSource.resume();
-                NSLog("STARTING")
                 
                 func completeConnection() {
                     // If we got this far, we are successful!
@@ -60,13 +68,15 @@ extension AddrInfo {
                     
                     NSLog("COMPLETING CONNECTION")
                     writeSource.suspend()
-                    writeSource.setCancelHandler { }
+                    closeItem.cancel()
                     writeSource.resume()
                     
                     observer.onNext(socket)
                     observer.onCompleted()
                 }
                 
+                writeSource.setCancelHandler(handler: closeItem)
+
                 writeSource.setEventHandler {
                     do {
                         NSLog("Event trying to connect")
@@ -80,14 +90,11 @@ extension AddrInfo {
                     }
                 }
                 
-                writeSource.setCancelHandler {
-                    #if os(Linux)
-                        Glibc.close(socket)
-                    #else
-                        Darwin.close(socket)
-                    #endif
-                }
+                writeSource.resume();
                 
+                NSLog("STARTING")
+                
+
                 do {
                     NSLog("First trying to connect")
                     try self.tryConnect(socket)

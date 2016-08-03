@@ -29,7 +29,7 @@ private class VisualizationClient {
         let publishSubject = PublishSubject<WriteContext>()
         let visualizationDisposable = visualization.bind(publishSubject)
         
-        compositeDisposable.addDisposable(visualizationDisposable)
+        _ = compositeDisposable.addDisposable(visualizationDisposable)
         
         let tickerDisposable = ticker
             .map { idx -> (Int, TimeInterval) in
@@ -74,20 +74,6 @@ private class VisualizationClient {
     
 }
 
-//
-//public func applyOverRange(_ fullBounds: CountableRange<Int>, iterations: Int = 16, fn: (CountableRange<Int>) -> ()) {
-//    let chunkSize = ((fullBounds.count - 1) / iterations) + 1
-//    let splitBounds = (0..<iterations).map { idx in
-//        (fullBounds.lowerBound + chunkSize * idx)..<min((fullBounds.lowerBound + chunkSize * (idx + 1)), fullBounds.upperBound)
-//    }
-//    
-//    DispatchQueue.concurrentPerform(iterations: iterations) { idx in
-//        let bounds = splitBounds[idx]
-//        fn(bounds)
-//    }
-//}
-//
-
 public struct VisualizationRunner {
     private let ledCount: Int
     
@@ -110,7 +96,6 @@ public struct VisualizationRunner {
                         ledCount: self.ledCount,
                         mode: .rgbaRaw
                     )
-                    //                let connection = ClientConnection(fd: sock, ledCount: ledCount, mode: .RGB8)
                     
                     let client = VisualizationClient(connection: connection)
                     

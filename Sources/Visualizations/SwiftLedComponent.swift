@@ -31,6 +31,18 @@ public struct SwiftLedComponent : Cleanse.RootComponent {
         binder
             .bind(Visualization.self)
             .asSingleton()
-            .to(factory: SimpleVisualization.init)
+            .to(factory: CompositeVisualization.init)
+        
+        binder.bindVisualization().to(factory: SimpleVisualization.init)
+        binder.bindVisualization().to(factory: IdentificationVisualization.init)
+    }
+}
+
+extension Binder {
+    func bindVisualization() -> ScopedBindingDecorator<(SingularCollectionBindingBuilderDecorator<BaseBindingBuilder<Visualization, Self>>), Singleton> {
+        return self
+            .bind(Visualization.self)
+            .intoCollection()
+            .asSingleton()
     }
 }

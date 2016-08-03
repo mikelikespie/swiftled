@@ -41,7 +41,7 @@ public class IdentificationVisualization : Visualization {
         print(makeIcosohedronPoints(edgeLength: 18))
     }
     
-    public let name = Observable<String>.just("Simple visualization")
+    public let name = "Identification"
     
     enum Direction {
         case Forward

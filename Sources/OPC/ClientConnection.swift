@@ -78,8 +78,8 @@ public final class ClientConnection : Collection {
         self.start = Date.timeIntervalSinceReferenceDate
         self.ledCount = ledCount
         self.channel = DispatchIO(type: DispatchIO.StreamType.stream, fileDescriptor: fd, queue: workQueue, cleanupHandler: { _ in })
-        self.channel.setLimit(lowWater: 0)
-        self.channel.setLimit(highWater: Int.max)
+//        self.channel.setLimit(lowWater: 0)
+       // self.channel.setLimit(highWater: Int.max)
         self.channel.setInterval(interval: .seconds(0), flags: DispatchIO.IntervalFlags.strictInterval)
     }
     
@@ -165,7 +165,6 @@ public final class ClientConnection : Collection {
             .write(
                 offset: 0,
                 data: dispatchData,
-//                data: DispatchData.empty,
                 queue: self.workQueue
             ) { done, data, error in
                 guard error == 0 else {
@@ -179,9 +178,9 @@ public final class ClientConnection : Collection {
                 }
         }
 
-        self.channel.barrier {
-            _ = self.channel.fileDescriptor;
-        }
+//        self.channel.barrier {
+//            _ = self.channel.fileDescriptor;
+//        }
         
         return subject
     }
