@@ -12,9 +12,7 @@ import Cleanse
 import OPC
 
 class SimpleVisualization : Visualization {
-    let brightnessControl: BrightnessControl.Element
-    
-    let gammaControl = SliderControl<Float>(bounds: 1.0..<4.0, defaultValue: 2.4, name: "Gamma")
+
     let timeMultiplier = SliderControl<Float>(bounds: -10.0..<10.0, defaultValue: 1, name: "Time Multiplier")
     
     let ledCount: Int
@@ -22,19 +20,15 @@ class SimpleVisualization : Visualization {
     
     public var controls: Observable<[Control]> {
         return Observable.just([
-            brightnessControl,
-            gammaControl,
             timeMultiplier,
             ])
     }
     
     init(
         ledCount: TaggedProvider<LedCount>,
-        segmentLength: TaggedProvider<SegmentLength>,
-        brightnessControl: TaggedProvider<BrightnessControl>) {
+        segmentLength: TaggedProvider<SegmentLength>) {
         self.ledCount = ledCount.get()
         self.segmentLength = segmentLength.get()
-        self.brightnessControl = brightnessControl.get()
     }
     
     public let name = "Simple"
@@ -49,11 +43,7 @@ class SimpleVisualization : Visualization {
             guard let `self` = self else {
                 return
             }
-            
-            
-            let gammaControlValue = self.gammaControl.value
-            let brightnessControlValue = self.brightnessControl.value
-            
+                
             let writeBuffer = context.writeBuffer
             
             offset += context.tickContext.timeDelta * Double(self.timeMultiplier.value)
@@ -77,7 +67,6 @@ class SimpleVisualization : Visualization {
                         v: value
                         )
                         .rgbFloat
-                        .gammaAdjusted(gammaControlValue) * pow(brightnessControlValue, 2)
                 }
             }
         }

@@ -25,6 +25,11 @@ import RxSwift
             return valueSubject
         }
         
+        @nonobjc
+        var value: Value {
+            return (try? valueSubject.value()) ?? valueBounds.lowerBound
+        }
+        
         private var disposeBag = DisposeBag()
         
         private let valueSubject: BehaviorSubject<Value>

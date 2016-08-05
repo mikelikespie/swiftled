@@ -12,17 +12,39 @@ import RxSwift
 import Cleanse
 import Dispatch
 
-private class VisualizationClient {
+private final class VisualizationClient : Component {
+    private typealias Root = VisualizationClient
+    private typealias Seed = ClientConnection
+    
     let connection: ClientConnection
     
+    let gamma: TaggedProvider<Gamma>
+    let brightness: TaggedProvider<Brightness>
+    
     var buffer: [RGBFloat]
-    init(connection: ClientConnection) {
+    init(
+        connection: ClientConnection,
+        gamma: TaggedProvider<Gamma>,
+        brightness: TaggedProvider<Brightness>) {
+        self.brightness = brightness
+        self.gamma = gamma
+        
         self.connection = connection
         self.buffer = [RGBFloat](repeating: RGBFloat(r: 0, g: 0, b: 0), count: connection.count)
     }
     
+    
+    private static func configure<B : Binder>(binder: B) {
+        binder.bind().to(factory: VisualizationClient.init)
+    }
+    
+
     func start(_ fps: Double, visualization: Visualization) -> Disposable {
-        let ticker: Observable<Int> =  Observable.interval(1.0 / TimeInterval(fps), scheduler: MainScheduler.instance)
+        let serialQueue = DispatchQueue(label: "MyQueue", attributes: [], target: nil)
+        
+        let defaultScheduler = SerialDispatchQueueScheduler(queue: serialQueue, internalSerialQueueName: "MyQueue")
+
+        let ticker: Observable<Int> =  Observable.interval(1.0 / TimeInterval(fps), scheduler: defaultScheduler)
         
         let compositeDisposable = CompositeDisposable()
         
@@ -58,9 +80,12 @@ private class VisualizationClient {
                 
                 let fullBounds = self.buffer.startIndex..<self.buffer.endIndex
                 
+                let gamma = self.gamma.get()
+                let brightness = self.brightness.get()
+                
                 applyOverRange(fullBounds) { bounds in
                     for idx in bounds {
-                        self.connection[idx] = self.buffer[idx]
+                        self.connection[idx] = self.buffer[idx].gammaAdjusted(gamma) * pow(brightness, 2)
                     }
                 }
                 
@@ -76,13 +101,20 @@ private class VisualizationClient {
 
 public struct VisualizationRunner {
     private let ledCount: Int
+    private let visualizationClientFactory: ComponentFactory<VisualizationClient>
     
-    public init(ledCount: TaggedProvider<LedCount>) {
+    private init(
+        ledCount: TaggedProvider<LedCount>,
+        visualizationClientFactory: ComponentFactory<VisualizationClient>
+    ) {
         self.ledCount = ledCount.get()
+        self.visualizationClientFactory = visualizationClientFactory
     }
     
     public func startVisualization(_ visualization: Visualization, fps: Double) -> Disposable {
         let compositeDisposable = CompositeDisposable()
+        let visualizationClientFactory = self.visualizationClientFactory
+        
         let addrInfoDisposable = getaddrinfoSockAddrsAsync("pi0.local", servname: "7890")
             .debug()
             .flatMap { sa in
@@ -97,7 +129,7 @@ public struct VisualizationRunner {
                         mode: .rgbaRaw
                     )
                     
-                    let client = VisualizationClient(connection: connection)
+                    let client = visualizationClientFactory.build(seed: connection)
                     
                     let clientDisposable = client.start(fps, visualization: visualization)
                     
@@ -119,6 +151,16 @@ public struct VisualizationRunner {
         _ = compositeDisposable.addDisposable(addrInfoDisposable)
         
         return compositeDisposable
+    }
+    
+    struct Module : Cleanse.Module {
+        static func configure<B : Binder>(binder: B) {
+            binder.install(dependency: VisualizationClient.self)
+            
+            binder
+                .bind()
+                .to(factory: VisualizationRunner.init)
+        }
     }
 }
 

@@ -47,3 +47,7 @@ public protocol Control : class {
     /// - returns: Disposable. It should stop listening for tick information
     func run(_ ticker: Observable<TickContext>) -> Disposable
 }
+
+protocol TypedControl : Control {
+    associatedtype Value
+}

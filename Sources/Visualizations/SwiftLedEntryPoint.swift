@@ -17,7 +17,7 @@ struct SwiftLedEntryPoint : EntryPoint {
     let configuration: LedConfiguration
     
     private func doStuff() -> Disposable {
-        return ledRunner.startVisualization(visualization, fps: 200)
+        return ledRunner.startVisualization(visualization, fps: 400)
     }
     
     func start() -> Disposable {

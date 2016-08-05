@@ -8,6 +8,7 @@
 
 import Foundation
 import RxSwift
+import Cleanse
 
 public protocol Visualization {
     /// Name of visualization. Can change

@@ -73,7 +73,7 @@ public struct RGBFloat : ColorConvertible, CustomStringConvertible {
         }
     }
     
-    var storage: float3
+    public var storage: float3
     
     public var rgb8: RGB8 {
         let multiplied = storage * 255
@@ -88,7 +88,7 @@ public struct RGBFloat : ColorConvertible, CustomStringConvertible {
         self.storage = float3(r,g,b)
     }
     
-    init(storage: float3) {
+    public init(storage: float3) {
         self.storage = storage
     }
     
@@ -370,5 +370,12 @@ public struct HSV : ColorConvertible {
 
 public func *(lhs: RGBFloat, rhs: Float) -> RGBFloat {
     return RGBFloat(storage: lhs.storage * rhs)
+}
+
+public extension RGBFloat {
+    func mix(other: RGBFloat, ratio: Float) -> RGBFloat {
+        let otherRatio = (1.0 - ratio)
+        return RGBFloat(storage: storage * ratio + other.storage * otherRatio)
+    }
 }
 

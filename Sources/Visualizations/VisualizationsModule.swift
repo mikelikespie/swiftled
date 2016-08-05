@@ -14,8 +14,8 @@ public struct VisualizationsModule : Module {
         binder.install(module: LedConfigurationModule.self)
         binder.install(module: SharedControlsModule.self)
         
-        binder
-            .bind()
-            .to(factory: VisualizationRunner.init)
+        binder.install(module: VisualizationRunner.Module.self)
+        
+        binder.install(module: MyShape.Module.self)
     }
 }

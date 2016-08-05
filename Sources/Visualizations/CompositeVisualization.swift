@@ -10,37 +10,21 @@ import Foundation
 import Cleanse
 import RxSwift
 
+
+struct CompositeVisualizationScope : Scope {
+    
+}
+
 /// Composes many visualizations
 struct CompositeVisualization : Visualization, Component {
-    public typealias Root = Visualization
-    
-    let visualizations: [Visualization]
+    typealias Root = Visualization
+    typealias Scope = CompositeVisualizationScope
     
     let currentVisualization: Observable<Visualization>
     
-    let visualizationControl: SliderControl<Int>
-    
-    init(visualizations: [Visualization]) {
-        self.visualizations = visualizations
-        
-        let visualizationNames = visualizations.map { $0.name }
-        precondition(visualizations.count > 0)
-    
-        visualizationControl = SliderControl<Int>(
-            bounds: Range(self.visualizations.indices),
-            defaultValue: 0,
-            name: "Visualization",
-            labelFunction: { visualizationNames[$0] })
-        
-//        self.visualizations.indices.c
-        
-        self.currentVisualization = visualizationControl
-            .rx_value
-            .map { Int($0) }
-            .distinctUntilChanged()
-            .map { visualizations[$0] }
-        
-        self.ourControls = .just([visualizationControl])
+    init(currentVisualization: Observable<Visualization>, controls: [Control]) {
+        self.ourControls = .just(controls)
+        self.currentVisualization = currentVisualization
     }
 
     var name: String {
@@ -82,5 +66,52 @@ struct CompositeVisualization : Visualization, Component {
         binder
             .bind(Root.self)
             .to(factory: CompositeVisualization.init)
+        
+        binder
+            .bind()
+            .tagged(with: VisualizationControl.self)
+            .scoped(in: CompositeVisualizationScope.self)
+            .to(factory: self.makeVisualizationControl)
+        
+        binder
+            .bind(Control.self)
+            .intoCollection()
+            .to { ($0 as TaggedProvider<VisualizationControl>).get() }
+        
+        binder
+            .bind(Observable<Visualization>.self)
+            .scoped(in: CompositeVisualizationScope.self)
+            .to(factory: self.makeCurrentVisualization)
+        
+    }
+    
+    struct VisualizationControl : Tag {
+        typealias Element = SliderControl<Int>
+    }
+    
+    static func makeVisualizationControl(visualizations: [Visualization]) -> VisualizationControl.Element {
+        let visualizationNames = visualizations.map { $0.name }
+
+        return
+            SliderControl<Int>(
+                bounds: Range(visualizations.indices),
+                defaultValue: 0,
+                name: "Visualization",
+                labelFunction: { visualizationNames[$0] })
+    }
+    
+    static func makeCurrentVisualization(
+        visualizations: [Visualization],
+        visualizationControl: TaggedProvider<VisualizationControl>
+    ) -> Observable<Visualization> {
+        precondition(visualizations.count > 0)
+        
+        return visualizationControl
+            .get()
+            .rx_value
+            .map { Int($0) }
+            .distinctUntilChanged()
+            .map { visualizations[$0] }
+
     }
 }

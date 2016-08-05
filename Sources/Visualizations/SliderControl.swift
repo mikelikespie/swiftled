@@ -13,11 +13,13 @@ import RxSwift
     import UIKit
 #endif
 
-class SliderControl<Value: FloatValueConvertible> : Control {
+class SliderControl<V: FloatValueConvertible> : TypedControl {
     let name: String
     let bounds: Range<Value>
     
-    public var rx_value: Observable<Value> {
+    typealias Value = V
+    
+    var rx_value: Observable<Value> {
         #if os(iOS)
             return sliderCell.rx_value
         #else
@@ -29,10 +31,10 @@ class SliderControl<Value: FloatValueConvertible> : Control {
     private var valueSubject: BehaviorSubject<Value>
     #endif
     
-    public var value: Float {
+    var value: Value {
         // return midpoint for now :/
         #if os(iOS)
-            return sliderCell.slider.value
+            return sliderCell.value
         #else
             return valueSubject.value()
         #endif
@@ -49,7 +51,7 @@ class SliderControl<Value: FloatValueConvertible> : Control {
     #endif
     
     
-    public init(bounds: Range<Value>, defaultValue: Value, name: String, labelFunction: Optional<(Value) -> String>=nil) {
+    init(bounds: Range<Value>, defaultValue: Value, name: String, labelFunction: Optional<(Value) -> String>=nil) {
         self.name = name
         self.bounds = bounds
         #if os(iOS)

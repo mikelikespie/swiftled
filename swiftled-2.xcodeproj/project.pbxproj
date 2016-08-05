@@ -20,6 +20,9 @@
 		275F97671D51728300B473B6 /* SliderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 275F97661D51728300B473B6 /* SliderCell.swift */; };
 		27713EEE1D51B05D00FC0F90 /* SharedControls.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27713EEC1D51B04400FC0F90 /* SharedControls.swift */; };
 		27713EF11D51B58000FC0F90 /* FloatValueConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27713EF01D51B58000FC0F90 /* FloatValueConvertible.swift */; };
+		27713EF41D52E40D00FC0F90 /* MyShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27713EF31D52E40D00FC0F90 /* MyShape.swift */; };
+		27848DA81D5307C800AC4E2C /* StaticVisualization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27848DA71D5307C800AC4E2C /* StaticVisualization.swift */; };
+		27848DAB1D54169200AC4E2C /* RGBAFloat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27848DAA1D54169200AC4E2C /* RGBAFloat.swift */; };
 		_LinkFileRef_Cleanse_via_Visualizations /* Cleanse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "_____Product_Cleanse" /* Cleanse.framework */; };
 		_LinkFileRef_Cleanse_via_swiftled /* Cleanse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "_____Product_Cleanse" /* Cleanse.framework */; };
 		_LinkFileRef_OPC_via_Visualizations /* OPC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "_____Product_OPC" /* OPC.framework */; };
@@ -280,6 +283,9 @@
 		275F97661D51728300B473B6 /* SliderCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SliderCell.swift; sourceTree = "<group>"; };
 		27713EEC1D51B04400FC0F90 /* SharedControls.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharedControls.swift; sourceTree = "<group>"; };
 		27713EF01D51B58000FC0F90 /* FloatValueConvertible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FloatValueConvertible.swift; sourceTree = "<group>"; };
+		27713EF31D52E40D00FC0F90 /* MyShape.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyShape.swift; sourceTree = "<group>"; };
+		27848DA71D5307C800AC4E2C /* StaticVisualization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StaticVisualization.swift; sourceTree = "<group>"; };
+		27848DAA1D54169200AC4E2C /* RGBAFloat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RGBAFloat.swift; sourceTree = "<group>"; };
 		__PBXFileRef_Cleanse_Info.plist /* swiftled-2.xcodeproj/Cleanse_Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "swiftled-2.xcodeproj/Cleanse_Info.plist"; sourceTree = SOURCE_ROOT; };
 		__PBXFileRef_OPC_Info.plist /* swiftled-2.xcodeproj/OPC_Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "swiftled-2.xcodeproj/OPC_Info.plist"; sourceTree = SOURCE_ROOT; };
 		__PBXFileRef_Package.swift /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
@@ -549,10 +555,12 @@
 		27713EEF1D51B25300FC0F90 /* Visualizations */ = {
 			isa = PBXGroup;
 			children = (
+				27848DA71D5307C800AC4E2C /* StaticVisualization.swift */,
 				__PBXFileRef_Sources/Visualizations/Visualization.swift /* Visualization.swift */,
 				275C3F901D518CEE008B79E9 /* CompositeVisualization.swift */,
 				__PBXFileRef_Sources/Visualizations/SimpleVisualization.swift /* SimpleVisualization.swift */,
 				2706BD7E1D5028C100C766C5 /* IdentificationVisualization.swift */,
+				27713EF31D52E40D00FC0F90 /* MyShape.swift */,
 			);
 			name = Visualizations;
 			sourceTree = "<group>";
@@ -852,6 +860,7 @@
 				275F96721D516D2F00B473B6 /* LedConfiguration.swift */,
 				275C3F921D518FB7008B79E9 /* DisposableHelpers.swift */,
 				27713EF01D51B58000FC0F90 /* FloatValueConvertible.swift */,
+				27848DAA1D54169200AC4E2C /* RGBAFloat.swift */,
 			);
 			name = Visualizations;
 			path = Sources/Visualizations;
@@ -1213,10 +1222,12 @@
 				__src_cc_ref_Sources/Visualizations/SliderControl.swift /* SliderControl.swift in Sources */,
 				275F97671D51728300B473B6 /* SliderCell.swift in Sources */,
 				275F97641D5170D000B473B6 /* SwiftLedComponent.swift in Sources */,
+				27848DA81D5307C800AC4E2C /* StaticVisualization.swift in Sources */,
 				27713EF11D51B58000FC0F90 /* FloatValueConvertible.swift in Sources */,
 				27713EEE1D51B05D00FC0F90 /* SharedControls.swift in Sources */,
 				2706BD7F1D5028C100C766C5 /* IdentificationVisualization.swift in Sources */,
 				__src_cc_ref_Sources/Visualizations/Tags.swift /* Tags.swift in Sources */,
+				27713EF41D52E40D00FC0F90 /* MyShape.swift in Sources */,
 				275F97631D5170D000B473B6 /* EntryPoint.swift in Sources */,
 				2706BD851D5036B300C766C5 /* DelegatedHashable.swift in Sources */,
 				__src_cc_ref_Sources/Visualizations/Visualization.swift /* Visualization.swift in Sources */,
@@ -1225,6 +1236,7 @@
 				275F96731D516D2F00B473B6 /* LedConfiguration.swift in Sources */,
 				__src_cc_ref_Sources/Visualizations/VisualizationsModule.swift /* VisualizationsModule.swift in Sources */,
 				275C3F911D518CEE008B79E9 /* CompositeVisualization.swift in Sources */,
+				27848DAB1D54169200AC4E2C /* RGBAFloat.swift in Sources */,
 				2706BD811D50339A00C766C5 /* Geometry.swift in Sources */,
 				275C3F931D518FB7008B79E9 /* DisposableHelpers.swift in Sources */,
 			);

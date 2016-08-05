@@ -28,21 +28,35 @@ public struct SwiftLedComponent : Cleanse.RootComponent {
         
         binder.install(module: VisualizationsModule.self)
         
+        binder.install(dependency: CompositeVisualization.self)
+        
         binder
             .bind(Visualization.self)
             .asSingleton()
-            .to(factory: CompositeVisualization.init)
+            .to { ($0 as ComponentFactory<CompositeVisualization>).build(seed: ()) }
+        
         
         binder.bindVisualization().to(factory: SimpleVisualization.init)
         binder.bindVisualization().to(factory: IdentificationVisualization.init)
+        binder.bindVisualization().to(factory: StaticVisualization.init)
+        
+        
+        binder
+            .bind([Visualization].self)
+            .to { ($0 as TaggedProvider<UnsortedVisualizations>).get().sorted { $0.name < $1.name } }
     }
 }
 
+
+struct UnsortedVisualizations : Tag {
+    typealias Element = [Visualization]
+}
 extension Binder {
-    func bindVisualization() -> ScopedBindingDecorator<(SingularCollectionBindingBuilderDecorator<BaseBindingBuilder<Visualization, Self>>), Singleton> {
+    func bindVisualization() -> ScopedBindingDecorator<TaggedBindingBuilderDecorator<SingularCollectionBindingBuilderDecorator<BaseBindingBuilder<Visualization, Self>>, UnsortedVisualizations>, Singleton> {
         return self
             .bind(Visualization.self)
             .intoCollection()
+            .tagged(with: UnsortedVisualizations.self)
             .asSingleton()
     }
 }

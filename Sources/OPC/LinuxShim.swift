@@ -7,6 +7,7 @@
 //
 
 
+#if os(Linux)
 
 public struct float3  {
     public var x: Float
@@ -56,7 +57,6 @@ func clamp(_ lhs: float3, min min_: Float, max max_: Float) -> float3 {
     )
 }
 
-#if os(Linux)
 
 public enum POSIXErrorCode : CInt, Swift.Error {
     case EDEADLK = 35

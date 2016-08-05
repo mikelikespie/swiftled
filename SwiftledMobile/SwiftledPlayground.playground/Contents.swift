@@ -16,7 +16,7 @@ PlaygroundPage.current.needsIndefiniteExecution = true
 
 let compositeDisposable = CompositeDisposable()
 
-let serialQueue = DispatchQueue(label: "MyQueue", attributes: [.initiallyInactive], target: nil)
+let serialQueue = DispatchQueue(label: "MyQueue", attributes: [], target: nil)
 
 let defaultScheduler = SerialDispatchQueueScheduler(queue: serialQueue, internalSerialQueueName: "MyQueue")
 
