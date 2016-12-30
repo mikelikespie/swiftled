@@ -39,8 +39,6 @@ public class StaticVisualization : Visualization {
         self.segmentCount = segmentCount.get()
         
         self.shapeProvider = shapeProvider
-        
-        print(makeIcosohedronPoints(edgeLength: 18))
     }
     
     

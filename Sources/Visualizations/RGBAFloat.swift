@@ -39,6 +39,15 @@ extension RGBFloat {
     }
 }
 
+extension RGBAFloat {
+    static let clear = RGBAFloat(rgb: .black, alpha: 0)
+}
+
+extension RGBAFloat : CustomDebugStringConvertible {
+    public var debugDescription: String {
+        return "rgba(r:\(premultipliedRGB.x), g:\(premultipliedRGB.y), b:\(premultipliedRGB.z), alpha:\(alpha))"
+    }
+}
 protocol RGBAMergeable {
     static func += (lhs: inout Self, rhs: RGBAFloat)
 }
@@ -47,7 +56,6 @@ extension RGBAFloat : RGBAMergeable {
 }
 extension RGBFloat : RGBAMergeable {
 }
-
 public func +=(lhs: inout RGBAFloat, rhs: RGBAFloat)  {
     // Additive combining
     
@@ -57,7 +65,8 @@ public func +=(lhs: inout RGBAFloat, rhs: RGBAFloat)  {
 
 public func +=(lhs: inout RGBFloat, rhs: RGBAFloat)  {
     // Additive combining
-    lhs.storage = min(lhs.storage + rhs.premultipliedRGB, 1)
+    // TODO: Make it combine w/ linear, not additive
+    lhs.storage = min(lhs.storage * lhs.storage + rhs.premultipliedRGB * rhs.premultipliedRGB, 1)
 }
 
 

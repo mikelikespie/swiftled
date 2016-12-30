@@ -85,7 +85,11 @@ private final class VisualizationClient : Component {
                 
                 applyOverRange(fullBounds) { bounds in
                     for idx in bounds {
-                        self.connection[idx] = self.buffer[idx].gammaAdjusted(gamma) * pow(brightness, 2)
+                        let bufferValue = self.buffer[idx]
+                        
+                        self.connection[idx] =
+                            (bufferValue * brightness)
+//                            .toLinear()
                     }
                 }
                 

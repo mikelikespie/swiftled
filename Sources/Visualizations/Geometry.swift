@@ -5,7 +5,7 @@
 //  Created by Michael Lewis on 8/1/16.
 //
 //
-
+#if false
 import Foundation
 
 #if os(Linux)
@@ -29,20 +29,6 @@ let icosohedronPoints: [float3] = [
     .init(0.000,  0.000, -1.000),
 ]
 
-typealias Face = (Int, Int, Int)
-
-struct Edge : DelegatedHashable {
-    let a, b: Int
-    
-    init(a: Int, b: Int) {
-        self.a = min(a, b)
-        self.b = max(a, b)
-    }
-    
-    var hashable: CombinedHashable<Int, Int> {
-        return CombinedHashable(a, b)
-    }
-}
 
 let icosohedronFaces: [Face] = [
     (0,1,2),
@@ -105,3 +91,5 @@ private func doInterpolate(a: float3, b: float3, steps: Int, out: inout [float3]
         out.append(mix(a, b, t: Float(i) / floatSteps))
     }
 }
+
+#endif

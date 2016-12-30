@@ -13,6 +13,34 @@ import Cleanse
 private enum Direction {
     case Forward
     case Reverse
+    
+    var complement: Direction {
+        switch self {
+        case .Forward:
+            return .Reverse
+        case .Reverse:
+            return .Forward
+        }
+    }
+}
+
+// Edge in a directional graph
+struct Edge : DelegatedHashable {
+    var a: Int
+    var b: Int
+    
+    init(a: Int, b: Int) {
+        self.a = a
+        self.b = b
+    }
+    
+    var hashable: CombinedHashable<Int, Int> {
+        return CombinedHashable(a, b)
+    }
+    
+    var complement: Edge {
+        return Edge(a: b, b: a)
+    }
 }
 
 private let edgeToVertices : [(Int, Int)] = [
@@ -46,12 +74,104 @@ private let edgeToVertices : [(Int, Int)] = [
     (7, 8),
     (8, 9), // 24
 
-    (9, 10), // 25
-    (10, 6),
-    (6, 7),
-    (7, 8),
-    (8, 9), // 29
+    (9, 11), // 25
+    (10, 11),
+    (6, 11),
+    (7, 11),
+    (8, 11), // 29
 ]
+
+private let edgeToSegmentMappingIndex: [Edge: Int] = {
+    var result = [Edge: Int]()
+    
+    for (i, (a, b)) in edgeToVertices.enumerated() {
+        result[Edge(a: a, b: b)] = i
+    }
+    
+    return result
+}()
+
+struct Face: DelegatedHashable {
+    let a: Int
+    let b: Int
+    let c: Int
+    
+    var hashable: CombinedHashable<CombinedHashable<Int, Int>, Int> {
+        return CombinedHashable(CombinedHashable(a, b), c)
+    }
+    
+    init(a: Int, b: Int, c: Int) {
+        let minVertex = min(a, b, c)
+        
+        switch minVertex {
+        case a:
+            self.a = a
+            self.b = b
+            self.c = c
+        case b:
+            self.a = b
+            self.b = c
+            self.c = a
+        case c:
+            self.a = c
+            self.b = a
+            self.c = b
+        default:
+            fatalError()
+        }
+    }
+    var edges: (a: Edge, b: Edge, c: Edge) {
+        return (
+            Edge(a: a, b: b),
+            Edge(a: b, b: c),
+            Edge(a: c, b: a)
+        )
+    }
+}
+
+
+private let allEdges: Set<Edge> = {
+    var edges = Set<Edge>(minimumCapacity: edgeToVertices.count * 2)
+    
+    for e in edgeToVertices {
+        let e1 = Edge(a: e.0, b: e.1)
+        let e2 = e1.complement
+        edges.insert(e1)
+        edges.insert(e2)
+    }
+
+    return edges
+}()
+
+private let edgesByOriginatingVertex: [Set<Int>] = {
+    var result = [Set<Int>](repeating: [], count: 12)
+    
+    for e in allEdges {
+        result[e.a].insert(e.b)
+    }
+    return result
+}()
+
+
+private func calculateAllFaces(edgeToVertices: [(Int, Int)]) -> Set<Face> {
+    var result = Set<Face>(minimumCapacity: 40)
+    
+    for (v_a, edges) in edgesByOriginatingVertex.enumerated() {
+        for v_b in edges {
+            for v_c in edgesByOriginatingVertex[v_b] {
+                guard edgesByOriginatingVertex[v_c].contains(v_a) else {
+                    continue
+                }
+                
+                result.insert(Face(a: v_a, b: v_b, c: v_c))
+            }
+        }
+    }
+    
+    return result
+}
+
+private let allFaces = calculateAllFaces(edgeToVertices: edgeToVertices)
 
 
 private let segmentMap: [(Direction, Int)] = [
@@ -96,6 +216,22 @@ private let inverseSegmentMap = segmentMap
     .enumerated()
     .sorted { $0.1.1 < $1.1.1 }
     .map { ($0.1.0, $0.0) }
+
+
+private func segment(edge: Edge) -> (Direction, Int) {
+    let direction: Direction
+    let segmentMappingIndex: Int
+    
+    if let mappingIndex = edgeToSegmentMappingIndex[edge] {
+        segmentMappingIndex = mappingIndex
+        direction = .Forward
+    } else {
+        segmentMappingIndex = edgeToSegmentMappingIndex[edge.complement]!
+        direction = .Reverse
+    }
+    
+    return (direction, segmentMappingIndex)
+}
 
 struct ShapeSegmentString : Collection {
     var startIndex: Int  {
@@ -142,6 +278,10 @@ final class MyShape {
     let ledCount: Int
     let segmentLength: Int
     let segmentCount: Int
+    let faces: [Face]
+    
+    var faceBuffer: [RGBAFloat]
+    var edgeBuffer: [RGBAFloat]
     
     public init(
         ledCount: TaggedProvider<LedCount>,
@@ -152,6 +292,11 @@ final class MyShape {
         self.segmentCount = segmentCount.get()
         
         self.buffer = Array(repeating: .black, count: self.ledCount)
+        
+        self.faceBuffer = Array(repeating: .clear, count: self.segmentLength * 3)
+        self.edgeBuffer = Array(repeating: .clear, count: self.segmentLength)
+        
+        self.faces = Array(allFaces)
     }
     
     func clear() {
@@ -186,7 +331,6 @@ final class MyShape {
         return physicalSegment * segmentLength + segmentOffset
     }
     
-    
     func withSegment(segment: Int, closure: @noescape (  ptr:  inout UnsafeMutableBufferPointer<RGBFloat>) -> () ) {
         let segmentOffset = segment * segmentLength
         self
@@ -210,11 +354,86 @@ final class MyShape {
         }
     }
 
+    func withFace(face: Int, closure: @noescape (  ptr:  inout UnsafeMutableBufferPointer<RGBAFloat>) -> () ) {
+        faceBuffer.replaceSubrange(0..<faceBuffer.count, with: repeatElement(.clear, count: faceBuffer.count))
+        
+        faceBuffer
+            .withUnsafeMutableBufferPointer { ptr in
+                closure(ptr: &ptr)
+        }
+        
+        let face = self.faces[face]
+        
+        let (edgeA, edgeB, edgeC) = face.edges
+
+        for (i, edge) in [edgeA, edgeB, edgeC].enumerated() {
+            let (direction, segmentIndex) = segment(edge: edge)
+            
+            let bufferRange = range(segment: segmentIndex)
+            let faceBufferRange = range(segment: i)
+
+//            buffer.withUnsafeMutableBufferPointer { ptr in
+//                ptr[bufferRange].merge(other: faceBuffer[faceBufferRange])
+            //            }
+            switch direction {
+            case .Forward:
+                for (bi, fbi) in zip(bufferRange, faceBufferRange) {
+                    buffer[bi] += faceBuffer[fbi]
+                }
+            case .Reverse:
+                for (bi, fbi) in zip(bufferRange, faceBufferRange.reversed()) {
+                    buffer[bi] += faceBuffer[fbi]
+                }
+            }
+        }
+    }
+    
+    private func range(segment: Int) -> CountableRange<Int> {
+        let segmentStart = segment * segmentLength
+        return segmentStart..<(segmentStart + segmentLength)
+    }
     
     func withSegments(closure: @noescape (  segment: Int, ptr:  inout UnsafeMutableBufferPointer<RGBFloat>) -> () ) {
         for segment in 0..<segmentCount {
             withSegment(segment: segment) {
                 closure(segment: segment, ptr: &$0)
+            }
+        }
+    }
+    
+    
+    func withEdges(adjacentToVertex vertex: Int, closure: @noescape (edge: Edge, ptr: inout UnsafeMutableBufferPointer<RGBAFloat>) -> ()) {
+        let adjacentVertices = edgesByOriginatingVertex[vertex]
+        
+        
+        for b in adjacentVertices {
+            let edge = Edge(a: vertex, b: b)
+            
+            withEdge(edge: edge) { ptr in
+                closure(edge: edge, ptr: &ptr)
+            }
+        }
+    }
+    func withEdge(edge: Edge, closure: @noescape (ptr: inout UnsafeMutableBufferPointer<RGBAFloat>) -> ()) {
+        edgeBuffer.replaceSubrange(0..<edgeBuffer.count, with: repeatElement(.clear, count: edgeBuffer.count))
+        
+        edgeBuffer
+            .withUnsafeMutableBufferPointer { ptr in
+                closure(ptr: &ptr)
+        }
+
+        let (direction, segmentIndex) = segment(edge: edge)
+        
+        let bufferRange = range(segment: segmentIndex)
+
+        switch direction {
+        case .Forward:
+            for (bi, fbi) in zip(bufferRange, edgeBuffer.indices) {
+                buffer[bi] += edgeBuffer[fbi]
+            }
+        case .Reverse:
+            for (bi, fbi) in zip(bufferRange, edgeBuffer.indices.reversed()) {
+                buffer[bi] += edgeBuffer[fbi]
             }
         }
     }

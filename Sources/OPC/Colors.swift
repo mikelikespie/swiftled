@@ -98,7 +98,7 @@ public struct RGBFloat : ColorConvertible, CustomStringConvertible {
             return c / 12.92
         }
         let a: Float = 0.055
-        return pow((c + a) / (1 + a), 2.4)
+        return pow((c + a) / (1 + a), 2)
     }
     
     // Converts from something like sRGB -> linear which is what a device would do maybe
@@ -200,6 +200,7 @@ public struct RGBFloat : ColorConvertible, CustomStringConvertible {
         return "RGBFloat(r: \(r), g: \(g), b: \(b))"
     }
 }
+
 
 
 extension RGBFloat {

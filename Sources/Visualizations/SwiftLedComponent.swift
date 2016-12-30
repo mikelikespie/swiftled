@@ -39,6 +39,7 @@ public struct SwiftLedComponent : Cleanse.RootComponent {
         binder.bindVisualization().to(factory: SimpleVisualization.init)
         binder.bindVisualization().to(factory: IdentificationVisualization.init)
         binder.bindVisualization().to(factory: StaticVisualization.init)
+        binder.bindVisualization().to(factory: STimeVisualization.init)
         
         
         binder
