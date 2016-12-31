@@ -13,8 +13,8 @@ import Cleanse
 import Dispatch
 
 private final class VisualizationClient : Component {
-    private typealias Root = VisualizationClient
-    private typealias Seed = ClientConnection
+    fileprivate typealias Root = VisualizationClient
+    fileprivate typealias Seed = ClientConnection
     
     let connection: ClientConnection
     
@@ -34,7 +34,7 @@ private final class VisualizationClient : Component {
     }
     
     
-    private static func configure<B : Binder>(binder: B) {
+    fileprivate static func configure<B : Binder>(binder: B) {
         binder.bind().to(factory: VisualizationClient.init)
     }
     
@@ -51,7 +51,7 @@ private final class VisualizationClient : Component {
         let publishSubject = PublishSubject<WriteContext>()
         let visualizationDisposable = visualization.bind(publishSubject)
         
-        _ = compositeDisposable.addDisposable(visualizationDisposable)
+        _ = compositeDisposable.insert(visualizationDisposable)
         
         let tickerDisposable = ticker
             .map { idx -> (Int, TimeInterval) in
@@ -70,7 +70,7 @@ private final class VisualizationClient : Component {
             .map { startOffsetContext -> TickContext in
                 return startOffsetContext!.1
             }
-            .subscribeNext { tickContext in
+            .subscribe(onNext: { tickContext in
                 self.buffer.withUnsafeMutableBufferPointer { ptr in
                     let writeContext = WriteContext(tickContext: tickContext, writeBuffer:  ptr)
                     publishSubject.onNext(writeContext)
@@ -94,9 +94,9 @@ private final class VisualizationClient : Component {
                 }
                 
                 _ = self.connection.flush()
-        }
+        })
         
-        _ = compositeDisposable.addDisposable(tickerDisposable)
+        _ = compositeDisposable.insert(tickerDisposable)
         
         return compositeDisposable
     }
@@ -133,11 +133,11 @@ public struct VisualizationRunner {
                         mode: .rgbaRaw
                     )
                     
-                    let client = visualizationClientFactory.build(seed: connection)
+                    let client = visualizationClientFactory.build(connection)
                     
                     let clientDisposable = client.start(fps, visualization: visualization)
                     
-                    _ = compositeDisposable.addDisposable(clientDisposable)
+                    _ = compositeDisposable.insert(clientDisposable)
                     
                     NSLog("Connected!")
                 },
@@ -152,7 +152,7 @@ public struct VisualizationRunner {
                 }
         )
         
-        _ = compositeDisposable.addDisposable(addrInfoDisposable)
+        _ = compositeDisposable.insert(addrInfoDisposable)
         
         return compositeDisposable
     }

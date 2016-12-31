@@ -64,7 +64,7 @@ func makeIcosohedronPoints(edgeLength: Int) -> [float3] {
     return result
 }
 
-private func iterateIcosohedronEdges(iterator: @noescape (a: float3, b: float3) -> ()) {
+private func iterateIcosohedronEdges(iterator: (_ a: float3, _ b: float3) -> ()) {
     var seenEdges = Set<Edge>()
     
     for face in icosohedronFaces {
@@ -79,7 +79,7 @@ private func iterateIcosohedronEdges(iterator: @noescape (a: float3, b: float3) 
     }
 }
 
-private func iterateFaceEdges(face: Face, block: @noescape (Edge) -> ()) {
+private func iterateFaceEdges(face: Face, block: (Edge) -> ()) {
     block(Edge(a: face.0, b: face.1))
     block(Edge(a: face.1, b: face.2))
     block(Edge(a: face.2, b: face.0))

@@ -71,7 +71,7 @@ public class IdentificationVisualization : Visualization {
     public func bind(_ ticker: Observable<WriteContext>) -> Disposable {
         let shape = shapeProvider.get()
         
-        return ticker.subscribeNext { context in
+        return ticker.subscribe(onNext: {context in
             shape.clear()
             
             for (i, c) in self.segmentControls.enumerated() {
@@ -118,6 +118,6 @@ public class IdentificationVisualization : Visualization {
             }
 
             shape.copyToBuffer(buffer: context.writeBuffer)
-        }
+        })
     }
 }

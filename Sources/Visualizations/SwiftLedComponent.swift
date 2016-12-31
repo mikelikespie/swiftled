@@ -33,7 +33,10 @@ public struct SwiftLedComponent : Cleanse.RootComponent {
         binder
             .bind(Visualization.self)
             .asSingleton()
-            .to { ($0 as ComponentFactory<CompositeVisualization>).build(seed: ()) }
+            .to {(factory: ComponentFactory<CompositeVisualization>) in
+                
+                return factory.build(())
+        }
         
         
         binder.bindVisualization().to(factory: SimpleVisualization.init)

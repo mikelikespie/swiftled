@@ -27,7 +27,7 @@ public protocol SockAddr {
     // returns PF_INET6 or PF_INET
     static var protocolFamily: Int32 { get }
     
-    func withUnsafeSockaddrPtr<Result>(@noescape _ body: @noescape (UnsafePointer<sockaddr>) throws -> Result) rethrows -> Result
+    func withUnsafeSockaddrPtr<Result>( _ body: (UnsafePointer<sockaddr>) throws -> Result) rethrows -> Result
 }
 
 public enum Address {
@@ -43,7 +43,7 @@ extension sockaddr_in6: SockAddr {
         case .any:
             self.sin6_addr = in6addr_any
         case let .ipv6Addr(address: address):
-            try Error.throwIfNotSuccess(inet_pton(self.dynamicType.addressFamily, address, &self.sin6_addr))
+            try Error.throwIfNotSuccess(inet_pton(type(of: self).addressFamily, address, &self.sin6_addr))
         case .ipv4Addr:
             fatalError("Cannot listen to IPV4Address in an ipv6 socket")
         case .loopback:
@@ -51,20 +51,20 @@ extension sockaddr_in6: SockAddr {
         }
         
         self.sin6_port = listenPort.bigEndian
-        self.sin6_family = sa_family_t(self.dynamicType.addressFamily)
+        self.sin6_family = sa_family_t(type(of: self).addressFamily)
         #if !os(Linux)
-        self.sin6_len = UInt8(self.dynamicType.size)
+        self.sin6_len = UInt8(type(of: self).size)
         #endif
     }
     
-    public func withUnsafeSockaddrPtr<Result>(@noescape _ body: @noescape (UnsafePointer<sockaddr>) throws -> Result) rethrows -> Result {
+    public func withUnsafeSockaddrPtr<Result>( _ body: (UnsafePointer<sockaddr>) throws -> Result) rethrows -> Result {
         var copy = self
-        return try withUnsafePointer(&copy) { ptr -> Result in
+        return try withUnsafePointer(to: &copy) { ptr -> Result in
             return try body(unsafeBitCast(ptr, to: UnsafePointer<sockaddr>.self))
         }
     }
     
-    public static let size = sizeof(sockaddr_in6.self)
+    public static let size = MemoryLayout<sockaddr_in6>.size
     public static let addressFamily = AF_INET6
     public static let protocolFamily = PF_INET6
 }
@@ -73,7 +73,7 @@ let INADDR_ANY = in_addr(s_addr: 0x00000000)
 let INADDR_LOOPBACK4 = in_addr(s_addr: UInt32(0x7f000001).bigEndian)
 
 extension sockaddr_in: SockAddr {
-    public static let size = sizeof(sockaddr_in.self)
+    public static let size = MemoryLayout<sockaddr_in>.size
     public static let addressFamily = AF_INET
     public static let protocolFamily = PF_INET
 
@@ -82,7 +82,7 @@ extension sockaddr_in: SockAddr {
         case .any:
             self.sin_addr = INADDR_ANY
         case let .ipv4Addr(address: address):
-            try Error.throwIfNotSuccess(inet_pton(self.dynamicType.addressFamily, address, &self.sin_addr))
+            try Error.throwIfNotSuccess(inet_pton(type(of: self).addressFamily, address, &self.sin_addr))
         case .ipv6Addr:
             fatalError("Cannot listen to IPV6Address in an ipv4 socket")
         case .loopback:
@@ -90,16 +90,16 @@ extension sockaddr_in: SockAddr {
         }
         
         self.sin_port = listenPort.bigEndian
-        self.sin_family = sa_family_t(self.dynamicType.addressFamily)
+        self.sin_family = sa_family_t(type(of: self).addressFamily)
         
         #if !os(Linux)
-        self.sin_len = UInt8(self.dynamicType.size)
+        self.sin_len = UInt8(type(of: self).size)
         #endif
     }
     
-    public func withUnsafeSockaddrPtr<Result>( _ body: @noescape (UnsafePointer<sockaddr>) throws -> Result) rethrows -> Result {
+    public func withUnsafeSockaddrPtr<Result>( _ body: (UnsafePointer<sockaddr>) throws -> Result) rethrows -> Result {
         var copy = self
-        return try withUnsafePointer(&copy) { ptr -> Result in
+        return try withUnsafePointer(to: &copy) { ptr -> Result in
             return try body(unsafeBitCast(ptr, to: UnsafePointer<sockaddr>.self))
         }
     }

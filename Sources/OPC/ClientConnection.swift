@@ -83,12 +83,12 @@ public final class ClientConnection : Collection {
         self.channel.setInterval(interval: .seconds(0), flags: DispatchIO.IntervalFlags.strictInterval)
     }
     
-    public func apply<C: ColorConvertible>( _ fn: (index: Int, now: TimeInterval) -> C) {
+    public func apply<C: ColorConvertible>( _ fn: (_ index: Int, _ now: TimeInterval) -> C) {
         let timeOffset = Date.timeIntervalSinceReferenceDate - start
         
         applyOverRange(0..<ledCount, iterations: 4) { rng in
             for idx in rng {
-                self[idx] = fn(index: idx, now: timeOffset).rgbFloat
+                self[idx] = fn(idx, timeOffset).rgbFloat
             }
         }
     }

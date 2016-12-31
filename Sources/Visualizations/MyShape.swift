@@ -331,35 +331,35 @@ final class MyShape {
         return physicalSegment * segmentLength + segmentOffset
     }
     
-    func withSegment(segment: Int, closure: @noescape (  ptr:  inout UnsafeMutableBufferPointer<RGBFloat>) -> () ) {
+    func withSegment(segment: Int, closure: (  _ ptr:  inout UnsafeMutableBufferPointer<RGBFloat>) -> () ) {
         let segmentOffset = segment * segmentLength
         self
             .buffer[segmentOffset..<(segmentOffset + segmentLength)]
             .withUnsafeMutableBufferPointer { ( ptr: inout UnsafeMutableBufferPointer<RGBFloat>) -> () in
-                closure(ptr: &ptr)
+                closure(&ptr)
                 
                 return ()
         }
     }
     
     
-    func withGroup(group: Int, closure: @noescape (  ptr:  inout UnsafeMutableBufferPointer<RGBFloat>) -> () ) {
+    func withGroup(group: Int, closure: (  _ ptr:  inout UnsafeMutableBufferPointer<RGBFloat>) -> () ) {
         let segmentOffset = group * 5 * segmentLength
         self
             .buffer[segmentOffset..<(segmentOffset + segmentLength * 5)]
             .withUnsafeMutableBufferPointer { ( ptr: inout UnsafeMutableBufferPointer<RGBFloat>) -> () in
-                closure(ptr: &ptr)
+                closure(&ptr)
                 
                 return ()
         }
     }
 
-    func withFace(face: Int, closure: @noescape (  ptr:  inout UnsafeMutableBufferPointer<RGBAFloat>) -> () ) {
+    func withFace(face: Int, closure: @noescape (  _ ptr:  inout UnsafeMutableBufferPointer<RGBAFloat>) -> () ) {
         faceBuffer.replaceSubrange(0..<faceBuffer.count, with: repeatElement(.clear, count: faceBuffer.count))
         
         faceBuffer
             .withUnsafeMutableBufferPointer { ptr in
-                closure(ptr: &ptr)
+                closure(&ptr)
         }
         
         let face = self.faces[face]
@@ -393,16 +393,16 @@ final class MyShape {
         return segmentStart..<(segmentStart + segmentLength)
     }
     
-    func withSegments(closure: @noescape (  segment: Int, ptr:  inout UnsafeMutableBufferPointer<RGBFloat>) -> () ) {
+    func withSegments(closure: (  _ segment: Int, _ ptr:  inout UnsafeMutableBufferPointer<RGBFloat>) -> () ) {
         for segment in 0..<segmentCount {
             withSegment(segment: segment) {
-                closure(segment: segment, ptr: &$0)
+                closure(segment, &$0)
             }
         }
     }
     
     
-    func withEdges(adjacentToVertex vertex: Int, closure: @noescape (edge: Edge, ptr: inout UnsafeMutableBufferPointer<RGBAFloat>) -> ()) {
+    func withEdges(adjacentToVertex vertex: Int, closure: @noescape (_ edge: Edge, _ ptr: inout UnsafeMutableBufferPointer<RGBAFloat>) -> ()) {
         let adjacentVertices = edgesByOriginatingVertex[vertex]
         
         
@@ -410,16 +410,16 @@ final class MyShape {
             let edge = Edge(a: vertex, b: b)
             
             withEdge(edge: edge) { ptr in
-                closure(edge: edge, ptr: &ptr)
+                closure(edge, &ptr)
             }
         }
     }
-    func withEdge(edge: Edge, closure: @noescape (ptr: inout UnsafeMutableBufferPointer<RGBAFloat>) -> ()) {
+    func withEdge(edge: Edge, closure: @noescape (_ ptr: inout UnsafeMutableBufferPointer<RGBAFloat>) -> ()) {
         edgeBuffer.replaceSubrange(0..<edgeBuffer.count, with: repeatElement(.clear, count: edgeBuffer.count))
         
         edgeBuffer
             .withUnsafeMutableBufferPointer { ptr in
-                closure(ptr: &ptr)
+                closure(&ptr)
         }
 
         let (direction, segmentIndex) = segment(edge: edge)
@@ -441,7 +441,7 @@ final class MyShape {
     func copyToBuffer(buffer: UnsafeMutableBufferPointer<RGBFloat>) {
         self.buffer.withUnsafeBufferPointer { ptr in
             applyOverRange(buffer.indices) { bounds in
-                var buffer = buffer
+                let buffer = buffer
                 
                 for idx in bounds {
                     buffer[idx] = ptr[self.remapLed(idx)]

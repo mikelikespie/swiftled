@@ -104,7 +104,7 @@ extension AddrInfo {
                     // If we're in progress, we'll be trying again
                 }
                 
-                return AnonymousDisposable {
+                return Disposables.create {
                     NSLog("Disposing!!!")
                     writeSource.cancel()
                 }
@@ -112,7 +112,7 @@ extension AddrInfo {
             } catch let e {
                 NSLog("erroring :/")
                 observer.onError(e)
-                return NopDisposable.instance
+                return Disposables.create()
             }
         }
     }
@@ -126,9 +126,9 @@ extension AddrInfo {
         let result = self.addr.withUnsafeSockaddrPtr { ptr -> Int32 in
             
             #if os(Linux)
-                return Glibc.connect(socket, ptr, socklen_t(self.addr.dynamicType.size))
+                return Glibc.connect(socket, ptr, socklen_t(type(of: self.addr).size))
             #else
-                return Darwin.connect(socket, ptr, socklen_t(self.addr.dynamicType.size))
+                return Darwin.connect(socket, ptr, socklen_t(type(of: self.addr).size))
             #endif
 
         }
@@ -143,7 +143,7 @@ extension AddrInfo {
         NSLog("trying to connect")
         
         var result: Int = 0
-        var len = socklen_t(sizeofValue(result))
+        var len = socklen_t(MemoryLayout.size(ofValue: result))
         
 
         let status = getsockopt(socket, SOL_SOCKET, SO_ERROR, &result, &len)
@@ -168,7 +168,7 @@ extension AddrInfo {
         }
         
         var flag: Int = 1
-        setsockopt(fd, Int32(IPPROTO_TCP), TCP_NODELAY, &flag, socklen_t(sizeofValue(flag)))
+        setsockopt(fd, Int32(IPPROTO_TCP), TCP_NODELAY, &flag, socklen_t(MemoryLayout.size(ofValue: flag)))
 
         return fd
     }
@@ -228,6 +228,6 @@ public func getaddrinfoSockAddrsAsync(_ hostname: String, servname: String, work
             }
         }
         
-        return NopDisposable.instance
+        return Disposables.create()
     }
 }

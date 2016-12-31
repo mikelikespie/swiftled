@@ -5,7 +5,7 @@ let package = Package(
     targets: [
         Target(
             name: "OPC",
-            dependencies: [.Target(name: "RxSwift")]),
+            dependencies: []),
         Target(
             name: "Visualizations",
             dependencies: [
@@ -19,5 +19,8 @@ let package = Package(
 				.Target(name: "Visualizations"),
 				.Target(name: "Cleanse"),
 			]),
+    ],
+    dependencies: [
+        .Package(url: "https://github.com/ReactiveX/RxSwift.git", majorVersion: 3)
     ]
 )

@@ -12,6 +12,6 @@ import RxSwift
 
 extension Disposable {
     public func addDisposableTo(_ compositeDisposable: CompositeDisposable) {
-        _ = compositeDisposable.addDisposable(self)
+        _ = compositeDisposable.insert(self)
     }
 }

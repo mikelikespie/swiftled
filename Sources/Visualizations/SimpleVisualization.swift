@@ -39,7 +39,7 @@ class SimpleVisualization : Visualization {
         var offset = 0.0
         
         
-        return ticker.subscribeNext { [weak self] context in
+        return ticker.subscribe(onNext: {[weak self] context in
             guard let `self` = self else {
                 return
             }
@@ -69,6 +69,6 @@ class SimpleVisualization : Visualization {
                         .rgbFloat
                 }
             }
-        }
+        })
     }
 }

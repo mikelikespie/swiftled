@@ -65,7 +65,7 @@ public class STimeVisualization : Visualization {
     public func bind(_ ticker: Observable<WriteContext>) -> Disposable {
         let shape = shapeProvider.get()
         
-        return ticker.subscribeNext { context in
+        return ticker.subscribe(onNext: { context in
             shape.clear()
             
             let rangeDelta = max(0, self.upperHueControl.value - self.lowerHueControl.value)
@@ -94,6 +94,6 @@ public class STimeVisualization : Visualization {
             }
             
             shape.copyToBuffer(buffer: context.writeBuffer)
-        }
+        })
     }
 }

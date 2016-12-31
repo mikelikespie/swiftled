@@ -67,7 +67,7 @@ import RxSwift
         
             rx_value
                 .map(labelFunction)
-                .subscribeNext { [weak self] label in
+                .subscribe(onNext: { [weak self] label in
                     guard let `self` = self else {
                         return
                     }
@@ -75,7 +75,7 @@ import RxSwift
                     
                     
                     self.label.text = "\(name): \(label)"
-                }
+                })
                 .addDisposableTo(disposeBag)
 
             let constraints = [

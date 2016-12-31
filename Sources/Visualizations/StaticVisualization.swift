@@ -63,14 +63,14 @@ public class StaticVisualization : Visualization {
         var buf2 = buf1
         
         
-        func withCurrentBuffer(closure: @noescape (
-            currentBuffer: inout [RGBFloat],
-            lastBuffer: inout [RGBFloat]) -> Void) {
-            closure(currentBuffer: &buf1, lastBuffer: &buf2)
+        func withCurrentBuffer(closure: (
+            _ currentBuffer: inout [RGBFloat],
+            _ lastBuffer: inout [RGBFloat]) -> Void) {
+            closure(&buf1, &buf2)
         }
         
         
-        return ticker.subscribeNext { context in
+        return ticker.subscribe(onNext: { context in
             shape.clear()
             let timeSinceLastSwitch = Float(context.tickContext.timeDelta)
             let staticLambda = self.staticHalflife.value
@@ -108,6 +108,6 @@ public class StaticVisualization : Visualization {
                     }
                 }
             }
-        }
+        })
     }
 }

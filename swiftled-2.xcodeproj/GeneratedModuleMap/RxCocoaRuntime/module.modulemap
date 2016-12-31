@@ -1,0 +1,5 @@
+module RxCocoaRuntime {
+    umbrella header "/Users/mike/projects/swiftled/Packages/RxSwift-3.1.0/Sources/RxCocoaRuntime/include/RxCocoaRuntime.h"
+    link "RxCocoaRuntime"
+    export *
+}

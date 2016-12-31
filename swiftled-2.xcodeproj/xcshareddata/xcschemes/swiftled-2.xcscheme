@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "______Target_Cleanse"
-               BuildableName = "Cleanse.framework"
-               BlueprintName = "Cleanse"
+               BlueprintIdentifier = "OBJ_360"
+               BuildableName = "RxBlocking.framework"
+               BlueprintName = "RxBlocking"
                ReferencedContainer = "container:swiftled-2.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -28,9 +28,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "______Target_OPC"
-               BuildableName = "OPC.framework"
-               BlueprintName = "OPC"
+               BlueprintIdentifier = "OBJ_375"
+               BuildableName = "RxCocoa.framework"
+               BlueprintName = "RxCocoa"
                ReferencedContainer = "container:swiftled-2.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -42,7 +42,21 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "______Target_RxSwift"
+               BlueprintIdentifier = "OBJ_476"
+               BuildableName = "RxCocoaRuntime.framework"
+               BlueprintName = "RxCocoaRuntime"
+               ReferencedContainer = "container:swiftled-2.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "OBJ_374"
                BuildableName = "RxSwift.framework"
                BlueprintName = "RxSwift"
                ReferencedContainer = "container:swiftled-2.xcodeproj">
@@ -56,9 +70,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "______Target_swiftled"
-               BuildableName = "swiftled"
-               BlueprintName = "swiftled"
+               BlueprintIdentifier = "OBJ_638"
+               BuildableName = "Cleanse.framework"
+               BlueprintName = "Cleanse"
                ReferencedContainer = "container:swiftled-2.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -70,7 +84,21 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "______Target_Visualizations"
+               BlueprintIdentifier = "OBJ_695"
+               BuildableName = "OPC.framework"
+               BlueprintName = "OPC"
+               ReferencedContainer = "container:swiftled-2.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "OBJ_738"
                BuildableName = "Visualizations.framework"
                BlueprintName = "Visualizations"
                ReferencedContainer = "container:swiftled-2.xcodeproj">
@@ -85,6 +113,15 @@
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
       </Testables>
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "OBJ_360"
+            BuildableName = "RxBlocking.framework"
+            BlueprintName = "RxBlocking"
+            ReferencedContainer = "container:swiftled-2.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>
@@ -101,9 +138,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "______Target_Cleanse"
-            BuildableName = "Cleanse.framework"
-            BlueprintName = "Cleanse"
+            BlueprintIdentifier = "OBJ_360"
+            BuildableName = "RxBlocking.framework"
+            BlueprintName = "RxBlocking"
             ReferencedContainer = "container:swiftled-2.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -116,6 +153,15 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "OBJ_360"
+            BuildableName = "RxBlocking.framework"
+            BlueprintName = "RxBlocking"
+            ReferencedContainer = "container:swiftled-2.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">

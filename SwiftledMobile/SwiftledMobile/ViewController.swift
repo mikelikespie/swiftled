@@ -89,10 +89,10 @@ class ViewController: UITableViewController, UISplitViewControllerDelegate {
         root.rootVisualization
             .controls
             .map { Array($0.map { $0.cells }.flatten()) }
-            .subscribeNext { [unowned self] cells in
+            .subscribe(onNext: { [unowned self] cells in
                 self.cells = cells
 //                self.tableView.reloadData()
-            }
+            })
             .addDisposableTo(disposeBag)
     }
     

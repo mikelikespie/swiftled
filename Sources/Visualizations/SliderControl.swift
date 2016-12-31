@@ -62,7 +62,7 @@ class SliderControl<V: FloatValueConvertible> : TypedControl {
     }
     
     public func run(_ ticker: Observable<TickContext>) -> Disposable {
-        return NopDisposable.instance
+        return Disposables.create()
     }
 }
 

@@ -46,15 +46,15 @@ struct CompositeVisualization : Visualization, Component {
         let currentVisualizationDisposable = SerialDisposable()
         
         // To work around a bug
-        currentVisualizationDisposable.disposable = NopDisposable.instance
+        currentVisualizationDisposable.disposable = Disposables.create()
         
         currentVisualizationDisposable.addDisposableTo(compositeDisposable)
         
         currentVisualization
-            .subscribeNext { visualization in
+            .subscribe(onNext: {visualization in
                 currentVisualizationDisposable.disposable.dispose()
                 currentVisualizationDisposable.disposable = visualization.bind(ticker)
-            }
+            })
             .addDisposableTo(compositeDisposable)
         
         return compositeDisposable
