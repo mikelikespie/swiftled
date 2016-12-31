@@ -22,6 +22,13 @@ import Cleanse
 import OPC
 
 
+#if os(Linux)
+    import Glibc
+#else
+    import Darwin
+#endif
+
+
 public class StaticVisualization : Visualization {
     let ledCount: Int
     let segmentLength: Int
