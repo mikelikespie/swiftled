@@ -28,34 +28,42 @@ public struct float3  {
     }
 }
 
-func + (lhs: float3, rhs: float3) -> float3 {
+public func + (lhs: float3, rhs: float3) -> float3 {
     return float3(lhs.x + rhs.x, lhs.y + rhs.y, lhs.z + rhs.z)
 }
 
-func * (lhs: float3, rhs: Float) -> float3 {
+public func * (lhs: float3, rhs: Float) -> float3 {
     return float3(lhs.x * rhs, lhs.y * rhs, lhs.z * rhs)
 }
 
 
-func * (lhs: float3, rhs: float3) -> float3 {
+public func * (lhs: float3, rhs: float3) -> float3 {
     return float3(lhs.x * rhs.x, lhs.y * rhs.y, lhs.z * rhs.z)
 }
 
 
-func distance_squared(_ lhs: float3, _ rhs: float3) -> Float {
+public func distance_squared(_ lhs: float3, _ rhs: float3) -> Float {
     let (xd, yd, zd) = (lhs.x - rhs.x, lhs.y - rhs.y, lhs.z - rhs.z)
     return xd * xd +
         yd * yd +
         zd * zd
 }
 
-func clamp(_ lhs: float3, min min_: Float, max max_: Float) -> float3 {
+public func clamp(_ lhs: float3, min min_: Float, max max_: Float) -> float3 {
     return float3(
         max(min(lhs.x, max_), min_),
         max(min(lhs.y, max_), min_),
         max(min(lhs.z, max_), min_)
     )
 }
+
+public func min(_ lhs: float3, _ rhs: Float) -> float3 {
+    return float3(min(rhs, lhs.x), min(rhs, lhs.y), min(rhs, lhs.z))
+}
+
+#endif
+
+#if os(Linux)
 
 
 public enum POSIXErrorCode : CInt {
