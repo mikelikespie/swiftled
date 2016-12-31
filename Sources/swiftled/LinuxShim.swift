@@ -11,8 +11,11 @@ import Dispatch
 
 
 #if os(Linux)
+    import Glibc
     
     @_silgen_name("dispatch_main")
     func dispatchMain()
+    
+    let arc4random = Glibc.random
     
 #endif
