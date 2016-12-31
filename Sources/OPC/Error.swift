@@ -14,13 +14,6 @@
     import Darwin
 #endif
 
-#if os(Linux)
-    
-    public func NSLog(_ str: String, _ values: CVarArg...) {
-        print(String(format: str, arguments: values))
-    }
-#endif
-
 /// Wraps errors. Has an uknown type if it cant resolve to an oserror
 enum Error: Swift.Error {
     case unknown(status: Int32)
