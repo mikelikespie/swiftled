@@ -168,7 +168,7 @@ public final class ClientConnection : Collection {
                 queue: self.workQueue
             ) { done, data, error in
                 guard error == 0 else {
-                    subject.onError(POSIXErrorCode(rawValue: error)!)
+                    subject.onError(Error.errorFromStatusCode(error)!)
                     return
                 }
                 
