@@ -1,7 +1,3 @@
-[submodule "RxSwift"]
-	path = RxSwift
-	; url = https://github.com/ReactiveX/RxSwift.git
-	url = pi@pi2.local:git/RxSwift.git
 [submodule "Cleanse"]
 	path = Cleanse
 	url = pi@pi2.local:git/Cleanse.git
