@@ -168,4 +168,8 @@ public enum POSIXErrorCode : CInt {
     case EHWPOISON = 133
 }
 
+    public func arc4random() ->  UInt32 {
+        return UInt32(Glibc.random())
+    }
+
 #endif
