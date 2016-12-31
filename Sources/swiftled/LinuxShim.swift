@@ -13,7 +13,7 @@ import Dispatch
 #if os(Linux)
     import Glibc
     
-    @_silgen_name("dispatch_main")
-    func dispatchMain()
+//    @_silgen_name("dispatch_main")
+//    func dispatchMain()
     
 #endif
