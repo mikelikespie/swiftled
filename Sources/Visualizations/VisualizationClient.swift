@@ -142,7 +142,7 @@ public struct VisualizationRunner {
                     NSLog("Connected!")
                 },
                 onError: { error in
-                    NSLog("failed \(error) \((error as? POSIXErrorCode)?.rawValue)")
+//                    NSLog("failed \(error) \((error as? POSIXErrorCode)?.rawValue)")
                     //            page.finishExecution()
                     
                 },
