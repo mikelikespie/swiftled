@@ -58,7 +58,7 @@ func clamp(_ lhs: float3, min min_: Float, max max_: Float) -> float3 {
 }
 
 
-public enum POSIXErrorCode : CInt, Swift.Error {
+public enum POSIXErrorCode : CInt {
     case EDEADLK = 35
     case ENAMETOOLONG = 36
     case ENOLCK = 37
