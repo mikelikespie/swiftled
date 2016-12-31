@@ -36,7 +36,7 @@ class SliderControl<V: FloatValueConvertible> : TypedControl {
         #if os(iOS)
             return sliderCell.value
         #else
-            return valueSubject.value()
+            return try! valueSubject.value()
         #endif
     }
     
