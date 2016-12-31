@@ -43,17 +43,15 @@ struct CompositeVisualization : Visualization, Component {
     func bind(_ ticker: Observable<WriteContext>) -> Disposable {
         let compositeDisposable = CompositeDisposable()
         
-        let currentVisualizationDisposable = SerialDisposable()
+        var currentVisualizationDisposable = Disposables.create()
         
-        // To work around a bug
-        currentVisualizationDisposable.disposable = Disposables.create()
         
         currentVisualizationDisposable.addDisposableTo(compositeDisposable)
         
         currentVisualization
             .subscribe(onNext: {visualization in
-                currentVisualizationDisposable.disposable.dispose()
-                currentVisualizationDisposable.disposable = visualization.bind(ticker)
+                currentVisualizationDisposable.dispose()
+                currentVisualizationDisposable = visualization.bind(ticker)
             })
             .addDisposableTo(compositeDisposable)
         
