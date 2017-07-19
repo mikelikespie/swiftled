@@ -4,3 +4,7 @@
 .sw?
 xcuserdata/
 Packages
+bazel-*
+tulsigen-*
+tulsi-*
+*.xcodeproj

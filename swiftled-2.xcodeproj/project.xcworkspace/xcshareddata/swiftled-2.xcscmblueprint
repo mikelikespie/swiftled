@@ -6,13 +6,15 @@
   "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
     "8B123162C394A0A0A138779108E4C59DD771865A" : 0,
     "E7B33B68B8CB7846C3A44744CDCB859C9F817B7F" : 0,
+    "6341CE5736B3E0521A6D5D85ADCA96E8C3000F5C" : 9223372036854775807,
     "6487196B125940D3F4E470880F76529F3395BA36" : 9223372036854775807,
     "FA78EFA588CAAA527A39EFF7FEB4200B880E2491" : 9223372036854775807
   },
   "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "55725F16-0DDB-4B05-A738-887165CADE0E",
   "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
-    "8B123162C394A0A0A138779108E4C59DD771865A" : "swiftled\/RxSwift\/",
+    "8B123162C394A0A0A138779108E4C59DD771865A" : "swiftled\/.build\/checkouts\/RxSwift.git--5214619868639177420\/",
     "E7B33B68B8CB7846C3A44744CDCB859C9F817B7F" : "swiftled\/",
+    "6341CE5736B3E0521A6D5D85ADCA96E8C3000F5C" : "libartnet\/",
     "6487196B125940D3F4E470880F76529F3395BA36" : "swiftled\/ola\/",
     "FA78EFA588CAAA527A39EFF7FEB4200B880E2491" : "swiftled\/Cleanse\/"
   },
@@ -20,6 +22,11 @@
   "DVTSourceControlWorkspaceBlueprintVersion" : 204,
   "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "swiftled-2.xcodeproj",
   "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/OpenLightingProject\/libartnet.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "6341CE5736B3E0521A6D5D85ADCA96E8C3000F5C"
+    },
     {
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/OpenLightingProject\/ola.git",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",

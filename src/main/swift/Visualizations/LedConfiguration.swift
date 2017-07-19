@@ -31,7 +31,7 @@ public struct LedConfiguration {
 
 
 struct LedConfigurationModule : Module {
-    static func configure<B : Binder>(binder: B) {
+    static func configure(binder: Binder<Unscoped>) {
         
         binder
             .bind()

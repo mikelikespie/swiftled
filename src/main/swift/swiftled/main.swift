@@ -15,7 +15,7 @@ let serialQueue = DispatchQueue(label: "MyQueue", attributes: [], target: nil)
 
 let defaultScheduler = SerialDispatchQueueScheduler(queue: serialQueue, internalSerialQueueName: "MyQueue")
 
-try! ComponentFactory
+_ = try! ComponentFactory
     .of(SwiftLedComponent.self)
     .build(LedConfiguration(segmentLength: segmentLength, segmentCount: segmentCount))
     .entryPoint

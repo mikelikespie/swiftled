@@ -10,11 +10,11 @@ import Foundation
 import Cleanse
 
 struct SharedControlsModule : Cleanse.Module {
-    static func configure<B : Binder>(binder: B) {
+    static func configure(binder: Binder<Singleton>) {
         binder
             .bind()
             .tagged(with: BrightnessControl.self)
-            .asSingleton()
+            .sharedInScope()
             .to { SliderControl(bounds: 0..<1, defaultValue: 0.25, name: "Brightness") }
         
         binder
@@ -30,7 +30,7 @@ struct SharedControlsModule : Cleanse.Module {
         binder
             .bind()
             .tagged(with: GammaControl.self)
-            .asSingleton()
+            .sharedInScope()
             .to {  SliderControl<Float>(bounds: 1.0..<4.0, defaultValue: 2.4, name: "Gamma") }
         
         binder

@@ -10,6 +10,7 @@ let package = Package(
             name: "Visualizations",
             dependencies: [
                 .Target(name: "OPC"),
+                .Target(name: "libartnet"),
                 .Target(name: "Cleanse"),
             ]),
         Target(

@@ -1,0 +1,10 @@
+load("@build_bazel_rules_apple//apple:swift.bzl", "swift_library")
+
+objc_library(
+    name = "artnet",
+    srcs = glob(["artnet/**/*.c"]),
+    hdrs = glob(["artnet/**/*.h"]),
+    visibility = ["//visibility:public"],
+    includes = ['.'],
+    copts = ['-Wno-shorten-64-to-32']
+)

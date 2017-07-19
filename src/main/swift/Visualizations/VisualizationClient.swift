@@ -32,10 +32,13 @@ private final class VisualizationClient : Component {
         self.connection = connection
         self.buffer = [RGBFloat](repeating: RGBFloat(r: 0, g: 0, b: 0), count: connection.count)
     }
-    
-    
-    fileprivate static func configure<B : Binder>(binder: B) {
-        binder.bind().to(factory: VisualizationClient.init)
+
+
+    fileprivate static func configureRoot(binder bind: Cleanse.ReceiptBinder<Root>) -> Cleanse.BindingReceipt<Root> {
+        return bind.to(factory: Root.init)
+    }
+
+    fileprivate static func configure(binder: Binder<Unscoped>) {
     }
     
 
@@ -158,7 +161,7 @@ public struct VisualizationRunner {
     }
     
     struct Module : Cleanse.Module {
-        static func configure<B : Binder>(binder: B) {
+        static func configure(binder: Binder<Unscoped>) {
             binder.install(dependency: VisualizationClient.self)
             
             binder

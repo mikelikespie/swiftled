@@ -10,11 +10,14 @@ import Foundation
 import RxSwift
 import Cleanse
 
-public protocol Visualization {
+public protocol BaseVisualization {
     /// Name of visualization. Can change
     var name: String { get }
     var controls: Observable<[Control]> { get }
-    
+
+}
+
+public protocol Visualization : BaseVisualization {
     /// - parameter ticker: ticks with time interval
     /// - returns: Disposable. It should stop listening for tick information
     func bind(_ ticker: Observable<WriteContext>) -> Disposable

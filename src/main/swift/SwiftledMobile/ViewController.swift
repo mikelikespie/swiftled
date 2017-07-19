@@ -9,7 +9,7 @@
 import UIKit
 import RxSwift
 import OPC
-import RxCocoa
+//import RxCocoa
 import Foundation
 import Visualizations
 import Cleanse
@@ -76,7 +76,7 @@ class ViewController: UITableViewController, UISplitViewControllerDelegate {
         
         let root = try! ComponentFactory
             .of(SwiftLedComponent.self)
-            .build(seed: LedConfiguration(
+            .build(LedConfiguration(
                 segmentLength: segmentLength,
                 segmentCount: segmentCount
             ))
@@ -88,7 +88,7 @@ class ViewController: UITableViewController, UISplitViewControllerDelegate {
         
         root.rootVisualization
             .controls
-            .map { Array($0.map { $0.cells }.flatten()) }
+            .map { Array($0.map { $0.cells }.joined()) }
             .subscribe(onNext: { [unowned self] cells in
                 self.cells = cells
 //                self.tableView.reloadData()
@@ -110,10 +110,6 @@ class ViewController: UITableViewController, UISplitViewControllerDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: AnyObject?) {
-        super.prepare(for: segue, sender: sender)
     }
     
     private var collapseDetailViewController = true

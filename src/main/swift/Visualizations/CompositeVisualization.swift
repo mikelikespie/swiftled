@@ -59,16 +59,16 @@ struct CompositeVisualization : Visualization, Component {
     }
     
     private let ourControls: Observable<[Control]>
+
+    public static func configureRoot(binder bind: Cleanse.ReceiptBinder<Root>) -> Cleanse.BindingReceipt<Root> {
+        return bind.to(factory: CompositeVisualization.init)
+    }
     
-    static func configure<B : Binder>(binder: B) {
-        binder
-            .bind(Root.self)
-            .to(factory: CompositeVisualization.init)
-        
+    static func configure(binder: Binder<CompositeVisualizationScope>) {
         binder
             .bind()
             .tagged(with: VisualizationControl.self)
-            .scoped(in: CompositeVisualizationScope.self)
+            .sharedInScope()
             .to(factory: self.makeVisualizationControl)
         
         binder
@@ -78,7 +78,7 @@ struct CompositeVisualization : Visualization, Component {
         
         binder
             .bind(Observable<Visualization>.self)
-            .scoped(in: CompositeVisualizationScope.self)
+            .sharedInScope()
             .to(factory: self.makeCurrentVisualization)
         
     }

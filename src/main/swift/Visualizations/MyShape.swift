@@ -354,7 +354,7 @@ final class MyShape {
         }
     }
 
-    func withFace(face: Int, closure: @noescape (  _ ptr:  inout UnsafeMutableBufferPointer<RGBAFloat>) -> () ) {
+    func withFace(face: Int, closure: (  _ ptr:  inout UnsafeMutableBufferPointer<RGBAFloat>) -> () ) {
         faceBuffer.replaceSubrange(0..<faceBuffer.count, with: repeatElement(.clear, count: faceBuffer.count))
         
         faceBuffer
@@ -402,7 +402,7 @@ final class MyShape {
     }
     
     
-    func withEdges(adjacentToVertex vertex: Int, closure: @noescape (_ edge: Edge, _ ptr: inout UnsafeMutableBufferPointer<RGBAFloat>) -> ()) {
+    func withEdges(adjacentToVertex vertex: Int, closure: (_ edge: Edge, _ ptr: inout UnsafeMutableBufferPointer<RGBAFloat>) -> ()) {
         let adjacentVertices = edgesByOriginatingVertex[vertex]
         
         
@@ -414,7 +414,7 @@ final class MyShape {
             }
         }
     }
-    func withEdge(edge: Edge, closure: @noescape (_ ptr: inout UnsafeMutableBufferPointer<RGBAFloat>) -> ()) {
+    func withEdge(edge: Edge, closure: (_ ptr: inout UnsafeMutableBufferPointer<RGBAFloat>) -> ()) {
         edgeBuffer.replaceSubrange(0..<edgeBuffer.count, with: repeatElement(.clear, count: edgeBuffer.count))
         
         edgeBuffer
@@ -451,7 +451,7 @@ final class MyShape {
     }
     
     struct Module : Cleanse.Module {
-        static func configure<B : Binder>(binder: B) {
+        static func configure(binder: Binder<Unscoped>) {
             binder.bind().to(factory: MyShape.init)
         }
     }
