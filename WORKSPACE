@@ -10,6 +10,7 @@ new_git_repository(
     commit = "1314805175263ad8141054f6be21f6bbef224d2c",
     remote = "https://github.com/ReactiveX/RxSwift.git",
 )
+
 new_git_repository(
     name = "Cleanse",
     build_file = "BUILD.Cleanse",
@@ -22,4 +23,11 @@ new_git_repository(
     build_file = "BUILD.libartnet",
     commit = "61878f911f10f22d8ce109324faa345408dbb2c5",
     remote = "https://github.com/OpenLightingProject/libartnet.git",
+)
+
+new_git_repository(
+    name = "yoga",
+    build_file = "BUILD.yoga",
+    commit = "154e67adbc1ce8f7c6421e003beafe44d32ba534",
+    remote = "https://github.com/facebook/yoga.git",
 )

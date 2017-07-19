@@ -5,16 +5,14 @@ swift_library(
     srcs = glob([
         "*.swift",
     ]),
-    deps = [
-        "@RxSwift//:RxSwift",
-        "@Cleanse//:Cleanse",
-        "@libartnet//:artnet",
-        "//src/main/swift/OPC",
-    ],
+    copts = ["-wmo"],
     module_name = "Visualizations",
     visibility = ["//visibility:public"],
-    copts = ['-wmo']
-    
-    
+    deps = [
+        "//src/main/swift/OPC",
+        "@Cleanse//:Cleanse",
+        "@RxSwift//:RxSwift",
+        "@libartnet//:artnet",
+        "@yoga//:YogaKit",
+    ],
 )
-

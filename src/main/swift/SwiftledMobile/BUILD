@@ -7,9 +7,9 @@ swift_library(
         "*.swift",
     ]),
     deps = [
-        "@RxSwift//:RxSwift",
         "//src/main/swift/OPC",
         "//src/main/swift/Visualizations",
+        "@RxSwift//:RxSwift",
     ],
 )
 
@@ -31,8 +31,8 @@ ios_application(
     ],
     infoplists = [":Info.plist"],
     launch_storyboard = "Base.lproj/LaunchScreen.storyboard",
+    minimum_os_version = "10.0",
     deps = [
         ":SwiftledMobile_lib",
     ],
-    minimum_os_version = "10.0",
 )

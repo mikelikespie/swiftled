@@ -1,0 +1,24 @@
+load("@build_bazel_rules_apple//apple:swift.bzl", "swift_library")
+
+objc_library(
+    name = "yoga",
+    srcs = glob(["yoga/*.c"]),
+    hdrs = glob(["yoga/*.h"]),
+    includes = ["."],
+    visibility = ["//visibility:public"],
+)
+
+objc_library(
+    name = "YogaKit",
+    srcs = glob([
+        "YogaKit/Source/*.m",
+        "YogaKit/Source/*+Private.h",
+    ]),
+    hdrs = glob(
+        ["YogaKit/Source/*.h"],
+        exclude = glob(["YogaKit/Source/*+Private.h"]),
+    ),
+    includes = ["."],
+    visibility = ["//visibility:public"],
+    deps = [":yoga"],
+)

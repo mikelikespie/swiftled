@@ -19,6 +19,6 @@ ios_application(
         "ipad",
     ],
     infoplists = [":Info.plist"],
-    deps = [":swiftled_lib"],
     minimum_os_version = "10.0",
+    deps = [":swiftled_lib"],
 )

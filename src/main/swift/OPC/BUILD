@@ -5,11 +5,9 @@ swift_library(
     srcs = glob([
         "*.swift",
     ]),
+    module_name = "OPC",
+    visibility = ["//visibility:public"],
     deps = [
         "@RxSwift//:RxSwift",
     ],
-    module_name = "OPC",
-    visibility = ["//visibility:public"]
-    
 )
-
