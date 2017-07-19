@@ -60,7 +60,7 @@ class SimpleVisualization : Visualization {
                     
                     let hue: Float = hueNumerator.truncatingRemainder(dividingBy:  1.0)
                     let portion = Float(i % segmentLength) / Float(segmentLength)
-                    let value = 0.5 + 0.5 * sin(Float(now * 2) + Float(M_PI * 2) * portion)
+                    let value = 0.5 + 0.5 * sin(Float(now * 2) + Float(Float.pi * 2) * portion)
                     writeBuffer[i] = HSV(
                         h: hue,
                         s: 1,

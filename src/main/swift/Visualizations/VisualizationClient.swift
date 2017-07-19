@@ -83,7 +83,6 @@ private final class VisualizationClient : Component {
                 
                 let fullBounds = self.buffer.startIndex..<self.buffer.endIndex
                 
-                let gamma = self.gamma.get()
                 let brightness = self.brightness.get()
                 
                 applyOverRange(fullBounds) { bounds in
@@ -145,7 +144,7 @@ public struct VisualizationRunner {
                     NSLog("Connected!")
                 },
                 onError: { error in
-                    NSLog("failed \(error) \((error as? POSIXErrorCode)?.rawValue)")
+                    NSLog("failed \(error) \((error as? POSIXErrorCode)?.rawValue ?? -999)")
                     //            page.finishExecution()
                     
                 },

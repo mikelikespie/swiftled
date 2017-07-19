@@ -1,0 +1,12 @@
+{
+  "configDefaults" : {
+    "optionSet" : {
+
+    }
+  },
+  "projectName" : "swiftled",
+  "packages" : [
+    "src\/main\/swift\/SwiftledMobile"
+  ],
+  "workspaceRoot" : ".."
+}

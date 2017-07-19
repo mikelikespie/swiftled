@@ -34,5 +34,6 @@ ios_application(
     minimum_os_version = "10.0",
     deps = [
         ":SwiftledMobile_lib",
+        ":SwiftledMobule_assets",
     ],
 )
