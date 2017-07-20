@@ -30,6 +30,7 @@ public class STimeVisualization : Visualization {
     let segmentCount: Int
     let shapeProvider: Provider<MyShape>
     
+
     
     init(
         ledCount: TaggedProvider<LedCount>,
@@ -43,6 +44,11 @@ public class STimeVisualization : Visualization {
         self.shapeProvider = shapeProvider
     }
     
+    public static func configureRoot(binder bind: ReceiptBinder<BaseVisualization>) -> BindingReceipt<BaseVisualization> {
+        return bind.to(factory: STimeVisualization.init)
+    }
+    
+
     
     let lowerHueControl = SliderControl<Float>(bounds: 0..<2, defaultValue: 0, name: "Lower Hue")
     let upperHueControl = SliderControl<Float>(bounds: 0..<2, defaultValue: 1.0 / 6.0, name: "Upper Hue")

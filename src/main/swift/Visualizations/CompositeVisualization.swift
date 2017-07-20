@@ -12,17 +12,21 @@ import RxSwift
 
 
 struct CompositeVisualizationScope : Scope {
-    
 }
 
 /// Composes many visualizations
-struct CompositeVisualization : Visualization, Component {
-    typealias Root = Visualization
+struct CompositeVisualization : BaseVisualization, Component {
+    typealias Root = BaseVisualization
     typealias Scope = CompositeVisualizationScope
     
-    let currentVisualization: Observable<Visualization>
+
+    static func configureRoot(binder bind: ReceiptBinder<BaseVisualization>) -> BindingReceipt<BaseVisualization> {
+        return bind.to(factory: self.init)
+    }
     
-    init(currentVisualization: Observable<Visualization>, controls: [Control]) {
+    let currentVisualization: Observable<BaseVisualization>
+    
+    init(currentVisualization: Observable<BaseVisualization>, controls: [Control]) {
         self.ourControls = .just(controls)
         self.currentVisualization = currentVisualization
     }
@@ -59,10 +63,6 @@ struct CompositeVisualization : Visualization, Component {
     }
     
     private let ourControls: Observable<[Control]>
-
-    public static func configureRoot(binder bind: Cleanse.ReceiptBinder<Root>) -> Cleanse.BindingReceipt<Root> {
-        return bind.to(factory: CompositeVisualization.init)
-    }
     
     static func configure(binder: Binder<CompositeVisualizationScope>) {
         binder
@@ -77,7 +77,7 @@ struct CompositeVisualization : Visualization, Component {
             .to { ($0 as TaggedProvider<VisualizationControl>).get() }
         
         binder
-            .bind(Observable<Visualization>.self)
+            .bind(Observable<BaseVisualization>.self)
             .sharedInScope()
             .to(factory: self.makeCurrentVisualization)
         
@@ -87,7 +87,7 @@ struct CompositeVisualization : Visualization, Component {
         typealias Element = SliderControl<Int>
     }
     
-    static func makeVisualizationControl(visualizations: [Visualization]) -> VisualizationControl.Element {
+    static func makeVisualizationControl(visualizations: [BaseVisualization]) -> VisualizationControl.Element {
         let visualizationNames = visualizations.map { $0.name }
 
         return
@@ -99,9 +99,9 @@ struct CompositeVisualization : Visualization, Component {
     }
     
     static func makeCurrentVisualization(
-        visualizations: [Visualization],
+        visualizations: [BaseVisualization],
         visualizationControl: TaggedProvider<VisualizationControl>
-    ) -> Observable<Visualization> {
+    ) -> Observable<BaseVisualization> {
         precondition(visualizations.count > 0)
         
         return visualizationControl

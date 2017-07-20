@@ -16,7 +16,7 @@ public struct SwiftLedComponent : Cleanse.RootComponent {
     public typealias Scope = Singleton
 
     public let entryPoint: EntryPoint
-    public let rootVisualization: Visualization
+    public let rootVisualization: BaseVisualization
 
     public static func configureRoot(binder bind: Cleanse.ReceiptBinder<Root>) -> Cleanse.BindingReceipt<Root> {
         return bind.to(factory: Root.init)
@@ -32,47 +32,57 @@ public struct SwiftLedComponent : Cleanse.RootComponent {
         binder.install(dependency: CompositeVisualization.self)
         
         binder
-            .bind(Visualization.self)
+            .bind(BaseVisualization.self)
             .sharedInScope()
             .to {(factory: ComponentFactory<CompositeVisualization>) in
                 
                 return factory.build(())
         }
     
-        
         binder
             .bind()
             .intoCollection()
             .tagged(with: UnsortedVisualizations.self)
             .to(value: [])
         
-//        binder.bindVisualization().to(factory: SimpleVisualization.init)
-//        binder.bindVisualization().to(factory: IdentificationVisualization.init)
-//        binder.bindVisualization().to(factory: StaticVisualization.init)
-//        binder.bindVisualization().to(factory: STimeVisualization.init)
+        binder.install(visualization: SimpleVisualization.self)
+        binder.install(visualization: IdentificationVisualization.self)
+        binder.install(visualization: StaticVisualization.self)
+        binder.install(visualization: STimeVisualization.self)
 
         binder
-            .bind([Visualization].self)
+            .bind([BaseVisualization].self)
             .to { ($0 as TaggedProvider<UnsortedVisualizations>).get().sorted { $0.name < $1.name } }
     }
 }
 
 
 struct UnsortedVisualizations : Tag {
-    typealias Element = [Visualization]
+    typealias Element = [BaseVisualization]
 }
 
-extension Binder {
-//    func bindVisualization() -> ReceiptBinder<Visualization> {
-////        ReceiptBinder
-////        return self
-//        self
-//            .bind(Visualization.self)
-////            .intoCollection()
-//            .tagged(with: UnsortedVisualizations.self)
-//        .
-////            .sharedInScope()
-//    }
+
+class VisualizationComponent<V: Visualization> : Component {
+    static func configureRoot(binder bind: ReceiptBinder<BaseVisualization>) -> BindingReceipt<BaseVisualization> {
+        return V.configureRoot(binder: bind)
+    }
+    
+    public static func configure(binder: Binder<Unscoped>) {
+    }
+}
+
+extension Binder where Scope == Singleton {
+    public func install<V: Visualization>(visualization: V.Type) {
+        install(dependency: VisualizationComponent<V>.self)
+        
+        bind(BaseVisualization.self)
+            .intoCollection()
+            .tagged(with: UnsortedVisualizations.self)
+            .sharedInScope()
+            .to {(factory: ComponentFactory<VisualizationComponent<V>>) -> BaseVisualization in
+                return factory.build(())
+        }
+    }
 }
 
 

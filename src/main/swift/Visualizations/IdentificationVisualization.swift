@@ -28,6 +28,10 @@ public class IdentificationVisualization : Visualization {
     let shapeProvider: Provider<MyShape>
     
     
+    public static func configureRoot(binder bind: ReceiptBinder<BaseVisualization>) -> BindingReceipt<BaseVisualization> {
+        return bind.to(factory: IdentificationVisualization.init)
+    }
+
     init(
         ledCount: TaggedProvider<LedCount>,
         segmentLength: TaggedProvider<SegmentLength>,

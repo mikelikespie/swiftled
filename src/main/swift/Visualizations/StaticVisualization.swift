@@ -48,7 +48,11 @@ public class StaticVisualization : Visualization {
         self.shapeProvider = shapeProvider
     }
     
+    public static func configureRoot(binder bind: ReceiptBinder<BaseVisualization>) -> BindingReceipt<BaseVisualization> {
+        return bind.to(factory: StaticVisualization.init)
+    }
     
+ 
     let staticHalflife = SliderControl<Float>(bounds: 0.125..<50, defaultValue: 10, name: "Static Lambda")
     let smoothingHalflife = SliderControl<Float>(bounds: 0.01..<3, defaultValue: 1.15, name: "Smoothing Lambda")
 

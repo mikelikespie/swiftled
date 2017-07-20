@@ -7,14 +7,13 @@
 //
 
 import Foundation
-import RxSwift
 import Dispatch
-import Swift
+import RxSwift
 
 private let headerSize = 4
 private let broadcastChannel: UInt8 = 0
 
- enum OpcCommand : UInt8 {
+enum OpcCommand : UInt8 {
     case setPixels = 0
     case customCommand = 255
 }

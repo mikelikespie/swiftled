@@ -13,7 +13,7 @@ import Cleanse
 
 struct SwiftLedEntryPoint : EntryPoint {
     let ledRunner: VisualizationRunner
-    let visualization: Visualization
+    let visualization: BaseVisualization
     let configuration: LedConfiguration
     
     private func doStuff() -> Disposable {

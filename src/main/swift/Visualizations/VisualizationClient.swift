@@ -42,7 +42,7 @@ private final class VisualizationClient : Component {
     }
     
 
-    func start(_ fps: Double, visualization: Visualization) -> Disposable {
+    func start(_ fps: Double, visualization: BaseVisualization) -> Disposable {
         let serialQueue = DispatchQueue(label: "MyQueue", attributes: [], target: nil)
         
         let defaultScheduler = SerialDispatchQueueScheduler(queue: serialQueue, internalSerialQueueName: "MyQueue")
@@ -117,7 +117,7 @@ public struct VisualizationRunner {
         self.visualizationClientFactory = visualizationClientFactory
     }
     
-    public func startVisualization(_ visualization: Visualization, fps: Double) -> Disposable {
+    public func startVisualization(_ visualization: BaseVisualization, fps: Double) -> Disposable {
         let compositeDisposable = CompositeDisposable()
         let visualizationClientFactory = self.visualizationClientFactory
         

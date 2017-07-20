@@ -31,6 +31,10 @@ class SimpleVisualization : Visualization {
         self.segmentLength = segmentLength.get()
     }
     
+    public static func configureRoot(binder bind: ReceiptBinder<BaseVisualization>) -> BindingReceipt<BaseVisualization> {
+        return bind.to(factory: SimpleVisualization.init)
+    }
+    
     public let name = "Simple"
     
     public func bind(_ ticker: Observable<WriteContext>) -> Disposable {
