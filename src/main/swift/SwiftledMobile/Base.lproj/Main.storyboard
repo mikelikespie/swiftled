@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12121" systemVersion="16F2073" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="At7-S6-7cB">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12121" systemVersion="16F2073" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="Cj7-UD-1Et">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -8,53 +8,6 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
-        <scene sceneID="W0T-2o-mtr">
-            <objects>
-                <viewController id="4WU-Ta-0VY" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="RVh-cS-0wG"/>
-                        <viewControllerLayoutGuide type="bottom" id="nXJ-RM-eT4"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="flc-D0-E0V">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="uhJ-GE-DVV" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1321" y="939"/>
-        </scene>
-        <!--SwiftledMobile-->
-        <scene sceneID="5Ax-Qx-EmV">
-            <objects>
-                <tableViewController clearsSelectionOnViewWillAppear="NO" id="30j-MY-ChV" customClass="ViewController" customModule="SwiftledMobile" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="Lct-Ny-JaN">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="kyD-F8-knk">
-                                <rect key="frame" x="0.0" y="28" width="375" height="44"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="kyD-F8-knk" id="JkL-43-GIB">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                </tableViewCellContentView>
-                            </tableViewCell>
-                        </prototypes>
-                        <connections>
-                            <outlet property="dataSource" destination="30j-MY-ChV" id="ZWa-cA-SKV"/>
-                            <outlet property="delegate" destination="30j-MY-ChV" id="V07-aL-8cg"/>
-                        </connections>
-                    </tableView>
-                    <navigationItem key="navigationItem" title="SwiftledMobile" id="gVv-R4-Bu3"/>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="gTd-p6-HD6" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2140" y="279"/>
-        </scene>
         <!--Navigation Controller-->
         <scene sceneID="aRQ-EX-XYo">
             <objects>
@@ -64,25 +17,31 @@
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
-                        <segue destination="30j-MY-ChV" kind="relationship" relationship="rootViewController" id="n6y-sS-4aQ"/>
+                        <segue destination="PSf-6x-3lq" kind="relationship" relationship="rootViewController" id="bG8-tP-U4H"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9Py-Pp-lDS" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1320" y="279"/>
+            <point key="canvasLocation" x="1166" y="272"/>
         </scene>
-        <!--Split View Controller-->
-        <scene sceneID="ipz-DO-dtE">
+        <!--Swiftled Mobile-->
+        <scene sceneID="gYX-fJ-CGi">
             <objects>
-                <splitViewController id="At7-S6-7cB" sceneMemberID="viewController">
-                    <connections>
-                        <segue destination="Cj7-UD-1Et" kind="relationship" relationship="masterViewController" id="Qqw-uI-7w1"/>
-                        <segue destination="4WU-Ta-0VY" kind="relationship" relationship="detailViewController" id="ldz-86-dbP"/>
-                    </connections>
-                </splitViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="KxF-fZ-Xgs" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <viewController title="Swiftled Mobile" id="PSf-6x-3lq" customClass="ViewController" customModule="SwiftledMobile" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="7LU-k6-eE3"/>
+                        <viewControllerLayoutGuide type="bottom" id="fry-gM-8pR"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="fyA-R8-ucT">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="SwiftledMobile" id="IK5-DN-fhg"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="7VZ-fP-6Hz" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="500" y="609"/>
+            <point key="canvasLocation" x="2005" y="-49"/>
         </scene>
     </scenes>
 </document>

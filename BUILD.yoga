@@ -14,6 +14,7 @@ objc_library(
         "YogaKit/Source/*.m",
         "YogaKit/Source/*+Private.h",
     ]),
+    copts = ["-includeUIKit/UIKit.h", "-DNS_ENUM"],
     hdrs = glob(
         ["YogaKit/Source/*.h"],
         exclude = glob(["YogaKit/Source/*+Private.h"]),
@@ -21,4 +22,19 @@ objc_library(
     includes = ["."],
     visibility = ["//visibility:public"],
     deps = [":yoga"],
+)
+
+genrule(
+    name = "import_shim",
+    outs = ["imports.swift"],
+    cmd = "echo \"@_exported import yoga_YogaKit_objc\" > \"$@\"",
+)
+
+swift_library(
+    name = "YogaKit_swift",
+    srcs = ["imports.swift"] + glob(["YogaKit/Source/*.swift"]),
+    copts = ["-wmo"],
+    module_name = "YogaKit_swift",
+    visibility = ["//visibility:public"],
+    deps = ["YogaKit"],
 )

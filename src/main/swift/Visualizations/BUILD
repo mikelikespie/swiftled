@@ -14,5 +14,6 @@ swift_library(
         "@RxSwift//:RxSwift",
         "@libartnet//:artnet",
         "@yoga//:YogaKit",
+        "@yoga//:YogaKit_swift",
     ],
 )

@@ -40,7 +40,7 @@ public protocol Control : class {
     
     /// Cells to present in the split view. Should be pre-configured
     #if os(iOS)
-    var cells: [UITableViewCell] { get }
+    var cells: [UIView] { get }
     #endif
     
     /// - parameter ticker: ticks with time interval

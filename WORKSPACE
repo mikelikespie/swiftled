@@ -28,6 +28,6 @@ new_git_repository(
 new_git_repository(
     name = "yoga",
     build_file = "BUILD.yoga",
-    commit = "154e67adbc1ce8f7c6421e003beafe44d32ba534",
-    remote = "https://github.com/facebook/yoga.git",
+    commit = "58fe91ac937f5d3fe5ef9a054d98ed9c2433ddd9",
+    remote = "https://github.com/mikelikespie/yoga.git",
 )

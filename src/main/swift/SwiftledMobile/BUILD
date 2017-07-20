@@ -6,12 +6,13 @@ swift_library(
     srcs = glob([
         "*.swift",
     ]),
+    module_name = "SwiftledMobile",
+    copts = ["-Xcc", "-includeUIKit/UIKit.h"],
     deps = [
         "//src/main/swift/OPC",
         "//src/main/swift/Visualizations",
         "@RxSwift//:RxSwift",
     ],
-    module_name = "SwiftledMobile",
 )
 
 objc_library(

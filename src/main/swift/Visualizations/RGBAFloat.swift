@@ -73,7 +73,7 @@ public func +=(lhs: inout RGBFloat, rhs: RGBAFloat)  {
 
 
 extension MutableCollection where Iterator.Element : RGBAMergeable, Index == Int {
-    mutating func merge<O: Collection where O.Iterator.Element == RGBAFloat, O.Index == Int>(other: O) {
+    mutating func merge<O: Collection>(other: O) where O.Iterator.Element == RGBAFloat, O.Index == Int {
         let startIndex = Swift.max(self.startIndex, other.startIndex)
         let endIndex = Swift.max(Swift.min(self.endIndex, other.endIndex), startIndex)
         
@@ -82,7 +82,7 @@ extension MutableCollection where Iterator.Element : RGBAMergeable, Index == Int
         }
     }
     
-    mutating func merge<O: Collection where O.Iterator.Element == RGBFloat, O.Index == Int>(other: O) {
+    mutating func merge<O: Collection>(other: O) where O.Iterator.Element == RGBFloat, O.Index == Int {
         let startIndex = Swift.max(self.startIndex, other.startIndex)
         let endIndex = Swift.max(Swift.min(self.endIndex, other.endIndex), startIndex)
         

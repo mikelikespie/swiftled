@@ -44,7 +44,7 @@ class SliderControl<V: FloatValueConvertible> : TypedControl {
     
     let sliderCell: SliderCell<Value>
     
-    public var cells: [UITableViewCell] {
+    public var cells: [UIView] {
         return [sliderCell]
     }
     

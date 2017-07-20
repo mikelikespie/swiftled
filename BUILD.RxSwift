@@ -3,6 +3,7 @@ load("@build_bazel_rules_apple//apple:swift.bzl", "swift_library")
 swift_library(
     name = "RxSwift",
     srcs = glob(["RxSwift/**/*.swift"]),
+    copts = ["-suppress-warnings"],
     module_name = "RxSwift",
     visibility = ["//visibility:public"],
 )
