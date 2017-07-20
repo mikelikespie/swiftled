@@ -38,14 +38,19 @@ public struct SwiftLedComponent : Cleanse.RootComponent {
                 
                 return factory.build(())
         }
+    
         
-//
+        binder
+            .bind()
+            .intoCollection()
+            .tagged(with: UnsortedVisualizations.self)
+            .to(value: [])
+        
 //        binder.bindVisualization().to(factory: SimpleVisualization.init)
 //        binder.bindVisualization().to(factory: IdentificationVisualization.init)
 //        binder.bindVisualization().to(factory: StaticVisualization.init)
 //        binder.bindVisualization().to(factory: STimeVisualization.init)
-        
-        
+
         binder
             .bind([Visualization].self)
             .to { ($0 as TaggedProvider<UnsortedVisualizations>).get().sorted { $0.name < $1.name } }
@@ -56,12 +61,21 @@ public struct SwiftLedComponent : Cleanse.RootComponent {
 struct UnsortedVisualizations : Tag {
     typealias Element = [Visualization]
 }
+
 extension Binder {
-//    func bindVisualization() -> ScopedBindingDecorator<TaggedBindingBuilderDecorator<SingularCollectionBindingBuilderDecorator<BaseBindingBuilder<Visualization, Self>>, UnsortedVisualizations>, Singleton> {
-//        return self
+//    func bindVisualization() -> ReceiptBinder<Visualization> {
+////        ReceiptBinder
+////        return self
+//        self
 //            .bind(Visualization.self)
-//            .intoCollection()
+////            .intoCollection()
 //            .tagged(with: UnsortedVisualizations.self)
-//            .sharedInScope()
+//        .
+////            .sharedInScope()
 //    }
 }
+
+
+//struct VisualizationBinder : BindToable {
+//    
+//}

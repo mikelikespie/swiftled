@@ -11,6 +11,7 @@ swift_library(
         "//src/main/swift/Visualizations",
         "@RxSwift//:RxSwift",
     ],
+    module_name = "SwiftledMobile",
 )
 
 objc_library(
