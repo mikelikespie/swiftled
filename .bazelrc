@@ -1,0 +1,2 @@
+build --ios_minimum_os=10.0 \
+	--strategy=SwiftCompile=standalone
