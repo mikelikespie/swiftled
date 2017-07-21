@@ -5,6 +5,6 @@
 import Foundation
 import UIKit
 
-protocol Control {
+public protocol Control {
     var cell: UIView { get }
 }

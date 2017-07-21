@@ -7,18 +7,21 @@
 //
 
 import UIKit
+import Cleanse
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
+    var root: Root!
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey : Any]? = nil) -> Bool {
         
-        window = UIWindow()
+        root = try! Root()
         
-        window?.rootViewController = ViewController()
+        window = root.window
+        window?.makeKeyAndVisible()
         
         return true
     }
@@ -32,7 +35,5 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
             _ = backgroundTask
     }
-
-
 }
 

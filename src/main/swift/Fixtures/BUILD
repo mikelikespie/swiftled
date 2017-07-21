@@ -6,7 +6,7 @@ swift_library(
         "**/*.swift",
     ]),
     copts = ["-wmo"],
-    module_name = "Visualizations",
+    module_name = "Fixtures",
     visibility = ["//visibility:public"],
     deps = [
         "@Cleanse//:Cleanse",

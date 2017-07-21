@@ -3,22 +3,41 @@
 //
 
 import Foundation
+import Cleanse
 
-
-struct UVFixture : Fixture {
-    class StandardProfile  : FixtureProfile {
-        let controls = [Control]()
+public struct UVFixture : Fixture {
+    public static let name = "UV"
+    public static let channels = 3
+    
+    public let profiles: [FixtureProfile]
+    
+    public static func configureSelf(binder bind: ReceiptBinder<UVFixture>) -> BindingReceipt<UVFixture> {
+        return bind.to(factory: self.init)
     }
     
-    class StrobeProfile  : FixtureProfile {
-        let controls = [Control]()
+    public static func configure(binder: Binder<FixtureScope>) {
+        binder.bind(FixtureProfile.self).intoCollection().to(factory: StandardProfile.init)
+        binder.bind(FixtureProfile.self).intoCollection().to(factory: StrobeProfile.init)
     }
     
-    let name = "UV"
-    let channels = 3
     
-    let profiles: [FixtureProfile] = [
-        StandardProfile(),
-        StrobeProfile(),
-    ]
+    struct StandardProfile  : FixtureProfile {
+        let lightnessControl: LightnessControl
+        
+        var controls: [Control] {
+            return [
+                lightnessControl,
+            ]
+        }
+    }
+    
+    struct StrobeProfile  : FixtureProfile {
+        let lightnessControl: LightnessControl
+        
+        var controls: [Control] {
+            return [
+                lightnessControl,
+            ]
+        }
+    }
 }

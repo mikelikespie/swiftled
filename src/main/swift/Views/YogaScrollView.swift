@@ -11,7 +11,7 @@ import UIKit
 import yoga_YogaKit
 import yoga_yoga
 
-public class YogaScrollView : UIScrollView {
+open class YogaScrollView : UIScrollView {
     public let container = ContentView()
     
     public override init(frame: CGRect) {
@@ -22,6 +22,7 @@ public class YogaScrollView : UIScrollView {
         self.backgroundColor = .white
     }
     
+    @available(*, unavailable)
     public required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -81,7 +82,7 @@ public class YogaScrollView : UIScrollView {
         }
     }
     
-    public override func layoutSubviews() {
+    open override func layoutSubviews() {
         super.layoutSubviews()
         
         let minWidth = insetWidth

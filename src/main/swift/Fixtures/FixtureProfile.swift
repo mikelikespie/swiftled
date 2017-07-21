@@ -7,7 +7,7 @@ import Cleanse
 
 
 // Profile for a fixture.
-protocol FixtureProfile {
+public protocol FixtureProfile {
     /// Controls that this profile uses
     var controls: [Control] { get }
 
@@ -17,11 +17,11 @@ protocol FixtureProfile {
 
 
 extension FixtureProfile {
-    var controls: [Control] {
+    public var controls: [Control] {
         return []
     }
     
-    var values: [UInt8] {
+    public var values: [UInt8] {
         return []
     }
 }
