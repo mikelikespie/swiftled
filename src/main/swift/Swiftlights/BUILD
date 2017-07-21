@@ -2,23 +2,22 @@ load("@build_bazel_rules_apple//apple:swift.bzl", "swift_library")
 load("@build_bazel_rules_apple//apple:ios.bzl", "ios_application")
 
 swift_library(
-    name = "SwiftledMobile_lib",
+    name = "Swiftlights_lib",
     srcs = glob([
         "*.swift",
     ]),
-    module_name = "SwiftledMobile",
-    copts = ["-Xcc", "-includeUIKit/UIKit.h"],
+    module_name = "Swiftlights",
+    copts = ["-wmo"],
     deps = [
-        "//src/main/swift/OPC",
-        "//src/main/swift/Visualizations",
         "//src/main/swift/Fixtures",
-        "//src/main/swift/Views",
+		"//src/main/swift/Views",
+        "//src/main/swift/Artnet",
         "@RxSwift//:RxSwift",
     ],
 )
 
 objc_library(
-    name = "SwiftledMobule_assets",
+    name = "Swiftlights_assets",
     asset_catalogs = glob(["Assets.xcassets/**"]),
     storyboards = glob(["**/*.storyboard"]),
 )
@@ -27,8 +26,8 @@ objc_library(
 # from "deps" and places them with the executable in an .app bundle, and then
 # outputs an .ipa with the bundle in its Payload directory.
 ios_application(
-    name = "SwiftledMobile",
-    bundle_id = "org.lolrus.swiftled",
+    name = "Swiftlights",
+    bundle_id = "org.lolrus.swiftlights",
     families = [
         "iphone",
         "ipad",
@@ -37,7 +36,7 @@ ios_application(
     launch_storyboard = "Base.lproj/LaunchScreen.storyboard",
     minimum_os_version = "10.0",
     deps = [
-        ":SwiftledMobile_lib",
-        ":SwiftledMobule_assets",
+        ":Swiftlights_lib",
+        ":Swiftlights_assets",
     ],
 )

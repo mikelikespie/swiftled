@@ -12,7 +12,7 @@ import yoga_YogaKit
 import yoga_yoga
 
 public class YogaScrollView : UIScrollView {
-    let container = ContentView()
+    public let container = ContentView()
     
     public override init(frame: CGRect) {
         super.init(frame: frame)

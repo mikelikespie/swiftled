@@ -8,7 +8,6 @@
 
 import UIKit
 import RxSwift
-import OPC
 //import RxCocoa
 import Foundation
 import Visualizations
@@ -42,25 +41,6 @@ class ViewController: UIViewController, UISplitViewControllerDelegate {
 
         self.splitViewController?.delegate = self
         
-        let root = try! ComponentFactory
-            .of(SwiftLedComponent.self)
-            .build(LedConfiguration(
-                segmentLength: segmentLength,
-                segmentCount: segmentCount
-            ))
-        
-        root
-            .entryPoint
-            .start()
-            .addDisposableTo(disposeBag)
-        
-        root.rootVisualization
-            .controls
-            .map { Array($0.map { $0.cells }.joined()) }
-            .subscribe(onNext: { [unowned self] cells in
-                self.scrollView.cells = cells
-             })
-            .addDisposableTo(disposeBag)
     }
     
     override func viewWillAppear(_ animated: Bool) {
