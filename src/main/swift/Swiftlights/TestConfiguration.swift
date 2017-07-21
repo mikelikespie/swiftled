@@ -8,7 +8,9 @@
 
 import Foundation
 
+import Fixtures
 
-struct TestConfiguration {
-    
-}
+let testConfiguration = FixtureConfiguration(
+    fixtures: [
+    ]
+)

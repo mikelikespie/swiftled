@@ -14,8 +14,8 @@ new_git_repository(
 new_git_repository(
     name = "Cleanse",
     build_file = "BUILD.Cleanse",
-    commit = "06bdd628dd6face36fe8aa9094771e38ea077c25",
-    remote = "https://github.com/square/Cleanse.git",
+    commit = "e5bd08c07adc2aa023be60acb661b8eefaf96f49",
+    remote = "https://github.com/mikelikespie/Cleanse.git",
 )
 
 new_git_repository(

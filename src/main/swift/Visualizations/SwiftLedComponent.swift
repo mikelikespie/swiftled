@@ -84,8 +84,3 @@ extension Binder where Scope == Singleton {
         }
     }
 }
-
-
-//struct VisualizationBinder : BindToable {
-//    
-//}

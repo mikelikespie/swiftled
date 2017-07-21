@@ -6,5 +6,6 @@ import Foundation
 import UIKit
 
 public protocol Control {
+    var name: String { get }
     var cell: UIView { get }
 }

@@ -10,7 +10,7 @@ swift_library(
     visibility = ["//visibility:public"],
     deps = [
         "//src/main/swift/OPC",
-        "@Cleanse//:Cleanse",
+        "//third_party:Cleanse",
         "@RxSwift//:RxSwift",
         "@libartnet//:artnet",
         "@yoga//:YogaKit",

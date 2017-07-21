@@ -8,6 +8,9 @@ import Cleanse
 
 // Profile for a fixture.
 public protocol FixtureProfile {
+    /// Profile name
+    var name: String { get }
+    
     /// Controls that this profile uses
     var controls: [Control] { get }
 
@@ -29,6 +32,7 @@ extension FixtureProfile {
 
 /// Noop profile that turns everything off
 struct OffProfile : FixtureProfile {
+    let name = "Off"
     let controls = [Control]()
     let values = [UInt8]()
 

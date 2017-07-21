@@ -9,6 +9,8 @@
 import UIKit
 import Cleanse
 import Fixtures
+import RxSwift
+import Views
 
 struct RootScope : Scope {
 }
@@ -18,6 +20,9 @@ struct Root : RootComponent {
     typealias Root = Swiftlights.Root
     
     let window: UIWindow
+    
+    // This is so we don't lose memory from underneath us
+    let rootRef: RootRef
     
     static func configure(binder: Binder<RootScope>) {
         
@@ -32,7 +37,14 @@ struct Root : RootComponent {
         
         binder
             .bind(RootViewController.self)
+            .sharedInScope()
             .to(factory: RootViewController.init)
+        
+        
+        binder
+            .bind(LayoutDirtier.self)
+            .sharedInScope()
+            .to(factory: LayoutDirtier.init)
         
         binder
             .bind(RootView.self)
@@ -41,9 +53,22 @@ struct Root : RootComponent {
         binder.install(fixture: UVFixture.self)
         
         binder.include(module: ControlsModule.self)
-//        binder.install(dependency: UVFixture.Module.self)
+        binder.include(module: ViewsModule.self)
+        
+        binder
+            .bind(Observable<FixtureConfiguration>.self)
+            .to(factory: self.makeFixtureConfiguration)
     }
     
+    static func makeFixtureConfiguration(uvFixture: Provider<UVFixture>) -> Observable<FixtureConfiguration> {
+        return Observable
+            .just(FixtureConfiguration(fixtures: [
+                .init(fixture: uvFixture.get(), startAddress: 0),
+                .init(fixture: uvFixture.get(), startAddress: 3),
+                .init(fixture: uvFixture.get(), startAddress: 3),
+            ]))
+    }
+
     static func makeKeyWindow(navController: UINavigationController, rootViewController: RootViewController) -> UIWindow {
         let window = UIWindow()
         

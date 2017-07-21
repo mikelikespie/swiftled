@@ -1,15 +1,16 @@
 {
   "sourceFilters" : [
     "..\/...",
-    "src\/..."
+    "src\/...",
+    "third_party\/..."
   ],
   "buildTargets" : [
-    "\/\/src\/main\/swift\/Swiftlights:Swiftlights",
-    "\/\/src\/main\/swift\/Swiftlights:Swiftlights_lib",
-    "\/\/src\/main\/swift\/Swiftlights:Swiftlights_assets",
     "\/\/src\/main\/swift\/SwiftledMobile:SwiftledMobile",
     "\/\/src\/main\/swift\/SwiftledMobile:SwiftledMobile_lib",
-    "\/\/src\/main\/swift\/SwiftledMobile:SwiftledMobule_assets"
+    "\/\/src\/main\/swift\/SwiftledMobile:SwiftledMobule_assets",
+    "\/\/src\/main\/swift\/Swiftlights:Swiftlights",
+    "\/\/src\/main\/swift\/Swiftlights:Swiftlights_assets",
+    "\/\/src\/main\/swift\/Swiftlights:Swiftlights_lib"
   ],
   "projectName" : "swiftled",
   "optionSet" : {

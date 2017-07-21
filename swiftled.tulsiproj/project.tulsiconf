@@ -7,7 +7,6 @@
   "projectName" : "swiftled",
   "packages" : [
     "src\/main\/swift\/SwiftledMobile"
-    "src\/main\/swift\/Swiftlights"
   ],
   "workspaceRoot" : ".."
 }

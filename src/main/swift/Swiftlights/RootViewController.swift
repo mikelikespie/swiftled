@@ -10,10 +10,11 @@ import UIKit
 import RxSwift
 //import RxCocoa
 import Foundation
-import Visualizations
+import Fixtures
 import Cleanse
 import yoga_YogaKit
 import Views
+import RxSwift
 
 class RootViewController: UIViewController {
     let disposeBag = DisposeBag()

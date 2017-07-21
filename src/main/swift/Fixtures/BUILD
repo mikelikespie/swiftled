@@ -9,9 +9,10 @@ swift_library(
     module_name = "Fixtures",
     visibility = ["//visibility:public"],
     deps = [
-        "@Cleanse//:Cleanse",
+        "//third_party:Cleanse",
         "@RxSwift//:RxSwift",
         "@yoga//:YogaKit",
         "@yoga//:YogaKit_swift",
+        "//src/main/swift/Views",
     ],
 )

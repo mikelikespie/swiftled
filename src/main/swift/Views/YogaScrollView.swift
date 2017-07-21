@@ -124,9 +124,8 @@ public class ContentView : UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-
     public override func layoutSubviews() {
         super.layoutSubviews()
-        self.yoga.applyLayout(preservingOrigin: false)
+        self.yoga.applyLayout(preservingOrigin: true)
     }
 }

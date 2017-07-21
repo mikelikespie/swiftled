@@ -27,7 +27,7 @@ objc_library(
 genrule(
     name = "import_shim",
     outs = ["imports.swift"],
-    cmd = "echo \"@_exported import yoga_YogaKit_objc\" > \"$@\"",
+    cmd = "echo \"@_exported import yoga_YogaKit\" > \"$@\"",
 )
 
 swift_library(

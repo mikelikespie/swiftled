@@ -10,6 +10,6 @@ swift_library(
     visibility = ["//visibility:public"],
     deps = [
         "@libartnet//:artnet",
-        "@Cleanse//:Cleanse",
+        "//third_party:Cleanse",
     ],
 )

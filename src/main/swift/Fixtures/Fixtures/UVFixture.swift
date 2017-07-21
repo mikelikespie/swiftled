@@ -6,8 +6,8 @@ import Foundation
 import Cleanse
 
 public struct UVFixture : Fixture {
-    public static let name = "UV"
-    public static let channels = 3
+    public let name = "UV"
+    public let channels = 3
     
     public let profiles: [FixtureProfile]
     
@@ -15,13 +15,15 @@ public struct UVFixture : Fixture {
         return bind.to(factory: self.init)
     }
     
-    public static func configure(binder: Binder<FixtureScope>) {
+    public static func configure(binder: Binder<Unscoped>) {
         binder.bind(FixtureProfile.self).intoCollection().to(factory: StandardProfile.init)
         binder.bind(FixtureProfile.self).intoCollection().to(factory: StrobeProfile.init)
     }
     
     
     struct StandardProfile  : FixtureProfile {
+        let name = "-"
+        
         let lightnessControl: LightnessControl
         
         var controls: [Control] {
@@ -32,6 +34,8 @@ public struct UVFixture : Fixture {
     }
     
     struct StrobeProfile  : FixtureProfile {
+        let name = "Strobe"
+        
         let lightnessControl: LightnessControl
         
         var controls: [Control] {

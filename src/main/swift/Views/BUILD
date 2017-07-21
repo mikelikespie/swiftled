@@ -9,8 +9,9 @@ swift_library(
     module_name = "Views",
     visibility = ["//visibility:public"],
     deps = [
-        "@Cleanse//:Cleanse",
-        "@yoga//:YogaKit",
+        "//third_party:Cleanse",
+"@RxSwift//:RxSwift",
+"@yoga//:YogaKit",
         "@yoga//:YogaKit_swift",
     ],
 )
