@@ -35,7 +35,6 @@ class ControlView : UIView {
 
         addSubview(nameLabel)
         addSubview(control.cell)
-
     }
 
     @available(*, unavailable)

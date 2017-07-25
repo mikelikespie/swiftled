@@ -19,8 +19,13 @@ public protocol FixtureProfile {
 }
 
 
+public struct ConfiguredControl {
+    public let name: String
+    public let control: Control
+}
+
 extension FixtureProfile {
-    public var controls: [Control] {
+    public var controls: [ConfiguredControl] {
         return []
     }
     

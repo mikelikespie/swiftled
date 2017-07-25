@@ -1,7 +1,7 @@
 import Views
 import RxSwift
 import Fixtures
-
+import UIKit
 class RootView : YogaScrollView {
     
     let disposeBag = DisposeBag()
@@ -14,6 +14,9 @@ class RootView : YogaScrollView {
         
         super.init(frame: .zero)
         
+        let imageView = UIImageView(image: UIImage(named: "slushious"))
+        self.backgroundColor = .black
+        self.tintColor = .white
         fixtureConfiguration
             .subscribe(onNext: { [weak self] config in
                 guard let `self` = self else {
@@ -24,7 +27,6 @@ class RootView : YogaScrollView {
                     .fixtures
                     .map { FixtureProfileView(fixture: $0.fixture, profile: $0.fixture.profiles[0]) }
             })
-            
             .disposed(by: disposeBag)
         
         layoutDirtier

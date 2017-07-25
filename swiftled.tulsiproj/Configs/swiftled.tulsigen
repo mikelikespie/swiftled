@@ -1,6 +1,8 @@
 {
   "sourceFilters" : [
     "..\/...",
+    "bazel-genfiles\/...",
+    "external\/...",
     "src\/...",
     "third_party\/..."
   ],

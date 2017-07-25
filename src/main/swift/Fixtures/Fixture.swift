@@ -4,6 +4,7 @@
 
 import Foundation
 import Cleanse
+import UIKit
 
 public struct FixtureScope : Scope {
 }
@@ -14,6 +15,14 @@ public protocol FixtureBase {
     var channels: Int { get }
     
     var profiles: [FixtureProfile] { get }
+
+    var icon: UIImage? { get }
+}
+
+extension FixtureBase {
+    public var icon: UIImage? {
+        return nil
+    }
 }
 
 public protocol Fixture : FixtureBase {    
